@@ -30,7 +30,9 @@ public class RecordingLookupService extends LookupService
 
 		try
 		{
-			response = MusicBrainzHelper.searchForSongs(searchTerm.get());
+			//response = MusicBrainzHelper.searchForSongs();
+
+			MusicBrainzHelper.searchForArtis(searchTerm.get());
 		}
 		catch (IOException e)
 		{

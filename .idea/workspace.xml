@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c40c023f-133f-4a69-977e-f8df4d43dc6d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/Recording.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/RecordingResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/musicbrainz/MusicBrainzHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/musicbrainz/MusicBrainzHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/RecordingLookupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/RecordingLookupService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,7 +20,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="115946" />
+    <option name="totalTimeSeconds" value="117065" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
@@ -84,7 +87,7 @@
     "jdk.selected.JAVA_MODULE": "22",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/dbeyerle/IdeaProjects/Invy/src/main/resources/isaatonimov/invy",
-    "project.structure.last.edited": "Problems",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.49867374",
     "settings.editor.selected.configurable": "preferences.lookFeel"
