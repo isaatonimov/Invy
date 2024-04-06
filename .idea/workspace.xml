@@ -5,38 +5,57 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c40c023f-133f-4a69-977e-f8df4d43dc6d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BLANK_README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LICENSE.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/screenshot.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/Controller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/MusicPlayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/invidious/InvidiousInstance.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/invidious/ResultBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/invidious/VideoResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/musicbrainz/MusicBrainzHelper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/service/RecordingLookupService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/service/VideoLookupService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/ffmpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/ffprobe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/primer-dark.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/view.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/DashboardController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/SimpleController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/ViewManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/MainStageHiddenEventHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/MainStageShownEventHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/RecordingLookupSuccessHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/SongViewSearchhandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/ToggleViewSuccessHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/VideoLookupSuccessHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/helpers/AppUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/helpers/JsonModelClassGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/Alias.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/Area.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/Artist.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/ArtistResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/BeginArea.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/EndArea.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/LifeSpan.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/LifeSpan__1.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/LifeSpan__2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/LifeSpan__3.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/jsonmodels/Tag.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/misc/ShortcutKeyListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/runnables/SetMenuItemAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/runnables/SetMenuItemShortcut.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/LookupService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/ToggleViewService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/search.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/json/required.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/dashboard.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/Controller.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/MusicPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/misc/MusicPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/invidious/InvidiousInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/invidious/InvidiousInstance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/invidious/ResultBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/invidious/ResultBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/invidious/VideoResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/invidious/VideoResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/musicbrainz/MusicBrainzHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/musicbrainz/MusicBrainzHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/service/RecordingLookupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/RecordingLookupService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/service/VideoLookupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/VideoLookupService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/ffmpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/ffprobe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/primer-dark.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/view.fxml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +66,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="46310" />
+    <option name="totalTimeSeconds" value="115631" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
@@ -55,6 +74,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="FxmlFile" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -78,6 +98,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -95,40 +118,64 @@
     "Application.App.executor": "Run",
     "Application.InvyApp.executor": "Run",
     "Downloaded.Files.Path.Enabled": "false",
+    "Maven.invy [clean].executor": "Run",
+    "Maven.invy [org.apache.maven.plugins:maven-clean-plugin:2.5:clean].executor": "Run",
     "Maven.invy [org.apache.maven.plugins:maven-install-plugin:2.4:help].executor": "Run",
     "Maven.invy [org.apache.maven.plugins:maven-install-plugin:2.4:install].executor": "Run",
-    "Repository.Attach.Annotations": "false",
+    "Maven.invy [verify].executor": "Run",
+    "Repository.Attach.Annotations": "true",
     "Repository.Attach.JavaDocs": "true",
-    "Repository.Attach.Sources": "false",
+    "Repository.Attach.Sources": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
+    "jdk.selected.JAVA_MODULE": "22",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/dbeyerle/IdeaProjects/Invy/src/main/resources/isaatonimov/invy",
-    "project.structure.last.edited": "Libraries",
+    "project.structure.last.edited": "Problems",
     "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.33421752",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "project.structure.side.proportion": "0.49867374",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="isaatonimov.invy.ui.services" />
+      <recent name="isaatonimov.invy.handlers" />
+      <recent name="isaatonimov.invy.controller" />
+      <recent name="isaatonimov.invy.runnables" />
       <recent name="isaatonimov.invy" />
-      <recent name="isaatonimov.invy.invidious" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/json" />
+      <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views" />
       <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy" />
+      <recent name="$PROJECT_DIR$/../SimpleTrayFX/src/main/resources/isaatonimov/simpletrayfx/themes" />
+      <recent name="$PROJECT_DIR$/../SimpleTrayFX/src/main/resources/isaatonimov/simpletrayfx" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="isaatonimov.invy" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="isaatonimov.invy.service" />
     </key>
   </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="Application" />
+      </set>
+    </option>
+  </component>
   <component name="RunManager">
     <configuration name="InvyApp" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="22" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="INCLUDE_PROVIDED_SCOPE" value="true" />
       <option name="MAIN_CLASS_NAME" value="isaatonimov.invy.App" />
       <module name="Invy" />
       <method v="2">
@@ -139,6 +186,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
+        <option value="jdk-21.0.2-liberica-21.0.2-3183f394aec4-0a923520" />
         <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-322ed176" />
       </set>
     </attachedChunks>

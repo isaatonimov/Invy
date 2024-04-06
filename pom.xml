@@ -15,14 +15,19 @@
 
   <dependencies>
     <dependency>
-      <groupId>info.schnatterer.musicbrainzws2-java</groupId>
-      <artifactId>musicbrainzws2-java</artifactId>
-      <version>3.1.0</version>
+      <groupId>org.jsonschema2pojo</groupId>
+      <artifactId>jsonschema2pojo-core</artifactId>
+      <version>1.2.1</version>
     </dependency>
     <dependency>
-      <groupId>net.bramp.ffmpeg</groupId>
-      <artifactId>ffmpeg</artifactId>
-      <version>0.8.0</version>
+      <groupId>com.github.kwhat</groupId>
+      <artifactId>jnativehook</artifactId>
+      <version>2.2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.dustinredmond.fxtrayicon</groupId>
+      <artifactId>FXTrayIcon</artifactId>
+      <version>4.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
@@ -35,24 +40,14 @@
       <version>4.0.0-RC2</version>
     </dependency>
     <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20240303</version>
-    </dependency>
-    <dependency>
-      <groupId>com.dustinredmond.fxtrayicon</groupId>
-      <artifactId>FXTrayIcon</artifactId>
-      <version>4.0.1</version>
-    </dependency>
-    <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>22-ea+11</version>
+      <version>23-ea+3</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>22-ea+11</version>
+      <version>23-ea+3</version>
     </dependency>
 <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -65,6 +60,12 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.jetbrains</groupId>
+        <artifactId>annotations</artifactId>
+        <version>RELEASE</version>
+        <scope>compile</scope>
     </dependency>
   </dependencies>
   <build>
