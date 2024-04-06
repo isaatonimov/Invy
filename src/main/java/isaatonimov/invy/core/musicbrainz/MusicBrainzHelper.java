@@ -1,6 +1,7 @@
 package isaatonimov.invy.core.musicbrainz;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import isaatonimov.invy.jsonmodels.Artist;
 import isaatonimov.invy.jsonmodels.ArtistResponse;
 import kong.unirest.Unirest;
 
@@ -9,10 +10,7 @@ import java.util.List;
 
 public class MusicBrainzHelper
 {
-	/*
-		First Draft of search Function, not that nice
-	 */
-	public static List<String> searchForSongs(String query) throws IOException
+	public static List<Artist> searchForArtis(String query)
 	{
 		//Set Base URL
 		String baseURL = "https://musicbrainz.org/ws/2/";
@@ -31,12 +29,14 @@ public class MusicBrainzHelper
 
 		ArtistResponse musicBrainzArtistResponse = objectMapper.readValue(response.getBody().toString(), ArtistResponse.class);
 
-		System.out.println("Test Object Mapper: " + musicBrainzArtistResponse.getArtists().get(1).getName());
-		System.out.println("Test Object Mapper: " + musicBrainzArtistResponse.getArtists().get(1).getId());
+		return musicBrainzArtistResponse.getArtists();
+	}
 
+	/*
+		First Draft of search Function, not that nice
+	 */
+	public static List<String> searchForSongs(String query) throws IOException
+	{
 
-		
-
-		return null;
 	}
 }
