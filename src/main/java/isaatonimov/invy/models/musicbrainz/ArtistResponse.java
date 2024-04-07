@@ -1,5 +1,5 @@
 
-package isaatonimov.invy.jsonmodels;
+package isaatonimov.invy.models.musicbrainz;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -27,7 +27,7 @@ public class ArtistResponse
     @JsonProperty("offset")
     private Integer offset;
     @JsonProperty("artists")
-    private List<isaatonimov.invy.jsonmodels.Artist> artists = new ArrayList<isaatonimov.invy.jsonmodels.Artist>();
+    private List<Artist> artists = new ArrayList<Artist>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
@@ -62,12 +62,12 @@ public class ArtistResponse
     }
 
     @JsonProperty("artists")
-    public List<isaatonimov.invy.jsonmodels.Artist> getArtists() {
+    public List<Artist> getArtists() {
         return artists;
     }
 
     @JsonProperty("artists")
-    public void setArtists(List<isaatonimov.invy.jsonmodels.Artist> artists) {
+    public void setArtists(List<Artist> artists) {
         this.artists = artists;
     }
 

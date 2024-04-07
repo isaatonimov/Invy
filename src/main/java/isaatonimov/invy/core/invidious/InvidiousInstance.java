@@ -1,101 +1,77 @@
 package isaatonimov.invy.core.invidious;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import isaatonimov.invy.models.invidious.FormatStream;
+import isaatonimov.invy.models.invidious.SearchResponse;
+import isaatonimov.invy.models.invidious.VideoResponse;
+import isaatonimov.invy.models.musicbrainz.Recording;
+import javafx.beans.property.SimpleObjectProperty;
+import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
 public class InvidiousInstance
 {
-	private URI instanceURL;
+	private SimpleObjectProperty<URI> instanceURL = new SimpleObjectProperty<>(this, "instanceURL");
+
 	/**
 	 * Constuctor for static instance by instance URL
 	 */
 	public InvidiousInstance(URI instanceURL)
 	{
-		this.instanceURL = instanceURL;
+		this.instanceURL.set(instanceURL);
 	}
 
-	/**
-	 * Constructor for automatic instance selection by region
-	 */
-	public InvidiousInstance(String region)
-	{
-
-	}
-
-	public List<VideoResult> search(String searchTerm) throws IOException
+	public List<SearchResponse> search(Recording recording) throws IOException
 	{
 		//currently fixed value
 		String searchType = "video";
-		Unirest.config().defaultBaseUrl(instanceURL.toString());
+		Unirest.config().defaultBaseUrl(instanceURL.get().toString());
 		Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
 
-		var response = Unirest.get("/api/v1/search").queryString("q", searchTerm).queryString("type", searchType).asString();
+		var response = Unirest.get("/api/v1/search").queryString("q", recording.toSearchTerm()).queryString("type", searchType).asString();
+		System.out.println("Searched for: " + recording.toSearchTerm());
 
-		return ResultBuilder.buildVideoResultFromJSON(response.getBody().toString());
+		ObjectMapper objectMapper = new ObjectMapper();
+		List<SearchResponse> searchResponse = objectMapper.readValue(response.getBody().toString(), new TypeReference<List<SearchResponse>>(){});
+
+		//Generate JSON Model Class from JSON - enabled just in development
+		//JsonModelClassGenerator.generateJSONModelClassFromJSONString(response.getBody().toString(), "SearchResponse");
+
+		return searchResponse;
 	}
 
-	public List<String> fetchVideoStreamURLS(VideoResult videoResult)
+	public List<FormatStream> fetchFormatStreams(SearchResponse searchResponse) throws IOException
 	{
-		Unirest.config().defaultBaseUrl(instanceURL.toString());
+		Unirest.config().defaultBaseUrl(instanceURL.get().toString());
 		Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
 
-		var response = Unirest.get("/api/v1/videos/" + videoResult.getVideoID()).asString();
+		HttpResponse<String> response = Unirest.get("/api/v1/videos/" + searchResponse.getVideoId()).asString();
 
-		return ResultBuilder.getVideoStreamsFromJson(response.getBody().toString());
+		//Generate JSON Model Class from JSON - enabled just in development
+		//JsonModelClassGenerator.generateJSONModelClassFromJSONString(response.getBody().toString(), "VideoResponse");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		VideoResponse videoResponse = objectMapper.readValue(response.getBody().toString(), VideoResponse.class);
+
+		System.out.println("Prinitng Video Stream Format Info");
+		for(var formatStream : videoResponse.getFormatStreams())
+		{
+			System.out.println("Encoding: " + formatStream.getEncoding());
+			System.out.println("Quality: " + formatStream.getQuality());
+		}
+
+		return videoResponse.getFormatStreams();
 	}
 
-	/*
-		Fetches Video Stream of given Video URL and plays it in JavaFX Media Player
-		Relied on FFMPEG -> Replace with similar java native library
-	 */
-	public String fetchVideoStream(String videoURL)
+	public String SearchAndFetchFirstVideoStream(Recording recording) throws IOException
 	{
-		Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
-		//File result = Unirest.get(videoURL).asFile("/private/tmp/output_video/output.1").getBody();
-//		FFmpeg ffmpeg;
-//		FFprobe fFprobe;
-//		try
-//		{
-//			ffmpeg = new FFmpeg(App.class.getResource("ffmpeg").getPath());
-//			fFprobe = new FFprobe(App.class.getResource("ffprobe").getPath());
-//
-//		}
-//		catch (IOException e)
-//		{
-//			throw new RuntimeException(e);
-//		}
-
-//		FFmpegBuilder builder = new FFmpegBuilder().
-//				setInput("/private/tmp/output_video/output.1").
-//				addOutput("/private/tmp/output_video/output.mp3").done();
-//
-//		FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, fFprobe);
-//
-//		executor.createJob(builder).run();
-
-		System.out.println("Finished downloading and converting video.");
-		System.out.println("Playing Video");
-
-		Media sound = new Media(new File("/private/tmp/output_video/output.mp3").toURI().toString());
-		MediaPlayer mediaPlayer = new MediaPlayer(sound);
-		mediaPlayer.play();
-
-		return "";
-	}
-
-	public void fetchVideoStream()
-	{
-
-	}
-
-	public URI getURL()
-	{
-		return instanceURL;
+		SearchResponse firstSearchResponse = search(recording).getFirst();
+		FormatStream firstFormatStream = fetchFormatStreams(firstSearchResponse).getFirst();
+		return firstFormatStream.getUrl();
 	}
 }

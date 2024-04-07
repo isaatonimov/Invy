@@ -1,5 +1,5 @@
 
-package isaatonimov.invy.jsonmodels;
+package isaatonimov.invy.models.musicbrainz;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "life-span"
 })
 @Generated("jsonschema2pojo")
-public class EndArea {
+public class BeginArea {
 
     @JsonProperty("id")
     private String id;
@@ -34,7 +34,7 @@ public class EndArea {
     @JsonProperty("sort-name")
     private String sortName;
     @JsonProperty("life-span")
-    private LifeSpan__3 lifeSpan;
+    private LifeSpan__1 lifeSpan;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
@@ -89,12 +89,12 @@ public class EndArea {
     }
 
     @JsonProperty("life-span")
-    public LifeSpan__3 getLifeSpan() {
+    public LifeSpan__1 getLifeSpan() {
         return lifeSpan;
     }
 
     @JsonProperty("life-span")
-    public void setLifeSpan(LifeSpan__3 lifeSpan) {
+    public void setLifeSpan(LifeSpan__1 lifeSpan) {
         this.lifeSpan = lifeSpan;
     }
 
@@ -111,7 +111,7 @@ public class EndArea {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(EndArea.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append(BeginArea.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("id");
         sb.append('=');
         sb.append(((this.id == null)?"<null>":this.id));
@@ -166,10 +166,10 @@ public class EndArea {
         if (other == this) {
             return true;
         }
-        if ((other instanceof EndArea) == false) {
+        if ((other instanceof BeginArea) == false) {
             return false;
         }
-        EndArea rhs = ((EndArea) other);
+        BeginArea rhs = ((BeginArea) other);
         return ((((((((this.sortName == rhs.sortName)||((this.sortName!= null)&&this.sortName.equals(rhs.sortName)))&&((this.lifeSpan == rhs.lifeSpan)||((this.lifeSpan!= null)&&this.lifeSpan.equals(rhs.lifeSpan))))&&((this.name == rhs.name)||((this.name!= null)&&this.name.equals(rhs.name))))&&((this.typeId == rhs.typeId)||((this.typeId!= null)&&this.typeId.equals(rhs.typeId))))&&((this.id == rhs.id)||((this.id!= null)&&this.id.equals(rhs.id))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.type == rhs.type)||((this.type!= null)&&this.type.equals(rhs.type))));
     }
 

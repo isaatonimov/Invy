@@ -25,7 +25,8 @@ module isaatonimov.invy {
 
 	opens isaatonimov.invy to javafx.fxml;
 	exports isaatonimov.invy;
-	exports isaatonimov.invy.jsonmodels to com.fasterxml.jackson.databind;
+	exports isaatonimov.invy.models.musicbrainz to com.fasterxml.jackson.databind;
+	exports isaatonimov.invy.models.invidious to com.fasterxml.jackson.databind;
 	exports isaatonimov.invy.controller;
 	opens isaatonimov.invy.controller to javafx.fxml;
 	exports isaatonimov.invy.misc;

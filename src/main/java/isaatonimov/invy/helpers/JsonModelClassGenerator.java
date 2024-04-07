@@ -36,7 +36,7 @@ public class JsonModelClassGenerator
 		SchemaMapper mapper = new SchemaMapper(new RuleFactory(config, new Jackson2Annotator(config), new SchemaStore()), new SchemaGenerator());
 		mapper.generate(codeModel, className, "isaatonimov.invy.jsonmodels", jsonFilePath.toUri().toURL());
 
-		String outputDir = "src/main/java/isaatonimov/invy/jsonmodels";
+		String outputDir = "src/main/java/isaatonimov/invy/models";
 
 		codeModel.build(new File(outputDir));
 

@@ -1,5 +1,5 @@
 
-package isaatonimov.invy.jsonmodels;
+package isaatonimov.invy.models.musicbrainz;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "ended"
 })
 @Generated("jsonschema2pojo")
-public class LifeSpan__1 {
+public class LifeSpan__3 {
 
     @JsonProperty("ended")
     private Object ended;
@@ -46,7 +46,7 @@ public class LifeSpan__1 {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(LifeSpan__1 .class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append(LifeSpan__3 .class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("ended");
         sb.append('=');
         sb.append(((this.ended == null)?"<null>":this.ended));
@@ -76,10 +76,10 @@ public class LifeSpan__1 {
         if (other == this) {
             return true;
         }
-        if ((other instanceof LifeSpan__1) == false) {
+        if ((other instanceof LifeSpan__3) == false) {
             return false;
         }
-        LifeSpan__1 rhs = ((LifeSpan__1) other);
+        LifeSpan__3 rhs = ((LifeSpan__3) other);
         return (((this.ended == rhs.ended)||((this.ended!= null)&&this.ended.equals(rhs.ended)))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))));
     }
 

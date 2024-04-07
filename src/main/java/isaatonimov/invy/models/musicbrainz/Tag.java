@@ -1,5 +1,5 @@
 
-package isaatonimov.invy.jsonmodels;
+package isaatonimov.invy.models.musicbrainz;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,24 +13,37 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "ended"
+    "count",
+    "name"
 })
 @Generated("jsonschema2pojo")
-public class LifeSpan__3 {
+public class Tag {
 
-    @JsonProperty("ended")
-    private Object ended;
+    @JsonProperty("count")
+    private Integer count;
+    @JsonProperty("name")
+    private String name;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
-    @JsonProperty("ended")
-    public Object getEnded() {
-        return ended;
+    @JsonProperty("count")
+    public Integer getCount() {
+        return count;
     }
 
-    @JsonProperty("ended")
-    public void setEnded(Object ended) {
-        this.ended = ended;
+    @JsonProperty("count")
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    @JsonProperty("name")
+    public String getName() {
+        return name;
+    }
+
+    @JsonProperty("name")
+    public void setName(String name) {
+        this.name = name;
     }
 
     @JsonAnyGetter
@@ -46,10 +59,14 @@ public class LifeSpan__3 {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(LifeSpan__3 .class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("ended");
+        sb.append(Tag.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append("count");
         sb.append('=');
-        sb.append(((this.ended == null)?"<null>":this.ended));
+        sb.append(((this.count == null)?"<null>":this.count));
+        sb.append(',');
+        sb.append("name");
+        sb.append('=');
+        sb.append(((this.name == null)?"<null>":this.name));
         sb.append(',');
         sb.append("additionalProperties");
         sb.append('=');
@@ -66,7 +83,8 @@ public class LifeSpan__3 {
     @Override
     public int hashCode() {
         int result = 1;
-        result = ((result* 31)+((this.ended == null)? 0 :this.ended.hashCode()));
+        result = ((result* 31)+((this.count == null)? 0 :this.count.hashCode()));
+        result = ((result* 31)+((this.name == null)? 0 :this.name.hashCode()));
         result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
         return result;
     }
@@ -76,11 +94,11 @@ public class LifeSpan__3 {
         if (other == this) {
             return true;
         }
-        if ((other instanceof LifeSpan__3) == false) {
+        if ((other instanceof Tag) == false) {
             return false;
         }
-        LifeSpan__3 rhs = ((LifeSpan__3) other);
-        return (((this.ended == rhs.ended)||((this.ended!= null)&&this.ended.equals(rhs.ended)))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))));
+        Tag rhs = ((Tag) other);
+        return ((((this.count == rhs.count)||((this.count!= null)&&this.count.equals(rhs.count)))&&((this.name == rhs.name)||((this.name!= null)&&this.name.equals(rhs.name))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))));
     }
 
 }

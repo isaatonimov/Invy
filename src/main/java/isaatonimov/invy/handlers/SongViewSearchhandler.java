@@ -19,9 +19,10 @@ public class SongViewSearchhandler implements javafx.event.EventHandler<javafx.s
 		if(event.getCode() == KeyCode.ENTER)
 		{
 			if(!toStart.isRunning())
+			{
+				((TextField)(event.getSource())).getScene().getWindow().hide();
 				toStart.restart();
-
-			((TextField)(event.getSource())).getScene().getWindow().hide();
+			}
 		}
 	}
 }

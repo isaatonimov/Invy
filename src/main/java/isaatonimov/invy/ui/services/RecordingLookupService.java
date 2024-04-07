@@ -7,6 +7,7 @@ import javafx.concurrent.Task;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class RecordingLookupService extends LookupService
@@ -34,7 +35,7 @@ public class RecordingLookupService extends LookupService
 
 			MusicBrainzHelper.searchForArtis(searchTerm.get());
 		}
-		catch (IOException e)
+		catch (IOException | URISyntaxException e)
 		{
 			//Handle -> TODO
 			throw new RuntimeException(e);

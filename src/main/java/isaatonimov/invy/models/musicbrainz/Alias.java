@@ -1,4 +1,4 @@
-package isaatonimov.invy.jsonmodels;
+package isaatonimov.invy.models.musicbrainz;
 
 import com.fasterxml.jackson.annotation.*;
 

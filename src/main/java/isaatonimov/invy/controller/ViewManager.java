@@ -2,7 +2,6 @@ package isaatonimov.invy.controller;
 
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import isaatonimov.invy.core.invidious.InvidiousInstance;
-import isaatonimov.invy.misc.MusicPlayer;
 import isaatonimov.invy.ui.services.RecordingLookupService;
 import isaatonimov.invy.ui.services.ToggleViewService;
 import isaatonimov.invy.ui.services.VideoLookupService;

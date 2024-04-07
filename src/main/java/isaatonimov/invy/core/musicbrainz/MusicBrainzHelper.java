@@ -1,19 +1,22 @@
 package isaatonimov.invy.core.musicbrainz;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import isaatonimov.invy.jsonmodels.Artist;
-import isaatonimov.invy.jsonmodels.ArtistResponse;
-import isaatonimov.invy.jsonmodels.Recording;
-import isaatonimov.invy.jsonmodels.RecordingResponse;
+import isaatonimov.invy.core.invidious.InvidiousInstance;
+import isaatonimov.invy.models.musicbrainz.Artist;
+import isaatonimov.invy.models.musicbrainz.ArtistResponse;
+import isaatonimov.invy.models.musicbrainz.Recording;
+import isaatonimov.invy.models.musicbrainz.RecordingResponse;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class MusicBrainzHelper
 {
-	public static List<Artist> searchForArtis(String query) throws IOException
+	public static List<Artist> searchForArtis(String query) throws IOException, URISyntaxException
 	{
 		//Set Base URL
 		String baseURL = "https://musicbrainz.org/ws/2/";
@@ -32,6 +35,7 @@ public class MusicBrainzHelper
 
 		ArtistResponse musicBrainzArtistResponse = objectMapper.readValue(response.getBody().toString(), ArtistResponse.class);
 
+		//TODO: REMOVE -> JUST FOR TESTING
 		searchForSongs(musicBrainzArtistResponse.getArtists().get(1));
 
 		return musicBrainzArtistResponse.getArtists();
@@ -40,7 +44,7 @@ public class MusicBrainzHelper
 	/*
 		First Draft of search Function, not that nice
 	 */
-	public static List<Recording> searchForSongs(Artist artist) throws IOException
+	public static List<Recording> searchForSongs(Artist artist) throws IOException, URISyntaxException
 	{
 		//Set Base URL
 		String baseURL = "https://musicbrainz.org/ws/2/";
@@ -55,6 +59,14 @@ public class MusicBrainzHelper
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		RecordingResponse recordingResponse = objectMapper.readValue(response.getBody().toString(), RecordingResponse.class);
+
+		//Set Artist Manually
+		for(var recording : recordingResponse.getRecordings())
+			recording.setArtist(artist);
+
+		//TODO: REMOVE -> JUST FOR TESTING
+		InvidiousInstance invidiousInstance = new InvidiousInstance(new URI("https://invidious.lunar.icu"));
+		invidiousInstance.search(recordingResponse.getRecordings().getFirst());
 
 		return recordingResponse.getRecordings();
 	}

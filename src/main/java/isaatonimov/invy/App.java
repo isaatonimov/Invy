@@ -4,9 +4,13 @@ import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import isaatonimov.invy.controller.ViewManager;
+import isaatonimov.invy.core.MusicPlayer;
 import isaatonimov.invy.core.invidious.InvidiousInstance;
-import isaatonimov.invy.handlers.*;
-import isaatonimov.invy.misc.MusicPlayer;
+import isaatonimov.invy.handlers.MainStageHiddenEventHandler;
+import isaatonimov.invy.handlers.MainStageShownEventHandler;
+import isaatonimov.invy.handlers.SongViewSearchhandler;
+import isaatonimov.invy.handlers.ToggleViewSuccessHandler;
+import isaatonimov.invy.helpers.AppUtils;
 import isaatonimov.invy.misc.ShortcutKeyListener;
 import isaatonimov.invy.ui.runnables.SetMenuItemAction;
 import isaatonimov.invy.ui.runnables.SetMenuItemShortcut;
@@ -25,15 +29,14 @@ import javafx.stage.StageStyle;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
-public class App extends Application {
-
+public class App extends Application
+{
 	//Core
-    private InvidiousInstance mainInvidiousInstance;
-	private MusicPlayer musicPlayer;
+	private InvidiousInstance mainInstance;
+	private MusicPlayer	 mainMusicPlayer;
 
 	//Background Services
 	private VideoLookupService videoLookupService;
@@ -43,7 +46,7 @@ public class App extends Application {
 	private ToggleViewService toggleViewService;
 
 	//Automation
-	private java.awt.Robot iRobot;
+	private java.awt.Robot 	iRobot;
 
 	private FXMLLoader		mainLoader;
 	private Scene			mainScene;
@@ -54,9 +57,6 @@ public class App extends Application {
 
 	private void initUI(Stage mainStage) throws IOException, URISyntaxException
 	{
-		mainInvidiousInstance = new InvidiousInstance(new URI("https://invidious.lunar.icu"));
-		musicPlayer 	= new MusicPlayer();
-
 		//UI
 		mainLoader 	= new FXMLLoader(getClass().getResource("/isaatonimov/invy/views/main.fxml"));
 		mainScene 	= new Scene(mainLoader.load());
@@ -65,6 +65,12 @@ public class App extends Application {
 		invyTrayIcon 	= new FXTrayIcon(mainStage, Objects.requireNonNull(getClass().getResource("/isaatonimov/invy/images/logo.png")));
 
 		this.mainStage = mainStage;
+	}
+
+	private void initCore() throws URISyntaxException
+	{
+		mainInstance 		= new InvidiousInstance(AppUtils.getMainInvidiousInstanceURL());
+		mainMusicPlayer 	= new MusicPlayer(mainInstance);
 	}
 
 	private void setStageSettings()
@@ -77,7 +83,7 @@ public class App extends Application {
 
 	private void initBackgroundServices()
 	{
-		videoLookupService 	= new VideoLookupService		(mainInvidiousInstance);
+		videoLookupService 	= new VideoLookupService		(mainInstance, null);
 		recordingLookupService	= new RecordingLookupService	();
 	}
 
@@ -96,6 +102,7 @@ public class App extends Application {
     {
 		try
 		{
+			initCore();
 			//Initialises everything UI
 			initUI(stage);
 
@@ -128,8 +135,8 @@ public class App extends Application {
 
 			//View Manager -> set fields
 			viewManager.setTrayIcon(invyTrayIcon);
-			viewManager.setInvidiouseInstance(mainInvidiousInstance);
-			viewManager.setMusicPlayer(musicPlayer);
+			//viewManager.setInvidiouseInstance(mainInvidiousInstance);
+			//viewManager.setMusicPlayer(musicPlayer);
 			//Background
 			viewManager.setVideoLookupService(videoLookupService);
 			viewManager.setRecordingLookupService(recordingLookupService);
@@ -153,8 +160,8 @@ public class App extends Application {
 
 			//Service Event Handler - Success Only
 			EventType<WorkerStateEvent> successEvent = WorkerStateEvent.WORKER_STATE_SUCCEEDED;
-			recordingLookupService.addEventHandler	(successEvent, 	new RecordingLookupSuccessHandler(viewManager.getSongView(), videoLookupService));
-			videoLookupService.addEventHandler	(successEvent, 	new VideoLookupSuccessHandler(mainInvidiousInstance));
+			//recordingLookupService.addEventHandler	(successEvent, 	new RecordingLookupSuccessHandler(viewManager.getSongView(), videoLookupService));
+			//videoLookupService.addEventHandler	(successEvent, 	new VideoLookupSuccessHandler(mainInvidiousInstance));
 			toggleViewService.addEventHandler		(successEvent, 	new ToggleViewSuccessHandler());
 
 			//Show UI / triggers
@@ -177,7 +184,11 @@ public class App extends Application {
 		}
 	}
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+	{
+		//Clear Temp Folder on startup
+		AppUtils.clearTempFolder();
+
         launch();
     }
 }

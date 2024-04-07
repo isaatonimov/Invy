@@ -1,15 +1,11 @@
 
-package isaatonimov.invy.jsonmodels;
+package isaatonimov.invy.models.musicbrainz;
 
+import com.fasterxml.jackson.annotation.*;
+
+import javax.annotation.processing.Generated;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import javax.annotation.processing.Generated;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -21,8 +17,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "disambiguation"
 })
 @Generated("jsonschema2pojo")
-public class Recording {
-
+public class Recording
+{
+    private Artist artist;
     @JsonProperty("first-release-date")
     private String firstReleaseDate;
     @JsonProperty("id")
@@ -38,6 +35,15 @@ public class Recording {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
+    public Artist getArtist()
+    {
+        return artist;
+    }
+
+    public void setArtist(Artist artist)
+    {
+        this.artist = artist;
+    }
     @JsonProperty("first-release-date")
     public String getFirstReleaseDate() {
         return firstReleaseDate;
@@ -173,4 +179,8 @@ public class Recording {
         return ((((((((this.firstReleaseDate == rhs.firstReleaseDate)||((this.firstReleaseDate!= null)&&this.firstReleaseDate.equals(rhs.firstReleaseDate)))&&((this.length == rhs.length)||((this.length!= null)&&this.length.equals(rhs.length))))&&((this.disambiguation == rhs.disambiguation)||((this.disambiguation!= null)&&this.disambiguation.equals(rhs.disambiguation))))&&((this.id == rhs.id)||((this.id!= null)&&this.id.equals(rhs.id))))&&((this.video == rhs.video)||((this.video!= null)&&this.video.equals(rhs.video))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.title == rhs.title)||((this.title!= null)&&this.title.equals(rhs.title))));
     }
 
+    public String toSearchTerm()
+    {
+        return this.getArtist().getName() + " Band " + this.getTitle();
+    }
 }
