@@ -178,8 +178,7 @@ public class App extends Application
 		}
 		catch (NativeHookException e)
 		{
-			//Prompt -> Accessibility Features
-			throw new RuntimeException(e);
+			System.out.println("Enable Accessabilty Features to use Menu Shortcut.");
 		}
 		catch (AWTException | InterruptedException e)
 		{

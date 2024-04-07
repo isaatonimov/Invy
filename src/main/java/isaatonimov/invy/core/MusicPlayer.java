@@ -7,8 +7,7 @@ import javafx.scene.media.MediaPlayer;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import java.util.*;
 
 /*
 	The music player:
@@ -23,7 +22,7 @@ public class MusicPlayer
 	private MediaPlayer 					mediaPlayer;
 	private LinkedHashMap<Recording, Media>	songQueue;
 	private Recording					currentlyPlaying;
-	private boolean						shufflePlay;
+	private boolean						shufflePlay = true;
 	private InvidiousInstance				invidiousInstance;
 
 	public MusicPlayer(InvidiousInstance invidiousInstance)
@@ -35,6 +34,19 @@ public class MusicPlayer
 
 	public void AddToQueue(LinkedList<Recording> recordings) throws URISyntaxException, IOException, InterruptedException
 	{
+		LinkedList<Recording> shuffledRecordsLink = new LinkedList<Recording>();
+		List<Recording> shuffledRecords = new ArrayList<>();
+
+		for(var record : recordings)
+			shuffledRecords.add(record);
+
+		Collections.shuffle(shuffledRecords);
+
+		for(var record : shuffledRecords)
+			shuffledRecordsLink.add(record);
+
+		recordings = shuffledRecordsLink;
+
 		for(int i = 0; i < recordings.size(); i++)
 			songQueue.put(recordings.get(i), null);
 
