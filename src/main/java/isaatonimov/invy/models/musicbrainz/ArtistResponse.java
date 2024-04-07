@@ -4,10 +4,7 @@ package isaatonimov.invy.models.musicbrainz;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.annotation.processing.Generated;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -27,7 +24,7 @@ public class ArtistResponse
     @JsonProperty("offset")
     private Integer offset;
     @JsonProperty("artists")
-    private List<Artist> artists = new ArrayList<Artist>();
+    private LinkedList<Artist> artists = new LinkedList<Artist>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
@@ -62,12 +59,12 @@ public class ArtistResponse
     }
 
     @JsonProperty("artists")
-    public List<Artist> getArtists() {
+    public LinkedList<Artist> getArtists() {
         return artists;
     }
 
     @JsonProperty("artists")
-    public void setArtists(List<Artist> artists) {
+    public void setArtists(LinkedList<Artist> artists) {
         this.artists = artists;
     }
 

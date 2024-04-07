@@ -12,7 +12,7 @@ public class RecordingLookupSuccessHandler implements javafx.event.EventHandler
 	private LookupService 		toStart;
 	private ObservableList<String> 	listItems;
 
-	public RecordingLookupSuccessHandler(ListView toUpdate, LookupService toStart) throws InterruptedException
+	public RecordingLookupSuccessHandler() throws InterruptedException
 	{
 		listItems 		= FXCollections.observableArrayList();
 
@@ -23,14 +23,6 @@ public class RecordingLookupSuccessHandler implements javafx.event.EventHandler
 	@Override
 	public void handle(Event event)
 	{
-//		listItems.clear();
-//
-//		for(var vr : (List<String>) ((RecordingLookupService)event.getSource()).getValue())
-//			listItems.add(vr);
-//
-//		toUpdate.setItems(listItems);
-//
-//		toStart.lookupSearchTerm.set(((LookupService)event.getSource()).lookupSearchTerm.get());
-//		toStart.start();
+
 	}
 }

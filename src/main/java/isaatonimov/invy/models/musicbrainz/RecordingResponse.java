@@ -1,17 +1,12 @@
 
 package isaatonimov.invy.models.musicbrainz;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.annotation.*;
+
 import javax.annotation.processing.Generated;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -23,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class RecordingResponse {
 
     @JsonProperty("recordings")
-    private List<Recording> recordings = new ArrayList<Recording>();
+    private LinkedList<Recording> recordings = new LinkedList<>();
     @JsonProperty("recording-count")
     private Integer recordingCount;
     @JsonProperty("recording-offset")
@@ -32,12 +27,12 @@ public class RecordingResponse {
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
     @JsonProperty("recordings")
-    public List<Recording> getRecordings() {
+    public LinkedList<Recording> getRecordings() {
         return recordings;
     }
 
     @JsonProperty("recordings")
-    public void setRecordings(List<Recording> recordings) {
+    public void setRecordings(LinkedList<Recording> recordings) {
         this.recordings = recordings;
     }
 

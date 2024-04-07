@@ -7,8 +7,8 @@ import javafx.scene.media.MediaPlayer;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 /*
 	The music player:
@@ -20,17 +20,44 @@ import java.util.List;
  */
 public class MusicPlayer
 {
-	private MediaPlayer 				mediaPlayer;
-	private List<Recording>			songQueue;
-	private HashMap<Recording, Media>	preloadQueue;
-	private Recording				currentlyPlaying;
-	private boolean					shufflePlay;
-	private InvidiousInstance			invidiousInstance;
+	private MediaPlayer 					mediaPlayer;
+	private LinkedHashMap<Recording, Media>	songQueue;
+	private Recording					currentlyPlaying;
+	private boolean						shufflePlay;
+	private InvidiousInstance				invidiousInstance;
 
 	public MusicPlayer(InvidiousInstance invidiousInstance)
 	{
 		this.invidiousInstance = invidiousInstance;
-		//add Event -> on End of Song -> play next song in Queue
+
+		songQueue 	= new LinkedHashMap<Recording, Media>();
+	}
+
+	public void AddToQueue(LinkedList<Recording> recordings) throws URISyntaxException, IOException, InterruptedException
+	{
+		for(int i = 0; i < recordings.size(); i++)
+			songQueue.put(recordings.get(i), null);
+
+		PreloadMediaForRecord(recordings.getFirst());
+		Play(recordings.getFirst());
+	}
+
+
+	/*
+
+	 */
+	public void Play(Recording recording) throws URISyntaxException, IOException, InterruptedException
+	{
+		currentlyPlaying = recording;
+		mediaPlayer = new MediaPlayer(songQueue.get(recording));
+		mediaPlayer.play();
+		setOnTrackFinishedEvent(mediaPlayer);
+		songQueue.remove(recording);
+		PreloadMediaForRecord(songQueue.pollFirstEntry().getKey());
+	}
+
+	private void setOnTrackFinishedEvent(MediaPlayer mediaPlayer)
+	{
 		mediaPlayer.setOnEndOfMedia(new Runnable()
 		{
 			@Override
@@ -38,9 +65,8 @@ public class MusicPlayer
 			{
 				try
 				{
-					Play(songQueue.getFirst());
+					Play(songQueue.firstEntry().getKey());
 				}
-				//TODO -> HANDLE
 				catch (URISyntaxException e)
 				{
 					throw new RuntimeException(e);
@@ -57,47 +83,12 @@ public class MusicPlayer
 		});
 	}
 
-	public void AddToQueue(List<Recording> recordings) throws URISyntaxException, IOException, InterruptedException
+	private void PreloadMediaForRecord(Recording recording) throws IOException
 	{
-		for(var record : recordings)
-		{
-			songQueue.add(record);
-		}
-
-		Play(recordings.getFirst());
-	}
-
-	public void RemoveFromQueue(Recording recording)
-	{
-		songQueue.remove(recording);
-		preloadQueue.remove(recording);
-	}
-
-	/*
-
-	 */
-	public void Play(Recording recording) throws URISyntaxException, IOException, InterruptedException
-	{
-		RemoveFromQueue(recording);
-		mediaPlayer = new MediaPlayer(preloadQueue.get(recording));
-		PreloadMedia(3);
-	}
-
-	private void PreloadMedia(int preloadNext) throws URISyntaxException, IOException, InterruptedException
-	{
-		int preloaded = 0;
-		for(var entry : preloadQueue.entrySet())
-		{
-			if(preloaded == 3)
-				return;
-
-			Thread.sleep(100);
-
-			Recording toFetch 	= entry.getKey();
-			String fetchedURL 	= invidiousInstance.SearchAndFetchFirstVideoStream(toFetch);
-			entry.setValue(new Media(fetchedURL));
-
-			preloaded++;
-		}
+		System.out.println("Invoked Preload Media...");
+		String fetchedURL 	= invidiousInstance.SearchAndFetchFirstVideoStream(recording);
+		System.out.println("Preloading: " + fetchedURL);
+		Media toPreload = new Media(fetchedURL);
+		songQueue.put(recording, toPreload);
 	}
 }

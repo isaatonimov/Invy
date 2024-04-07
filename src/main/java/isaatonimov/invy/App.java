@@ -3,7 +3,7 @@ package isaatonimov.invy;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
-import isaatonimov.invy.controller.ViewManager;
+import isaatonimov.invy.controller.Controller;
 import isaatonimov.invy.core.MusicPlayer;
 import isaatonimov.invy.core.invidious.InvidiousInstance;
 import isaatonimov.invy.handlers.MainStageHiddenEventHandler;
@@ -14,6 +14,7 @@ import isaatonimov.invy.helpers.AppUtils;
 import isaatonimov.invy.misc.ShortcutKeyListener;
 import isaatonimov.invy.ui.runnables.SetMenuItemAction;
 import isaatonimov.invy.ui.runnables.SetMenuItemShortcut;
+import isaatonimov.invy.ui.services.ApplicationShutdownService;
 import isaatonimov.invy.ui.services.RecordingLookupService;
 import isaatonimov.invy.ui.services.ToggleViewService;
 import isaatonimov.invy.ui.services.VideoLookupService;
@@ -39,11 +40,12 @@ public class App extends Application
 	private MusicPlayer	 mainMusicPlayer;
 
 	//Background Services
-	private VideoLookupService videoLookupService;
-	private RecordingLookupService recordingLookupService;
+	private VideoLookupService 			videoLookupService;
+	private RecordingLookupService 		recordingLookupService;
 
 	//UI Services
-	private ToggleViewService toggleViewService;
+	private ToggleViewService 			toggleViewService;
+	private ApplicationShutdownService 	applicationShutdownService;
 
 	//Automation
 	private java.awt.Robot 	iRobot;
@@ -51,7 +53,7 @@ public class App extends Application
 	private FXMLLoader		mainLoader;
 	private Scene			mainScene;
 	private Stage			mainStage;
-	private ViewManager viewManager;
+	private Controller controller;
 	private FXTrayIcon		invyTrayIcon;
 
 
@@ -60,7 +62,7 @@ public class App extends Application
 		//UI
 		mainLoader 	= new FXMLLoader(getClass().getResource("/isaatonimov/invy/views/main.fxml"));
 		mainScene 	= new Scene(mainLoader.load());
-		viewManager = mainLoader.getController();
+		controller = mainLoader.getController();
 
 		invyTrayIcon 	= new FXTrayIcon(mainStage, Objects.requireNonNull(getClass().getResource("/isaatonimov/invy/images/logo.png")));
 
@@ -83,18 +85,19 @@ public class App extends Application
 
 	private void initBackgroundServices()
 	{
-		videoLookupService 	= new VideoLookupService		(mainInstance, null);
-		recordingLookupService	= new RecordingLookupService	();
+		videoLookupService 		= new VideoLookupService		(mainInstance);
+		recordingLookupService		= new RecordingLookupService	();
 	}
 
 	private void initUIHelperServices()
 	{
-		toggleViewService	= new ToggleViewService(mainStage);
+		toggleViewService		= new ToggleViewService(mainStage);
+		applicationShutdownService 	= new ApplicationShutdownService();
 	}
 
 	private void initAccessibilityServices() throws AWTException
 	{
-		iRobot = new Robot();
+		iRobot 				= new Robot();
 	}
 
     @Override
@@ -118,33 +121,33 @@ public class App extends Application
 			//Sets all Stage settings
 			setStageSettings();
 
-			viewManager.setStage(mainStage);
+			controller.setStage(mainStage);
 
 			//Configurations concerning TrayIcon and its Menu items
 			//TODO Extend -> add more MenuItems
-			MenuItem showHide = new MenuItem("Show / Hide");
+			MenuItem showHide 	= new MenuItem("Show / Hide");
+			MenuItem quit		= new MenuItem("Quit Invy");
 			invyTrayIcon.addMenuItem(showHide);
-			invyTrayIcon.addExitItem("Quit Invy");
-
+			invyTrayIcon.addMenuItem(quit);
 			//Menu Shortcut for Show / Hide -> MAC OS -> SHIFT + COMMAND + SPACE
 			MenuShortcut showHideShortcut = new MenuShortcut(KeyEvent.VK_SPACE, true);
 
 			//Custom Event for Menu Item Show / HIde
 			EventQueue.invokeLater(new SetMenuItemShortcut(invyTrayIcon, showHide, showHideShortcut));
 			EventQueue.invokeLater(new SetMenuItemAction(invyTrayIcon, showHide, toggleViewService));
+			EventQueue.invokeLater(new SetMenuItemAction(invyTrayIcon, quit, applicationShutdownService));
 
 			//View Manager -> set fields
-			viewManager.setTrayIcon(invyTrayIcon);
-			//viewManager.setInvidiouseInstance(mainInvidiousInstance);
-			//viewManager.setMusicPlayer(musicPlayer);
-			//Background
-			viewManager.setVideoLookupService(videoLookupService);
-			viewManager.setRecordingLookupService(recordingLookupService);
-			//UI
-			viewManager.setToggleViewService(toggleViewService);
+			controller.setTrayIcon				(invyTrayIcon);
+			controller.setInvidiouseInstance		(mainInstance);
+			controller.setMusicPlayer			(mainMusicPlayer);
 
-			//View Manager Listener
-			viewManager.getMusicSearchTextField().setOnKeyReleased(new SongViewSearchhandler(recordingLookupService));
+			//Background
+			controller.setVideoLookupService		(videoLookupService);
+			controller.setRecordingLookupService	(recordingLookupService);
+
+			//UI
+			controller.setToggleViewService		(toggleViewService);
 
 			//Native Hook -> Shortcut Listener
 			GlobalScreen.registerNativeHook();
@@ -155,14 +158,15 @@ public class App extends Application
 			GlobalScreen.addNativeKeyListener(mainShortcutKeyListener);
 
 			//Main Stage Event Handler -> Again very hacky
-			mainStage.setOnShown(new MainStageShownEventHandler(iRobot, viewManager.getMusicSearchTextField()));
+			mainStage.setOnShown(new MainStageShownEventHandler(iRobot, controller.getMusicSearchTextField()));
 			mainStage.setOnHidden(new MainStageHiddenEventHandler());
 
 			//Service Event Handler - Success Only
-			EventType<WorkerStateEvent> successEvent = WorkerStateEvent.WORKER_STATE_SUCCEEDED;
-			//recordingLookupService.addEventHandler	(successEvent, 	new RecordingLookupSuccessHandler(viewManager.getSongView(), videoLookupService));
-			//videoLookupService.addEventHandler	(successEvent, 	new VideoLookupSuccessHandler(mainInvidiousInstance));
+			EventType<WorkerStateEvent> 		successEvent = WorkerStateEvent.WORKER_STATE_SUCCEEDED;
 			toggleViewService.addEventHandler		(successEvent, 	new ToggleViewSuccessHandler());
+
+			SongViewSearchhandler songSearchHandler = new SongViewSearchhandler(mainMusicPlayer, recordingLookupService);
+			controller.getMusicSearchTextField().setOnKeyReleased(songSearchHandler);
 
 			//Show UI / triggers
 			invyTrayIcon.show();
@@ -182,6 +186,13 @@ public class App extends Application
 			//Prompt -> ?
 			throw new RuntimeException(e);
 		}
+	}
+	@Override
+	public void stop()
+	{
+		System.out.println("Stage is closing");
+		invyTrayIcon.hide();
+		System.exit(0);
 	}
 
     public static void main(String[] args)

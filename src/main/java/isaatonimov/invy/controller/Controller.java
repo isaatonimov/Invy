@@ -1,24 +1,29 @@
 package isaatonimov.invy.controller;
 
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
+import isaatonimov.invy.core.MusicPlayer;
 import isaatonimov.invy.core.invidious.InvidiousInstance;
 import isaatonimov.invy.ui.services.RecordingLookupService;
 import isaatonimov.invy.ui.services.ToggleViewService;
 import isaatonimov.invy.ui.services.VideoLookupService;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class ViewManager
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class Controller implements Initializable
 {
 	//UI
 	private Stage stage;
 	private FXTrayIcon trayIcon;
 
 	//Core
-	private InvidiousInstance 	invidiousInstance;
-	private MusicPlayer 		musicPlayer;
+	private InvidiousInstance 		invidiousInstance;
+	private MusicPlayer 			musicPlayer;
 
 	//Services - UI
 	private ToggleViewService 		toggleViewService;
@@ -74,5 +79,11 @@ public class ViewManager
 	public void setToggleViewService(ToggleViewService toggleViewService)
 	{
 		this.toggleViewService = toggleViewService;
+	}
+
+	@Override
+	public void initialize(URL url, ResourceBundle resourceBundle)
+	{
+
 	}
 }

@@ -8,7 +8,7 @@ import javafx.concurrent.Task;
 import java.io.IOException;
 import java.util.List;
 
-public class VideoLookupService extends LookupService
+public class VideoLookupService extends LookupService<SearchResponse>
 {
 	private InvidiousInstance 	targetInstance;
 	private Recording 		toLookUp;
