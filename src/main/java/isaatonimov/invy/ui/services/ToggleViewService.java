@@ -1,34 +1,28 @@
 package isaatonimov.invy.ui.services;
 
+import isaatonimov.invy.controller.Controller;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.stage.Stage;
 
 public class ToggleViewService extends Service
 {
-	public Stage viewStage;
+	private Controller 	controller;
 
-	public ToggleViewService(Stage viewStage)
+	public ToggleViewService(Controller controller)
 	{
-		this.viewStage = viewStage;
+		this.controller = controller;
 	}
 	@Override
 	protected Task createTask()
 	{
-		if(viewStage.isShowing())
-		{
-			viewStage.hide();
-		}
-		else
-		{
-			viewStage.show();
-			viewStage.requestFocus();
-		}
+		controller.toggleMainView();
+
 		return new Task()
 		{
 			@Override
 			protected Object call() throws Exception
 			{
+
 				return null;
 			}
 		};

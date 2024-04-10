@@ -1,6 +1,7 @@
 package isaatonimov.invy.handlers;
 
 import isaatonimov.invy.core.MusicPlayer;
+import isaatonimov.invy.exceptions.NoVideoResultsFoundException;
 import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.ui.services.RecordingLookupService;
 import javafx.concurrent.Service;
@@ -55,6 +56,10 @@ public class SongViewSearchhandler implements javafx.event.EventHandler<javafx.s
 					throw new RuntimeException(e);
 				}
 				catch (InterruptedException e)
+				{
+					throw new RuntimeException(e);
+				}
+				catch (NoVideoResultsFoundException e)
 				{
 					throw new RuntimeException(e);
 				}

@@ -1,11 +1,10 @@
 package isaatonimov.invy.handlers;
 
+import isaatonimov.invy.controller.Controller;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
@@ -14,14 +13,16 @@ import java.awt.event.InputEvent;
 
 public class MainStageShownEventHandler implements EventHandler<WindowEvent>
 {
+	private Controller controller;
 	private Robot robot;
 	private javafx.scene.robot.Robot robotFX;
 	private Node whereToMove;
-	public MainStageShownEventHandler(java.awt.Robot robot, Node whereToMove)
+	public MainStageShownEventHandler(Controller controller)
 	{
+		this.controller = controller;
 		this.robotFX = new javafx.scene.robot.Robot();
-		this.robot = robot;
-		this.whereToMove = whereToMove;
+		this.robot = controller.getRobot();
+		this.whereToMove = controller.getArtistSearchTextField();
 	}
 	@Override
 	public void handle(WindowEvent windowEvent)
@@ -48,10 +49,12 @@ public class MainStageShownEventHandler implements EventHandler<WindowEvent>
 
 				robotFX.mouseMove(destinationX, destinationY -50);
 
-				((Window)(windowEvent.getSource())).getScene().setCursor(Cursor.NONE);
+				//((Window)(windowEvent.getSource())).getScene().setCursor(Cursor.NONE);
 			}
 		});
 
 		delay.play();
+
+		controller.updateShowHideMenuItem(false);
 	}
 }

@@ -2,6 +2,7 @@ package isaatonimov.invy.core.invidious;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import isaatonimov.invy.exceptions.NoVideoResultsFoundException;
 import isaatonimov.invy.models.invidious.FormatStream;
 import isaatonimov.invy.models.invidious.SearchResponse;
 import isaatonimov.invy.models.invidious.VideoResponse;
@@ -12,6 +13,7 @@ import kong.unirest.Unirest;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.List;
 
 public class InvidiousInstance
@@ -26,12 +28,20 @@ public class InvidiousInstance
 		this.instanceURL.set(instanceURL);
 	}
 
-	public List<SearchResponse> search(Recording recording) throws IOException
+
+	public String searchAndGetFirstVideoID(Recording recording) throws NoVideoResultsFoundException, IOException
+	{
+		List<SearchResponse> searchResponses = search(recording);
+
+		return searchResponses.getFirst().getVideoId();
+	}
+
+	public List<SearchResponse> search(Recording recording) throws IOException, NoVideoResultsFoundException
 	{
 		//currently fixed value
 		String searchType = "video";
 		Unirest.config().defaultBaseUrl(instanceURL.get().toString());
-		Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
+		//Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
 
 		var response = Unirest.get("/api/v1/search").queryString("q", recording.toSearchTerm()).queryString("type", searchType).asString();
 		System.out.println("Searched for: " + recording.toSearchTerm());
@@ -42,13 +52,21 @@ public class InvidiousInstance
 		//Generate JSON Model Class from JSON - enabled just in development
 		//JsonModelClassGenerator.generateJSONModelClassFromJSONString(response.getBody().toString(), "SearchResponse");
 
-		return searchResponse;
+		if(searchResponse.size() == 0)
+			throw new NoVideoResultsFoundException();
+		else
+			return searchResponse;
 	}
 
+	/*
+		Used to be the method of choice to get video streams
+		piped offers direct access to audio streams and is more privacy friendly
+	 */
+	@Deprecated
 	public List<FormatStream> fetchFormatStreams(SearchResponse searchResponse) throws IOException
 	{
 		Unirest.config().defaultBaseUrl(instanceURL.get().toString());
-		Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
+		//Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
 
 		HttpResponse<String> response = Unirest.get("/api/v1/videos/" + searchResponse.getVideoId()).asString();
 
@@ -68,10 +86,12 @@ public class InvidiousInstance
 		return videoResponse.getFormatStreams();
 	}
 
-	public String SearchAndFetchFirstVideoStream(Recording recording) throws IOException
+	@Deprecated
+	public URL SearchAndFetchFirstVideoURL(Recording recording) throws IOException, NoVideoResultsFoundException
 	{
 		SearchResponse firstSearchResponse = search(recording).getFirst();
 		FormatStream firstFormatStream = fetchFormatStreams(firstSearchResponse).getFirst();
-		return firstFormatStream.getUrl();
+
+		return new URL(firstFormatStream.getUrl());
 	}
 }

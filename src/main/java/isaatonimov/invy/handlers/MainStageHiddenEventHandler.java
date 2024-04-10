@@ -1,10 +1,9 @@
 package isaatonimov.invy.handlers;
 
+import isaatonimov.invy.controller.Controller;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
-import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
@@ -13,9 +12,11 @@ import java.awt.event.InputEvent;
 
 public class MainStageHiddenEventHandler implements EventHandler<WindowEvent>
 {
+	private Controller controller;
 	private Robot robot;
-	public MainStageHiddenEventHandler() throws AWTException
+	public MainStageHiddenEventHandler(Controller controller) throws AWTException
 	{
+		this.controller = controller;
 		this.robot = new Robot();
 	}
 	@Override
@@ -27,7 +28,7 @@ public class MainStageHiddenEventHandler implements EventHandler<WindowEvent>
 			@Override
 			public void handle(ActionEvent actionEvent)
 			{
-				((Window)(windowEvent.getSource())).getScene().setCursor(Cursor.DEFAULT);
+				//((Window)(windowEvent.getSource())).getScene().setCursor(Cursor.DEFAULT);
 
 				robot.mousePress(InputEvent.BUTTON1_MASK);
 				robot.mouseRelease(InputEvent.BUTTON1_MASK);
@@ -35,5 +36,6 @@ public class MainStageHiddenEventHandler implements EventHandler<WindowEvent>
 		});
 
 		delay.play();
+		controller.updateShowHideMenuItem(true);
 	}
 }

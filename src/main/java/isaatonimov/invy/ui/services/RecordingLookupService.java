@@ -1,27 +1,22 @@
 package isaatonimov.invy.ui.services;
 
-import isaatonimov.invy.core.musicbrainz.MusicBrainzHelper;
+import isaatonimov.invy.core.musicbrainz.MusicBrainzInstance;
 import isaatonimov.invy.models.musicbrainz.Artist;
 import isaatonimov.invy.models.musicbrainz.Recording;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.concurrent.Task;
-import javafx.scene.control.TextField;
 
 import java.util.LinkedList;
 
 public class RecordingLookupService extends LookupService<LinkedList<Recording>>
 {
-	private SimpleStringProperty 	searchTerm 	= new SimpleStringProperty		(this, "searchTerm");
-	private SimpleListProperty<String> recordsToSeach = new SimpleListProperty<String>	(this, "recordsToSearch");
-
+	Artist artist;
 	public RecordingLookupService()
 	{
 	}
 
-	public void SetTextFieldToBind(TextField searchField)
+	public void updateArtist(Artist artist)
 	{
-		searchField.textProperty().bindBidirectional(searchTerm);
+		this.artist = artist;
 	}
 
 	@Override
@@ -34,13 +29,8 @@ public class RecordingLookupService extends LookupService<LinkedList<Recording>>
 			{
 				System.out.println("Recording Lookup Service Starting....");
 
-				LinkedList<Recording> recordings = new LinkedList<>();
-				LinkedList<Artist> 	artists = MusicBrainzHelper.searchForArtis(searchTerm.get());
-
-				for(var artist : artists)
-				{
-					recordings.addAll(MusicBrainzHelper.searchForSongs(artist));
-				}
+				LinkedList<Recording> recordings 	= new LinkedList<>();
+				recordings.addAll(MusicBrainzInstance.searchForSongs(artist));
 
 				for(var record : recordings)
 					System.out.println("Titles looked up: " + record.getTitle());

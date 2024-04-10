@@ -1,13 +1,22 @@
 package isaatonimov.invy.core;
 
-import isaatonimov.invy.core.invidious.InvidiousInstance;
+import isaatonimov.invy.controller.Controller;
+import isaatonimov.invy.exceptions.NoVideoResultsFoundException;
 import isaatonimov.invy.models.musicbrainz.Recording;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import isaatonimov.invy.ui.services.AudioStreamLookupService;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /*
 	The music player:
@@ -19,21 +28,23 @@ import java.util.*;
  */
 public class MusicPlayer
 {
-	private MediaPlayer 					mediaPlayer;
-	private LinkedHashMap<Recording, Media>	songQueue;
+	private AudioStreamLookupService 		audioStreamLookupService;
 	private Recording					currentlyPlaying;
 	private boolean						shufflePlay = true;
-	private InvidiousInstance				invidiousInstance;
+	private Controller					controller;
 
-	public MusicPlayer(InvidiousInstance invidiousInstance)
+
+	public MusicPlayer(Controller controller)
 	{
-		this.invidiousInstance = invidiousInstance;
-
-		songQueue 	= new LinkedHashMap<Recording, Media>();
+		this.controller = controller;
+		this.audioStreamLookupService = controller.getAudioStreamLookupService();
 	}
 
-	public void AddToQueue(LinkedList<Recording> recordings) throws URISyntaxException, IOException, InterruptedException
+	public void AddToQueue(LinkedList<Recording> recordings) throws URISyntaxException, IOException, InterruptedException, NoVideoResultsFoundException
 	{
+		//Clears all songs before a a new Queue is submitted
+		//thats all i need for now
+
 		LinkedList<Recording> shuffledRecordsLink = new LinkedList<Recording>();
 		List<Recording> shuffledRecords = new ArrayList<>();
 
@@ -48,46 +59,45 @@ public class MusicPlayer
 		recordings = shuffledRecordsLink;
 
 		for(int i = 0; i < recordings.size(); i++)
-			songQueue.put(recordings.get(i), null);
 
-		PreloadMediaForRecord(recordings.getFirst());
+		//PreloadMediaForRecord(recordings.getFirst());
+
 		Play(recordings.getFirst());
+
+	}
+
+	public void RemoveRecordGracefully(Recording record)
+	{
+
 	}
 
 
 	/*
 
 	 */
-	public void Play(Recording recording) throws URISyntaxException, IOException, InterruptedException
+	public void Play(Recording recording) throws URISyntaxException, IOException, InterruptedException, NoVideoResultsFoundException
 	{
-		currentlyPlaying = recording;
-		mediaPlayer = new MediaPlayer(songQueue.get(recording));
-		mediaPlayer.play();
-		setOnTrackFinishedEvent(mediaPlayer);
-		songQueue.remove(recording);
-		PreloadMediaForRecord(songQueue.pollFirstEntry().getKey());
-	}
+		URL fetchedURL;
 
-	private void setOnTrackFinishedEvent(MediaPlayer mediaPlayer)
-	{
-		mediaPlayer.setOnEndOfMedia(new Runnable()
+		audioStreamLookupService.updateQuery(recording);
+		audioStreamLookupService.restart();
+
+		audioStreamLookupService.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, new EventHandler()
 		{
 			@Override
-			public void run()
+			public void handle(Event event)
 			{
+				URL fetchedURL = (URL) audioStreamLookupService.getValue();
+
+				MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
+				MediaPlayer mediaPlayer1 = mediaPlayerFactory.mediaPlayers().newMediaPlayer();
+				mediaPlayer1.media().play(fetchedURL.toString(), ":no-video");
+				mediaPlayer1.
+
 				try
 				{
-					Play(songQueue.firstEntry().getKey());
-				}
-				catch (URISyntaxException e)
-				{
-					throw new RuntimeException(e);
-				}
-				catch (IOException e)
-				{
-					throw new RuntimeException(e);
-				}
-				catch (InterruptedException e)
+					Thread.currentThread().join();
+				} catch (InterruptedException e)
 				{
 					throw new RuntimeException(e);
 				}
@@ -95,12 +105,13 @@ public class MusicPlayer
 		});
 	}
 
-	private void PreloadMediaForRecord(Recording recording) throws IOException
+	public Recording getCurrentlyPlayingRecord()
 	{
-		System.out.println("Invoked Preload Media...");
-		String fetchedURL 	= invidiousInstance.SearchAndFetchFirstVideoStream(recording);
-		System.out.println("Preloading: " + fetchedURL);
-		Media toPreload = new Media(fetchedURL);
-		songQueue.put(recording, toPreload);
+		return currentlyPlaying;
+	}
+
+	public void shutdown()
+	{
+
 	}
 }
