@@ -21,39 +21,39 @@ public class SongInfoService extends Service<Recording>
 	@Override
 	protected Task<Recording> createTask()
 	{
+		if(controller.getMusicPlayer().currentlyPlaying.get() != null)
+		{
+			String targetURL = "https://musicbrainz.org/recording/" + controller.getMusicPlayer().currentlyPlaying.get().getId();
+
+			System.out.println("Clicked on Song Info:" + targetURL);
+
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
+			{
+				try
+				{
+					Desktop.getDesktop().browse(new URI(targetURL));
+				}
+				catch (IOException e)
+				{
+					throw new RuntimeException(e);
+				}
+				catch (URISyntaxException e)
+				{
+					throw new RuntimeException(e);
+				}
+			}
+		}
+		else
+		{
+			controller.playWarningSound();
+		}
+
 		return new Task<Recording>()
 		{
 			@Override
 			protected Recording call() throws Exception
 			{
-				if(controller.getMusicPlayer().getCurrentlyPlayingRecord() != null)
-				{
-					String targetURL = "https://musicbrainz.org/recording/" + controller.getMusicPlayer().getCurrentlyPlayingRecord().toString();
-
-					System.out.println("Clicked on Song Info:" + targetURL);
-
-					if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
-					{
-						try
-						{
-							Desktop.getDesktop().browse(new URI(targetURL));
-						}
-						catch (IOException e)
-						{
-							throw new RuntimeException(e);
-						}
-						catch (URISyntaxException e)
-						{
-							throw new RuntimeException(e);
-						}
-					}
-				}
-				else
-				{
-					controller.playWarningSound();
-				}
-
-				return controller.getMusicPlayer().getCurrentlyPlayingRecord();
+				return controller.getMusicPlayer().currentlyPlaying.get();
 			}
 		};
 	}

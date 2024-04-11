@@ -1,5 +1,7 @@
 package isaatonimov.invy;
 
+import java.awt.*;
+
 /**
  * Credits to https://stackoverflow.com/users/1990216/cai
  - This class is intended to start application as AWT application before initializing
@@ -10,12 +12,13 @@ package isaatonimov.invy;
 
 public class AWTMain {
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 
 		// This is awt property which enables dock-icon-less
 		// applications
 		System.setProperty("apple.awt.UIElement", "true");
-		java.awt.Toolkit.getDefaultToolkit();
+		Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
 
 		// This is a call to JavaFX application main method.
 		// From now on we are transferring control to FX application.

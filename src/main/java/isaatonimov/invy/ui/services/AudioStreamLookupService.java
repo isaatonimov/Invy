@@ -1,7 +1,5 @@
 package isaatonimov.invy.ui.services;
 
-import isaatonimov.invy.controller.Controller;
-import isaatonimov.invy.core.invidious.InvidiousInstance;
 import isaatonimov.invy.core.invidious.PipedInstance;
 import isaatonimov.invy.exceptions.SearchQueryEmptyException;
 import isaatonimov.invy.models.musicbrainz.Recording;
@@ -14,35 +12,22 @@ import java.util.List;
 
 public class AudioStreamLookupService extends LookupService<URL>
 {
-	private Controller		controller;
-	private InvidiousInstance 	invidiousInstance;
 	private PipedInstance		pipedInstance;
 	private Recording		query;
 
-	public AudioStreamLookupService(Controller controller)
+	public AudioStreamLookupService(PipedInstance pipedInstance)
 	{
-		this.controller		= controller;
-		this.invidiousInstance 	= controller.getInvidiousInstance();
-		this.pipedInstance		= controller.getPipedInstance();
+		this.pipedInstance		= pipedInstance;
 	}
 
 	public void updateQuery(Recording query)
 	{
-		//Fallback
-		if(query == null)
-			controller.getRecommendationsView().getSelectionModel().getSelectedItem();
-
 		this.query = query;
 	}
 
 	@Override
 	protected Task createTask()
 	{
-		if(pipedInstance == null)
-			pipedInstance = controller.getPipedInstance();
-		if(invidiousInstance == null)
-			invidiousInstance = controller.getInvidiousInstance();
-
 		return new Task()
 		{
 			@Override
@@ -59,10 +44,7 @@ public class AudioStreamLookupService extends LookupService<URL>
 
 						//currently just picks first id then picks stream
 						List<AudioStream> streams = pipedInstance.getAudioStreamsByVideoID(IDs.getFirst());
-						//Does the same for streams, does not prioritize high quality for example
-
-
-
+						//Does the same for streams, does not prioritize high quality
 						response = new URL(streams.getFirst().getUrl());
 					}
 					else

@@ -33,14 +33,7 @@ public class SetMenuItemAction implements Runnable
 					@Override
 					public void actionPerformed(ActionEvent e)
 					{
-						Platform.runLater(new Runnable()
-						{
-							@Override
-							public void run()
-							{
-								toStart.restart();
-							}
-						});
+						Platform.runLater(() -> toStart.restart());
 					}
 				});
 			}

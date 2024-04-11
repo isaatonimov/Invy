@@ -1,6 +1,7 @@
 package isaatonimov.invy.controller;
 
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
+import isaatonimov.invy.App;
 import isaatonimov.invy.core.MusicPlayer;
 import isaatonimov.invy.core.invidious.InvidiousInstance;
 import isaatonimov.invy.core.invidious.PipedInstance;
@@ -11,9 +12,15 @@ import isaatonimov.invy.ui.services.ArtistLookupService;
 import isaatonimov.invy.ui.services.AudioStreamLookupService;
 import isaatonimov.invy.ui.services.RecordingLookupService;
 import isaatonimov.invy.ui.services.ToggleViewService;
+import javafx.application.Platform;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionModel;
@@ -53,13 +60,15 @@ public class Controller implements Initializable
 
 	private Robot robot;
 
+	private static NotificationFX notificationFX;
+
 	//FXML References
 	@FXML
-	private TextField artistSearchTextField;
+	private TextField 	artistSearchTextField;
 	@FXML
-	private ListView recommendationsView;
-
-
+	private ListView 	recommendationsView;
+	@FXML
+	private Node 		rootPane;
 
 	//GETTERS
 	public ListView getRecommendationsView()
@@ -89,6 +98,18 @@ public class Controller implements Initializable
 	public void setMusicPlayer(MusicPlayer musicPlayer)
 	{
 		this.musicPlayer = musicPlayer;
+
+		this.musicPlayer.currentlyPlaying.addListener((observable, oldValue, newValue) ->
+		{
+			updateTogglePlayMenuItem();
+			updateCurrentlyPlayingSongMenuItem();
+			showNowPlaying();
+		});
+
+		this.musicPlayer.currentlyPlayingState.addListener((observable, oldValue, newValue) ->
+		{
+			updateTogglePlayMenuItem();
+		});
 	}
 	public void setTrayIcon(FXTrayIcon invyTrayIcon)
 	{
@@ -138,7 +159,14 @@ public class Controller implements Initializable
 
 	public void hideMainWindow()
 	{
-		this.stage.hide();
+		Platform.runLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				stage.hide();
+			}
+		});
 	}
 
 	public void showMainWindow()
@@ -154,8 +182,17 @@ public class Controller implements Initializable
 			menuItemShowHide.setText("Hide Search");
 	}
 
-	public void updateCurrentlyPlayingSongMenuItem(Recording record)
+	public void updateTogglePlayMenuItem()
 	{
+		if(musicPlayer.isCurrentlySomethingPlaying())
+			menuItemTogglePlay.setText("Play");
+		else
+			menuItemTogglePlay.setText("Pause");
+	}
+
+	public void updateCurrentlyPlayingSongMenuItem()
+	{
+		Recording record = musicPlayer.currentlyPlaying.get();
 		menuItemSong.setText(record.getArtist().getName() + ": " + record.getTitle());
 	}
 
@@ -211,11 +248,25 @@ public class Controller implements Initializable
 		recordingLookupService.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event ->
 		{
 			if(recordingLookupService.getValue() != null)
+			{
 				startMusicPlayerWithPlaylist((LinkedList<Recording>) recordingLookupService.getValue());
+
+				musicPlayer.getAudioStreamLookupService().addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, new EventHandler()
+				{
+					@Override
+					public void handle(Event event)
+					{
+						updateCurrentlyPlayingSongMenuItem();
+						updateTogglePlayMenuItem();
+					}
+				});
+			}
 		});
 
 		recordingLookupService.updateArtist(selectedItem);
 		recordingLookupService.restart();
+
+
 	}
 
 	public void setMenuItemShowHide(MenuItem showHide)
@@ -253,7 +304,7 @@ public class Controller implements Initializable
 
 	public void playWarningSound()
 	{
-		System.out.println("Todo: Implement Warning Sound...");
+		Toolkit.getDefaultToolkit().beep();
 	}
 
 	public Stage getStage()
@@ -269,5 +320,55 @@ public class Controller implements Initializable
 	public AudioStreamLookupService getAudioStreamLookupService()
 	{
 		return audioStreamLookupService;
+	}
+
+	public void showNowPlaying()
+	{
+		Recording recording = musicPlayer.currentlyPlaying.get();
+		String notificationTitle 	= "Playing";
+		String notificationSubtitle 	= "Song";
+		String notificationMessage 	= recording.getTitle() + " by " + recording.getArtist().getName();
+
+		NotificationFX notificationFX = createNewNotifcation();
+
+		notificationFX.title.set(notificationTitle);
+		notificationFX.subtitle.set(notificationSubtitle);
+		notificationFX.message.set(notificationMessage);
+
+		notificationFX.show();
+
+		//trayIcon.showMessage(;
+	}
+
+	public NotificationFX createNewNotifcation()
+	{
+		if(notificationFX != null)
+			return notificationFX;
+		else
+		{
+			FXMLLoader notifcationLoader;
+			notifcationLoader = new FXMLLoader(App.class.getResource("/isaatonimov/invy/views/notification.fxml"));
+			Scene notificationScene;
+
+			NotificationFX notificationFX;
+
+			try
+			{
+				notificationScene = new Scene(notifcationLoader.load());
+				notificationFX = notifcationLoader.getController();
+				notificationFX.setScene(notificationScene);
+			}
+			catch (IOException e)
+			{
+				throw new RuntimeException(e);
+			}
+
+			return notificationFX;
+		}
+	}
+
+	public Node getRootPane()
+	{
+		return rootPane;
 	}
 }

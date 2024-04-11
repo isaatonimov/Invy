@@ -1,6 +1,10 @@
 package isaatonimov.invy;
 
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeHookException;
+import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
 import isaatonimov.invy.controller.Controller;
 import isaatonimov.invy.core.MusicPlayer;
 import isaatonimov.invy.core.invidious.InvidiousInstance;
@@ -17,6 +21,7 @@ import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -40,17 +45,21 @@ public class App extends Application
 	private MusicPlayer	 	mainMusicPlayer;
 
 	//Background Services
-	private AudioStreamLookupService audioStreamLookupService;
+	private AudioStreamLookupService 	audioStreamLookupService;
 	private RecordingLookupService 		recordingLookupService;
 	private ArtistLookupService			artistLookupService;
 
 	//UI Services
 	private ToggleViewService 			toggleViewService;
 	private SongInfoService			showSongInfoService;
+	private SongTogglePlayService		songTogglePlayService;
+	private SongPlayNextService			songPlayNextService;
+	private SongPlayPrevService			songPlayPrevService;
 	private ApplicationShutdownService 	applicationShutdownService;
 
 	//Automation
 	private java.awt.Robot 	iRobot;
+	private boolean 			isMouseOutsideMainWindow;
 
 	private FXMLLoader		mainLoader;
 	private Scene			mainScene;
@@ -87,7 +96,6 @@ public class App extends Application
 		{
 			invidiousInstance = new InvidiousInstance(AppUtils.getMainInvidiousInstanceURL());
 			pipedInstance	= new PipedInstance(new URL("https://pipedapi.kavin.rocks"));
-
 		}
 		catch (URISyntaxException e)
 		{
@@ -101,6 +109,10 @@ public class App extends Application
 
 	private void setStageSettings()
 	{
+		//set app icon
+		mainStage.getIcons().add(new Image(App.class.getResource("/isaatonimov/invy/images/invy.icns").toString()));
+
+		//set
 		mainStage.setTitle("Invy");
 		mainStage.initStyle(StageStyle.UNDECORATED);
 		mainStage.setScene(mainScene);
@@ -117,8 +129,8 @@ public class App extends Application
 		recordingLookupService		= new RecordingLookupService	();
 		artistLookupService		= new ArtistLookupService		();
 
-		//Uses dynamic Instances of Piped and Invidious
-		audioStreamLookupService = new AudioStreamLookupService(controller);
+		//Uses dynamic Instances of Piped
+		audioStreamLookupService = new AudioStreamLookupService(pipedInstance);
 	}
 
 	private void initUIHelperServices(Controller controller)
@@ -126,25 +138,50 @@ public class App extends Application
 		toggleViewService		= new ToggleViewService			(controller);
 		showSongInfoService		= new SongInfoService			(controller);
 		applicationShutdownService 	= new ApplicationShutdownService	(controller);
+		songTogglePlayService		= new SongTogglePlayService		(controller);
+		songPlayNextService		= new SongPlayNextService			(controller);
+		songPlayPrevService		= new SongPlayPrevService			(controller);
 	}
 
-	private void initAccessibilityServices(MenuShortcut showHideShortcut)
+	private void initAccessibilityServices(MenuShortcut showHideShortcut, MenuShortcut songToggleShortcut, MenuShortcut playNextShortcut, MenuShortcut playPrevShortcut)
 	{
 		try
 		{
 			iRobot 				= new Robot();
 
 			//Native Hook -> Shortcut Listener
-			//GlobalScreen.registerNativeHook();
+			GlobalScreen.registerNativeHook();
 
 			ShortcutKeyListener mainShortcutKeyListener = new ShortcutKeyListener();
-			mainShortcutKeyListener.addShortcutToListenFor(showHideShortcut, toggleViewService);
+			mainShortcutKeyListener.addShortcutToListenFor		(showHideShortcut, 	toggleViewService);
+			mainShortcutKeyListener.addSimpleShortcutToListenFor	(65, 		songPlayPrevService);
+			mainShortcutKeyListener.addSimpleShortcutToListenFor	(66, 		songTogglePlayService);
+			mainShortcutKeyListener.addSimpleShortcutToListenFor	(67, 		songPlayNextService);
 
-			//GlobalScreen.addNativeKeyListener(mainShortcutKeyListener);
+			NativeMouseListener mouseListener = new NativeMouseListener()
+			{
+				@Override
+				public void nativeMouseClicked(NativeMouseEvent nativeEvent)
+				{
+					if(isMouseOutsideMainWindow)
+					{
+						controller.hideMainWindow();
+						isMouseOutsideMainWindow = false;
+					}
+				}
+			};
+
+			GlobalScreen.addNativeKeyListener(mainShortcutKeyListener);
+			GlobalScreen.addNativeMouseListener(mouseListener);
+
+			controller.setRobot(iRobot);
 		}
 		catch (InterruptedException | AWTException e)
 		{
 			System.out.println("Enable Accessabilty Features to use Menu Shortcut.");
+		} catch (NativeHookException e)
+		{
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -156,6 +193,10 @@ public class App extends Application
 
 		//Initialises Background Services that do not interact directly with the ui
 		initBackgroundServices();
+
+		//music Player instance after background services are started
+		mainMusicPlayer 	= new MusicPlayer(audioStreamLookupService);
+
 		//Sets all Stage settings
 		setStageSettings();
 
@@ -166,14 +207,19 @@ public class App extends Application
 		MenuItem showHide 	= new MenuItem("Show Search");
 		MenuItem song		= new MenuItem("No song yet...");
 		MenuItem togglePlay	= new MenuItem("Play");
+		MenuItem prevSong	= new MenuItem("Previous");
 		MenuItem nextSong	= new MenuItem("Next");
 		MenuItem quit		= new MenuItem("Quit Invy");
+
+		FXTrayIcon trayIconTest = new FXTrayIcon(this.mainStage);
+
 
 		invyTrayIcon.addMenuItem(showHide);
 		invyTrayIcon.addSeparator();
 		invyTrayIcon.addMenuItem(song);
 		invyTrayIcon.addSeparator();
 		invyTrayIcon.addMenuItem(togglePlay);
+		invyTrayIcon.addMenuItem(prevSong);
 		invyTrayIcon.addMenuItem(nextSong);
 		invyTrayIcon.addSeparator();
 		invyTrayIcon.addMenuItem(quit);
@@ -185,9 +231,13 @@ public class App extends Application
 		//Initialise all UI Helper Services
 
 		//Menu Shortcut for Show / Hide -> MAC OS -> SHIFT + COMMAND + SPACE
-		MenuShortcut showHideShortcut = new MenuShortcut(KeyEvent.VK_SPACE, true);
+		MenuShortcut showHideShortcut 		= new MenuShortcut(KeyEvent.VK_SPACE, true);
 		//Menu Shortcut for opening current song info in default browser
-		MenuShortcut showSongInfoShortcut = new MenuShortcut(KeyEvent.VK_TAB, true);
+		MenuShortcut showSongInfoShortcut 	= new MenuShortcut(KeyEvent.VK_TAB, true);
+		//Menu Shortcut for toggling play/pause of current song
+		MenuShortcut songTogglePlayShortcut 	= new MenuShortcut(KeyEvent.VK_F8, false);
+		MenuShortcut songTogglePlayNext 	= new MenuShortcut(KeyEvent.VK_F9, false);
+		MenuShortcut songTogglePlayPrev 	= new MenuShortcut(KeyEvent.VK_F7, false);
 
 		//Custom Event for Menu Item Show / HIde
 		EventQueue.invokeLater(new SetMenuItemShortcut(invyTrayIcon, showHide, showHideShortcut));
@@ -197,8 +247,17 @@ public class App extends Application
 		//Custom Event for Menu Item Show Song Info
 		EventQueue.invokeLater(new SetMenuItemShortcut(invyTrayIcon, song, showSongInfoShortcut));
 		EventQueue.invokeLater(new SetMenuItemAction(invyTrayIcon, song, showSongInfoService));
+		//Custom Event for Play / Pause Shortcut
+		EventQueue.invokeLater(new SetMenuItemShortcut(invyTrayIcon, togglePlay, songTogglePlayShortcut));
+		EventQueue.invokeLater(new SetMenuItemAction(invyTrayIcon, togglePlay, songTogglePlayService));
+		//Custom Event for Play Next Song Shortcut
+		EventQueue.invokeLater(new SetMenuItemShortcut(invyTrayIcon, nextSong, songTogglePlayNext));
+		EventQueue.invokeLater(new SetMenuItemAction(invyTrayIcon, nextSong, songPlayNextService));
+		//Custom Event for Play Previous Song Shortcut
+		EventQueue.invokeLater(new SetMenuItemShortcut(invyTrayIcon, prevSong, songTogglePlayPrev));
+		EventQueue.invokeLater(new SetMenuItemAction(invyTrayIcon, prevSong, songPlayPrevService));
 
-		//View Manager -> set fields
+		//Controller -> set fields
 		controller.setTrayIcon				(invyTrayIcon);
 		controller.setInvidiouseInstance		(invidiousInstance);
 		controller.setPipedInstance			(pipedInstance);
@@ -214,8 +273,7 @@ public class App extends Application
 		controller.setToggleViewService		(toggleViewService);
 
 		//
-		initAccessibilityServices(showHideShortcut);
-		controller.setRobot(iRobot);
+		initAccessibilityServices(showHideShortcut, songTogglePlayShortcut, songTogglePlayNext, songTogglePlayPrev);
 
 		//Main Stage Event Handler -> Again very hacky
 		mainStage.setOnShown(new MainStageShownEventHandler(controller));
@@ -243,11 +301,11 @@ public class App extends Application
 		controller.getArtistSearchTextField().setOnKeyReleased(smartSearchBoxHandler);
 		controller.getRecommendationsView().setOnMouseClicked(recommendationViewHandler);
 
-		//music Player instance an link
-		mainMusicPlayer 	= new MusicPlayer(controller);
-		controller.setMusicPlayer(mainMusicPlayer);
+		//Handler for MainPane TODO: Make better
+		controller.getRootPane().setOnMouseExited(event -> isMouseOutsideMainWindow = true);
+		controller.getRootPane().setOnMouseEntered(event -> isMouseOutsideMainWindow = false);
 
-		//TESTING -> API Piped
+		controller.setMusicPlayer(mainMusicPlayer);
 
 		//show the main icon
 		invyTrayIcon.show();
@@ -257,8 +315,9 @@ public class App extends Application
 	public void stop()
 	{
 		System.out.println("Stage is closing");
-		//invyTrayIcon.hide();
-		//System.exit(0);
+		mainMusicPlayer.shutdown();
+		invyTrayIcon.hide();
+		System.exit(0);
 	}
 
     public static void main(String[] args)

@@ -4,6 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+
   <groupId>isaatonimov</groupId>
   <artifactId>invy</artifactId>
   <version>0.0.1</version>
@@ -20,11 +21,6 @@
       <groupId>uk.co.caprica</groupId>
       <artifactId>vlcj</artifactId>
       <version>4.8.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jitsi</groupId>
-      <artifactId>fmj</artifactId>
-      <version>1.0.2-jitsi</version>
     </dependency>
     <dependency>
       <groupId>org.panteleyev</groupId>
@@ -94,13 +90,15 @@
         <version>24.1.0</version>
         <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>isaatonimov</groupId>
-      <artifactId>invy</artifactId>
-      <version>0.0.1</version>
-    </dependency>
   </dependencies>
   <build>
+    <extensions>
+      <extension>
+        <groupId>org.springframework.build</groupId>
+        <artifactId>aws-maven</artifactId>
+        <version>5.0.0.RELEASE</version>
+      </extension>
+    </extensions>
     <pluginManagement>
       <plugins>
         <plugin>

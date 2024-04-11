@@ -1,14 +1,17 @@
 package isaatonimov.invy.core;
 
-import isaatonimov.invy.controller.Controller;
 import isaatonimov.invy.exceptions.NoVideoResultsFoundException;
 import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.ui.services.AudioStreamLookupService;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
 
 /*
 	The music player:
@@ -28,47 +32,65 @@ import java.util.List;
  */
 public class MusicPlayer
 {
+
 	private AudioStreamLookupService 		audioStreamLookupService;
-	private Recording					currentlyPlaying;
-	private boolean						shufflePlay = true;
-	private Controller					controller;
+	public SimpleObjectProperty<Recording> 	currentlyPlaying = new SimpleObjectProperty<>(this, "currentlyPlaying");
+	public SimpleBooleanProperty 			currentlyPlayingState = new SimpleBooleanProperty(this, "currentlyPlayingState");
+	private MediaPlayerFactory 				mediaPlayerFactory;
+	private MediaPlayer 					mediaPlayer;
+	private LinkedList<Recording>			queue;
 
-
-	public MusicPlayer(Controller controller)
+	public MusicPlayer(AudioStreamLookupService audioStreamLookupService)
 	{
-		this.controller = controller;
-		this.audioStreamLookupService = controller.getAudioStreamLookupService();
+		queue = new LinkedList<Recording>();
+		this.audioStreamLookupService = audioStreamLookupService;
+
+		mediaPlayerFactory = new MediaPlayerFactory("--no-metadata-network-access");
+		mediaPlayer = mediaPlayerFactory.mediaPlayers().newMediaPlayer();
+
+		mediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter(){
+			@Override
+			public void finished(MediaPlayer mediaPlayer)
+			{
+
+				System.out.println("Media finished, trying to play next song in queue");
+
+				Platform.runLater(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						PlayNext();
+					}
+				});
+			}
+		});
+	}
+
+	public void ShuffleQueue()
+	{
+		List<Recording> shuffledRecords = new ArrayList<>();
+
+		for(var record : queue)
+			shuffledRecords.add(record);
+
+		Collections.shuffle(shuffledRecords);
+
+		queue.clear();
+
+		for(var record : shuffledRecords)
+			queue.add(record);
 	}
 
 	public void AddToQueue(LinkedList<Recording> recordings) throws URISyntaxException, IOException, InterruptedException, NoVideoResultsFoundException
 	{
 		//Clears all songs before a a new Queue is submitted
 		//thats all i need for now
-
-		LinkedList<Recording> shuffledRecordsLink = new LinkedList<Recording>();
-		List<Recording> shuffledRecords = new ArrayList<>();
-
-		for(var record : recordings)
-			shuffledRecords.add(record);
-
-		Collections.shuffle(shuffledRecords);
-
-		for(var record : shuffledRecords)
-			shuffledRecordsLink.add(record);
-
-		recordings = shuffledRecordsLink;
-
-		for(int i = 0; i < recordings.size(); i++)
-
-		//PreloadMediaForRecord(recordings.getFirst());
-
-		Play(recordings.getFirst());
-
-	}
-
-	public void RemoveRecordGracefully(Recording record)
-	{
-
+		queue.clear();
+		queue.addAll(recordings);
+		//Then Shuffles it
+		ShuffleQueue();;
+		Play(queue.getFirst());
 	}
 
 
@@ -77,6 +99,7 @@ public class MusicPlayer
 	 */
 	public void Play(Recording recording) throws URISyntaxException, IOException, InterruptedException, NoVideoResultsFoundException
 	{
+		currentlyPlaying.set(recording);
 		URL fetchedURL;
 
 		audioStreamLookupService.updateQuery(recording);
@@ -88,30 +111,98 @@ public class MusicPlayer
 			public void handle(Event event)
 			{
 				URL fetchedURL = (URL) audioStreamLookupService.getValue();
-
-				MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
-				MediaPlayer mediaPlayer1 = mediaPlayerFactory.mediaPlayers().newMediaPlayer();
-				mediaPlayer1.media().play(fetchedURL.toString(), ":no-video");
-				mediaPlayer1.
-
-				try
-				{
-					Thread.currentThread().join();
-				} catch (InterruptedException e)
-				{
-					throw new RuntimeException(e);
-				}
+				System.out.println("Playing:" + fetchedURL);
+				mediaPlayer.media().play(fetchedURL.toString(), ":no-video");
 			}
 		});
 	}
 
-	public Recording getCurrentlyPlayingRecord()
+	public boolean isCurrentlySomethingPlaying()
 	{
-		return currentlyPlaying;
+		return mediaPlayer.status().isPlaying();
+	}
+
+
+	public void PlayNext()
+	{
+		try
+		{
+			if(queue.indexOf(currentlyPlaying.get()) + 1 <= queue.size()-1)
+				Play(queue.get(queue.indexOf(currentlyPlaying.get()) + 1));
+			else
+			{
+				ShuffleQueue();
+				Play(queue.getFirst());
+			}
+		}
+		catch (URISyntaxException e)
+		{
+			throw new RuntimeException(e);
+		} catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		} catch (InterruptedException e)
+		{
+			throw new RuntimeException(e);
+		} catch (NoVideoResultsFoundException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void PlayPrevious()
+	{
+		try
+		{
+			if(queue.indexOf(currentlyPlaying.get()) -1 >= 0)
+				Play(queue.get(queue.indexOf(currentlyPlaying.get()) - 1));
+			else
+			{
+				//Play again this title
+				Play(queue.getFirst());
+
+				//ShuffleQueue();
+				//Play(queue.getFirst());
+			}
+		}
+		catch (URISyntaxException e)
+		{
+			throw new RuntimeException(e);
+		} catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		} catch (InterruptedException e)
+		{
+			throw new RuntimeException(e);
+		} catch (NoVideoResultsFoundException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
+	public boolean TogglePausePlay()
+	{
+		if(mediaPlayer.status().isPlaying())
+		{
+			currentlyPlayingState.set(false);
+			mediaPlayer.controls().pause();
+		}
+		else
+		{
+			currentlyPlayingState.set(true);
+			mediaPlayer.controls().play();
+		}
+
+		return mediaPlayer.status().isPlaying();
 	}
 
 	public void shutdown()
 	{
+		mediaPlayer.controls().stop();
+	}
 
+	public AudioStreamLookupService getAudioStreamLookupService()
+	{
+		return audioStreamLookupService;
 	}
 }

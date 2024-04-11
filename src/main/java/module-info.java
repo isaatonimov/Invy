@@ -16,7 +16,6 @@ module isaatonimov.invy {
 	requires com.fasterxml.jackson.databind;
 	requires com.fasterxml.jackson.annotation;
 	requires uk.co.caprica.vlcj;
-	requires uk.co.caprica.vlcj.natives;
 
 	opens isaatonimov.invy to javafx.fxml;
 	exports isaatonimov.invy;

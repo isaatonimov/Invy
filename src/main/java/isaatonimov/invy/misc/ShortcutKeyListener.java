@@ -13,30 +13,27 @@ import java.util.List;
 
 public class ShortcutKeyListener implements NativeKeyListener
 {
-	private List<Integer> 					keyEventQueue 		= new ArrayList<>();
-	private HashMap<MenuShortcut, Service>	shortcutActionMap 	= new HashMap<>();
-	private HashMap<Service, Worker.State>	serviceStates 		= new HashMap<>();
+	private List<Integer> 					keyEventQueue 			= new ArrayList<>();
+	private HashMap<MenuShortcut, Service>	shortcutActionMap 		= new HashMap<>();
+	private HashMap<Service, Worker.State>	serviceStates 			= new HashMap<>();
+	private HashMap<Integer, Service>		simpleShortcutActionMap 	= new HashMap<>();
 
 	public ShortcutKeyListener() throws InterruptedException
 	{
-		new Thread(new Runnable()
+		new Thread(() ->
 		{
-			@Override
-			public void run()
+			try
 			{
-				try
+				while(true)
 				{
-					while(true)
-					{
-						Thread.sleep(200);
-						resetIfSucceeded();
-						updateWorkerStateMap();
-					}
+					Thread.sleep(200);
+					resetIfSucceeded();
+					updateWorkerStateMap();
 				}
-				catch (InterruptedException e)
-				{
-					throw new RuntimeException(e);
-				}
+			}
+			catch (InterruptedException e)
+			{
+				throw new RuntimeException(e);
 			}
 		}).start();
 	}
@@ -47,20 +44,22 @@ public class ShortcutKeyListener implements NativeKeyListener
 		updateWorkerStateMap();
 	}
 
+	public void addSimpleShortcutToListenFor(int keyCode, Service toStart)
+	{
+		System.out.println("Adding: " + keyCode + " -> " + toStart.toString());
+		simpleShortcutActionMap.put(keyCode, toStart);
+	}
+
 	private void updateWorkerStateMap()
 	{
-		Platform.runLater(new Runnable()
+		Platform.runLater(() ->
 		{
-			@Override
-			public void run()
-			{
-				serviceStates.clear();
+			serviceStates.clear();
 
-				for(var entry : shortcutActionMap.entrySet())
-				{
-					//System.out.println("Updated Service State Map: " + entry.getValue().toString() + " -> " + entry.getValue().getState().toString());
-					serviceStates.put(entry.getValue(), entry.getValue().getState());
-				}
+			for(var entry : shortcutActionMap.entrySet())
+			{
+				//System.out.println("Updated Service State Map: " + entry.getValue().toString() + " -> " + entry.getValue().getState().toString());
+				serviceStates.put(entry.getValue(), entry.getValue().getState());
 			}
 		});
 	}
@@ -90,6 +89,11 @@ public class ShortcutKeyListener implements NativeKeyListener
 		return keyCodes;
 	}
 
+	public void StartServiceInCorrectThread(Service toStart)
+	{
+		Platform.runLater(() -> toStart.restart());
+	}
+
 	@Override
 	public void nativeKeyPressed(NativeKeyEvent nativeEvent)
 	{
@@ -107,6 +111,14 @@ public class ShortcutKeyListener implements NativeKeyListener
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent nativeEvent)
 	{
+		System.out.println("Keycode: " + nativeEvent.getKeyCode());
+
+		for(var entry : simpleShortcutActionMap.entrySet())
+		{
+			if(nativeEvent.getKeyCode() == entry.getKey())
+				StartServiceInCorrectThread(entry.getValue());
+		}
+
 		if(nativeEvent.getKeyCode() == 57)
 		{
 			for(var entry : serviceStates.entrySet())
@@ -115,8 +127,8 @@ public class ShortcutKeyListener implements NativeKeyListener
 				{
 					if (keyEventQueue.contains(42) && keyEventQueue.contains(3675) && keyEventQueue.contains(57))
 					{
-						System.out.println("Combination alrighty -> Service Start");
-						Platform.runLater(() -> entry.getKey().start());
+						//System.out.println("Combination alrighty -> Service Start");
+						StartServiceInCorrectThread(entry.getKey());
 					}
 					else
 					{
