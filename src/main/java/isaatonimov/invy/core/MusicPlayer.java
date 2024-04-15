@@ -91,6 +91,9 @@ public class MusicPlayer
 		//Then Shuffles it
 		ShuffleQueue();;
 		Play(queue.getFirst());
+
+		System.out.println("Queue Size: " + queue.size());
+
 	}
 
 

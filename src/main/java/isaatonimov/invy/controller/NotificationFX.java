@@ -52,10 +52,11 @@ public class NotificationFX
 		Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
 		notificationStage = new Stage();
-		notificationStage.setWidth(240);
+		notificationStage.setWidth(300);
 		notificationStage.setHeight(90);
 		notificationStage.setScene(notifactionScene);
-		notificationStage.initStyle(StageStyle.UNDECORATED);
+		notifactionScene.setFill(Color.TRANSPARENT);
+		notificationStage.initStyle(StageStyle.TRANSPARENT);
 
 		notificationStage.setAlwaysOnTop(true);
 		notificationStage.setY(screenBounds.getMinY() + 20);
@@ -75,7 +76,7 @@ public class NotificationFX
 
 	public void show()
 	{
-		notificationStage.initStyle(StageStyle.TRANSPARENT);
+		this.notificationStage.getScene().getRoot().setOpacity(1);
 		notifactionScene.setFill(Color.TRANSPARENT);
 		notificationStage.show();
 		Timeline timeline = new Timeline();
@@ -84,7 +85,7 @@ public class NotificationFX
 		timeline.getKeyFrames().add(key);
 		timeline.setOnFinished((ae) -> this.hide());
 		timeline.play();
-		notifactionScene.setFill(Color.WHITE);
+		notifactionScene.setFill(Color.TRANSPARENT);
 	}
 
 	public void hide()

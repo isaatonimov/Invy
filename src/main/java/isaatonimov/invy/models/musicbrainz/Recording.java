@@ -34,6 +34,7 @@ public class Recording
     private String disambiguation;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
+    private Release release;
 
     public Artist getArtist()
     {
@@ -181,6 +182,18 @@ public class Recording
 
     public String toSearchTerm()
     {
-        return this.getArtist().getName() + " Band " + this.getTitle();
+        String searchTerm = this.getArtist().getName() + " band "+ " song " + this.getTitle();
+        System.out.println("Search Term used: " + searchTerm);
+        return searchTerm;
+    }
+
+    public void setRelease(Release release)
+    {
+        this.release = release;
+    }
+
+    public Release getRelease()
+    {
+        return release;
     }
 }

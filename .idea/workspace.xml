@@ -10,33 +10,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c40c023f-133f-4a69-977e-f8df4d43dc6d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/hs_err_pid46240.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid46280.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid46383.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid46442.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid46583.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid46604.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid46631.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid46675.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/NotificationFX.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/SongPlayNextService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/SongPlayPrevService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/SongTogglePlayService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/invy.icns" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/notification.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Invy_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Invy_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/exceptions/CoverArtNotFoundExcetion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/CoverArtArchive.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/CoverArtResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Image.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Release.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/ReleaseEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/ReleaseResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/TextRepresentation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Thumbnails.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/TracklistReleaseResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/Invy_jar/Invy.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Invy_jar/Invy.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/AWTMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/AWTMain.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/NotificationFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/NotificationFX.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/MusicPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/MusicPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/invidious/PipedInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/invidious/PipedInstance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/musicbrainz/MusicBrainzInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/musicbrainz/MusicBrainzInstance.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/misc/ShortcutKeyListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/misc/ShortcutKeyListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/runnables/SetMenuItemAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/runnables/SetMenuItemAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Recording.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Recording.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/AudioStreamLookupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/AudioStreamLookupService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/SongInfoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/SongInfoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/RecordingLookupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/RecordingLookupService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/notification.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/notification.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +46,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="219125" />
+    <option name="totalTimeSeconds" value="232003" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
@@ -80,7 +79,7 @@
     </option>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -211,6 +210,15 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/musicbrainz/MusicBrainzInstance.java</url>
+          <line>106</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="org.musicbrainz.model.entity.listelement.ReleaseListWs2" memberName="releases" />

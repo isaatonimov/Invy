@@ -22,19 +22,19 @@ public class ShortcutKeyListener implements NativeKeyListener
 	{
 		new Thread(() ->
 		{
-			try
-			{
-				while(true)
-				{
-					Thread.sleep(200);
-					resetIfSucceeded();
-					updateWorkerStateMap();
-				}
-			}
-			catch (InterruptedException e)
-			{
-				throw new RuntimeException(e);
-			}
+//			try
+//			{
+////				while(true)
+////				{
+////					Thread.sleep(200);
+////					resetIfSucceeded();
+////					updateWorkerStateMap();
+////				}
+//			}
+//			catch (InterruptedException e)
+//			{
+//				throw new RuntimeException(e);
+//			}
 		}).start();
 	}
 

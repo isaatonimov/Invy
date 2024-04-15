@@ -58,14 +58,8 @@ public class PipedInstance
 		ObjectMapper objectMapper = new ObjectMapper();
 		StreamResponse streamResponse = objectMapper.readValue(response.getBody().toString(), StreamResponse.class);
 
-		for(var stream : streamResponse.getAudioStreams())
-		{
-			System.out.println(stream.getUrl());
-		}
-
 		//Generate JSON Model Class from JSON - enabled just in development
 		//JsonModelClassGenerator.generateJSONModelClassFromJSONString(response.getBody().toString(), "StreamResponse");
-
 		return streamResponse.getAudioStreams();
 	}
 }

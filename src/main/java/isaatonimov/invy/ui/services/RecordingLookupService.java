@@ -32,9 +32,6 @@ public class RecordingLookupService extends LookupService<LinkedList<Recording>>
 				LinkedList<Recording> recordings 	= new LinkedList<>();
 				recordings.addAll(MusicBrainzInstance.searchForSongs(artist));
 
-				for(var record : recordings)
-					System.out.println("Titles looked up: " + record.getTitle());
-
 				return recordings;
 			}
 		};

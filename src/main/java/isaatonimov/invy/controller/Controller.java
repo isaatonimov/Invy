@@ -5,6 +5,7 @@ import isaatonimov.invy.App;
 import isaatonimov.invy.core.MusicPlayer;
 import isaatonimov.invy.core.invidious.InvidiousInstance;
 import isaatonimov.invy.core.invidious.PipedInstance;
+import isaatonimov.invy.core.musicbrainz.MusicBrainzInstance;
 import isaatonimov.invy.exceptions.NoVideoResultsFoundException;
 import isaatonimov.invy.models.musicbrainz.Artist;
 import isaatonimov.invy.models.musicbrainz.Recording;
@@ -25,6 +26,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -324,16 +326,35 @@ public class Controller implements Initializable
 
 	public void showNowPlaying()
 	{
-		Recording recording = musicPlayer.currentlyPlaying.get();
+		Recording recording 		= musicPlayer.currentlyPlaying.get();
 		String notificationTitle 	= "Playing";
-		String notificationSubtitle 	= "Song";
-		String notificationMessage 	= recording.getTitle() + " by " + recording.getArtist().getName();
+		String notificationSubtitle 	= recording.getArtist().getName();
+		String notificationMessage 	= recording.getTitle();
+		Image coverArt			= null;
 
 		NotificationFX notificationFX = createNewNotifcation();
 
 		notificationFX.title.set(notificationTitle);
 		notificationFX.subtitle.set(notificationSubtitle);
 		notificationFX.message.set(notificationMessage);
+
+		try
+		{
+			coverArt = new Image(String.valueOf(MusicBrainzInstance.searchForCoverArt(recording.getRelease())));
+			notificationFX.image.set(coverArt);
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException(e);
+		}
+		catch (InterruptedException e)
+		{
+			throw new RuntimeException(e);
+		}
+		catch (URISyntaxException e)
+		{
+			throw new RuntimeException(e);
+		}
 
 		notificationFX.show();
 

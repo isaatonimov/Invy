@@ -3,48 +3,46 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="90.0" prefWidth="240.0" stylesheets="@../themes/primer-dark.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isaatonimov.invy.controller.NotificationFX">
+
+<BorderPane prefHeight="112.0" prefWidth="300.0" style="-fx-background-radius: 12;" stylesheets="@../themes/primer-dark.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isaatonimov.invy.controller.NotificationFX">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <HBox alignment="CENTER" scaleX="1.15" scaleY="1.15" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="29.0" prefHeight="65.0" prefWidth="203.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <VBox alignment="CENTER_LEFT" prefHeight="58.0" prefWidth="152.0">
-                     <children>
-                        <Label fx:id="titleLabel" text="Now Playing">
-                           <font>
-                              <Font size="8.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="subtitleLabel" text="Song">
-                           <font>
-                              <Font size="6.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="messageLabel" text="L.A by Crumb">
-                           <font>
-                              <Font size="17.0" />
-                           </font></Label>
-                     </children>
-                  </VBox>
-                  <ImageView fx:id="imageView" fitHeight="53.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/logo.png" />
-                     </image>
-                  </ImageView>
+                  <Label fx:id="titleLabel" graphicTextGap="0.0" prefHeight="18.0" prefWidth="188.0" text="Now Playing">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="2.0" right="2.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="subtitleLabel" prefHeight="23.0" prefWidth="187.0" text="Crumb">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="messageLabel" text="L.A Cappuchino Monkey" textOverrun="CLIP">
+                     <font>
+                        <Font size="27.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="5.0" right="2.0" />
+                     </VBox.margin>
+                  </Label>
                </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </HBox>
+            </VBox>
+            <ImageView fx:id="imageView" fitHeight="50.0" fitWidth="50.0" layoutX="225.0" layoutY="21.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="25.0" />
          </children>
       </AnchorPane>
    </center>

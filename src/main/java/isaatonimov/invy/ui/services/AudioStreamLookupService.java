@@ -45,6 +45,12 @@ public class AudioStreamLookupService extends LookupService<URL>
 						//currently just picks first id then picks stream
 						List<AudioStream> streams = pipedInstance.getAudioStreamsByVideoID(IDs.getFirst());
 						//Does the same for streams, does not prioritize high quality
+
+						for(var stream : streams)
+						{
+							System.out.println("Stream Quality:" + stream.getQuality() + "for -> " + stream.getUrl());
+						}
+
 						response = new URL(streams.getFirst().getUrl());
 					}
 					else

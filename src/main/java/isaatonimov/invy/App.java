@@ -22,6 +22,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -39,6 +40,9 @@ import java.util.Objects;
  */
 public class App extends Application
 {
+	
+
+
 	//Core
 	private InvidiousInstance 	invidiousInstance;
 	private PipedInstance 		pipedInstance;
@@ -95,7 +99,7 @@ public class App extends Application
 		try
 		{
 			invidiousInstance = new InvidiousInstance(AppUtils.getMainInvidiousInstanceURL());
-			pipedInstance	= new PipedInstance(new URL("https://pipedapi.kavin.rocks"));
+			pipedInstance	= new PipedInstance(new URL("https://piped.kavin.rocks/"));
 		}
 		catch (URISyntaxException e)
 		{
@@ -114,8 +118,9 @@ public class App extends Application
 
 		//set
 		mainStage.setTitle("Invy");
-		mainStage.initStyle(StageStyle.UNDECORATED);
+		mainStage.initStyle(StageStyle.TRANSPARENT);
 		mainStage.setScene(mainScene);
+		mainScene.setFill(Color.TRANSPARENT);
 		mainStage.setAlwaysOnTop(true);
 
 		//Styling -> currently redundant -> also in fxml for preview in sceneBuilder
@@ -150,33 +155,40 @@ public class App extends Application
 			iRobot 				= new Robot();
 
 			//Native Hook -> Shortcut Listener
-			GlobalScreen.registerNativeHook();
-
-			ShortcutKeyListener mainShortcutKeyListener = new ShortcutKeyListener();
-			mainShortcutKeyListener.addShortcutToListenFor		(showHideShortcut, 	toggleViewService);
-			mainShortcutKeyListener.addSimpleShortcutToListenFor	(65, 		songPlayPrevService);
-			mainShortcutKeyListener.addSimpleShortcutToListenFor	(66, 		songTogglePlayService);
-			mainShortcutKeyListener.addSimpleShortcutToListenFor	(67, 		songPlayNextService);
-
-			NativeMouseListener mouseListener = new NativeMouseListener()
+			try
 			{
-				@Override
-				public void nativeMouseClicked(NativeMouseEvent nativeEvent)
-				{
-					if(isMouseOutsideMainWindow)
-					{
-						controller.hideMainWindow();
-						isMouseOutsideMainWindow = false;
-					}
-				}
-			};
+				GlobalScreen.registerNativeHook();
 
-			GlobalScreen.addNativeKeyListener(mainShortcutKeyListener);
-			GlobalScreen.addNativeMouseListener(mouseListener);
+				ShortcutKeyListener mainShortcutKeyListener = new ShortcutKeyListener();
+				mainShortcutKeyListener.addShortcutToListenFor		(showHideShortcut, 	toggleViewService);
+				mainShortcutKeyListener.addSimpleShortcutToListenFor	(65, 		songPlayPrevService);
+				mainShortcutKeyListener.addSimpleShortcutToListenFor	(66, 		songTogglePlayService);
+				mainShortcutKeyListener.addSimpleShortcutToListenFor	(67, 		songPlayNextService);
+
+				NativeMouseListener mouseListener = new NativeMouseListener()
+				{
+					@Override
+					public void nativeMouseClicked(NativeMouseEvent nativeEvent)
+					{
+						if(isMouseOutsideMainWindow)
+						{
+							controller.hideMainWindow();
+							isMouseOutsideMainWindow = false;
+						}
+					}
+				};
+
+				GlobalScreen.addNativeKeyListener(mainShortcutKeyListener);
+				GlobalScreen.addNativeMouseListener(mouseListener);
+			}
+			catch (Exception e)
+			{
+				GlobalScreen.unregisterNativeHook();
+			}
 
 			controller.setRobot(iRobot);
 		}
-		catch (InterruptedException | AWTException e)
+		catch (AWTException e)
 		{
 			System.out.println("Enable Accessabilty Features to use Menu Shortcut.");
 		} catch (NativeHookException e)
@@ -333,6 +345,5 @@ public class App extends Application
 		}
 
 		launch();
-
     }
 }
