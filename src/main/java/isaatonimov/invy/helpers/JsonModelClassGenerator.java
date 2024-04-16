@@ -18,7 +18,7 @@ public class JsonModelClassGenerator
 	{
 		String fileName = new SimpleDateFormat("yyyyMMddhhmmss'.json'").format(new Date());
 
-		Path newPath = Paths.get(AppUtils.getTempDirectory().toString(), fileName);
+		Path newPath = Paths.get(AppUtils.getTempDirectoryPath().toString(), fileName);
 		//Create file from JSON String
 		Path jsonFilePath = Files.createFile(newPath);
 		Files.write(jsonFilePath, jsonSource.getBytes());

@@ -1,6 +1,10 @@
 package isaatonimov.invy;
 
+import com.dlsc.preferencesfx.PreferencesFx;
+import com.dlsc.preferencesfx.model.Category;
+import com.dlsc.preferencesfx.model.Setting;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
@@ -12,16 +16,31 @@ import isaatonimov.invy.core.invidious.PipedInstance;
 import isaatonimov.invy.handlers.*;
 import isaatonimov.invy.helpers.AppUtils;
 import isaatonimov.invy.misc.ShortcutKeyListener;
+import isaatonimov.invy.models.piped.InstancesResponse;
+import isaatonimov.invy.ui.NotificationFX;
 import isaatonimov.invy.ui.runnables.SetMenuItemAction;
 import isaatonimov.invy.ui.runnables.SetMenuItemShortcut;
 import isaatonimov.invy.ui.services.*;
 import javafx.application.Application;
+import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -29,9 +48,9 @@ import javafx.stage.StageStyle;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /*
@@ -40,8 +59,40 @@ import java.util.Objects;
  */
 public class App extends Application
 {
-	
 
+	//Preferences - Properties - Audio Source
+	BooleanProperty usePipedAsAudioSourceProvider 	= new SimpleBooleanProperty(true);
+	BooleanProperty autoLocateOptimalInstance		= new SimpleBooleanProperty(false);
+
+	//Preferences - Properties - Music Player
+	BooleanProperty autoShuffleResults			= new SimpleBooleanProperty(true);
+	BooleanProperty useVLCBackend				= new SimpleBooleanProperty(false);
+
+	//Preferences - Static Nodes and Thingamachigs
+
+	ListProperty currentPipedInstance;
+	ObjectProperty currentPipedInstanceSelection;
+
+	//TESTING
+	MediaView preferencesMediaView;
+
+	Button openTempFolderButton 				= new Button("Open Temp Folder");
+
+	//Preferences - Properties - Misc
+	ObjectProperty  defaultLogLocation			= new SimpleObjectProperty(AppUtils.getTempDirectoryFile());
+	BooleanProperty accessibilityFeatures			= new SimpleBooleanProperty(true);
+	ListProperty themeToUseItems				= new SimpleListProperty<>(FXCollections.observableArrayList(Arrays.asList(
+			"Cupertino Dark", "Cupertino Light", "Dracula",
+			"Nord Dark", "Nord Light", "Primer Dark", "Primer Light"
+	)));
+
+	ObjectProperty themeToUseSelection = new SimpleObjectProperty<>("Cupertino Dark");
+
+	//Preferences Dialog
+	PreferencesFx mainPreferencesDialog;
+
+	//Notification FX
+	NotificationFX mainNotificationFX;
 
 	//Core
 	private InvidiousInstance 	invidiousInstance;
@@ -59,6 +110,7 @@ public class App extends Application
 	private SongTogglePlayService		songTogglePlayService;
 	private SongPlayNextService			songPlayNextService;
 	private SongPlayPrevService			songPlayPrevService;
+	private PreferencesService			preferencesService;
 	private ApplicationShutdownService 	applicationShutdownService;
 
 	//Automation
@@ -96,23 +148,13 @@ public class App extends Application
 
 	private void initCore()
 	{
-		try
-		{
-			invidiousInstance = new InvidiousInstance(AppUtils.getMainInvidiousInstanceURL());
-			pipedInstance	= new PipedInstance(new URL("https://piped.kavin.rocks/"));
-		}
-		catch (URISyntaxException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (MalformedURLException e)
-		{
-			throw new RuntimeException(e);
-		}
+		invidiousInstance = new InvidiousInstance	();
+		pipedInstance	= new PipedInstance		();
 	}
 
 	private void setStageSettings()
 	{
+		//Font.loadFont(App.class.getResource("/font/fontawesome-webfont.ttf").toExternalForm(), 10);
 		//set app icon
 		mainStage.getIcons().add(new Image(App.class.getResource("/isaatonimov/invy/images/invy.icns").toString()));
 
@@ -126,6 +168,127 @@ public class App extends Application
 		//Styling -> currently redundant -> also in fxml for preview in sceneBuilder
 		//TODO -> change before deploying
 		mainScene.setUserAgentStylesheet(Objects.requireNonNull(getClass().getResource("/isaatonimov/invy/themes/primer-dark.css")).toString());
+	}
+
+	private void initPreferences()
+	{
+		//network test
+
+		try
+		{
+			List<InstancesResponse> pipedInstances =  PipedInstance.getPipedInstances();
+
+			List<String> pipedInstanceString = new ArrayList<>();
+
+			for(var x : pipedInstances)
+				pipedInstanceString.add(x.getApiUrl());
+
+			currentPipedInstance = new SimpleListProperty<>(FXCollections.observableArrayList(pipedInstanceString));
+
+			currentPipedInstanceSelection = new SimpleObjectProperty();
+
+			if(autoLocateOptimalInstance.get() == true)
+				currentPipedInstanceSelection = new SimpleObjectProperty(PipedInstance.getNearestPipedInstanceRelativeToHost(pipedInstances));
+			else
+				currentPipedInstanceSelection = new SimpleObjectProperty();
+		}
+		catch (JsonProcessingException e)
+		{
+			throw new RuntimeException(e);
+		}
+
+		openTempFolderButton.setStyle("-fx-padding: 10px;");
+
+		openTempFolderButton.setOnMouseClicked(new EventHandler<MouseEvent>()
+		{
+			@Override
+			public void handle(MouseEvent event)
+			{
+				try
+				{
+					Desktop.getDesktop().open(AppUtils.getTempDirectoryFile());
+				}
+				catch (IOException e)
+				{
+					throw new RuntimeException(e);
+				}
+			}
+		});
+
+		mainPreferencesDialog = PreferencesFx.of(App.class,
+				Category.of("Audio Source",
+						Setting.of("Prefer Piped", usePipedAsAudioSourceProvider),
+						Setting.of("Auto detect nearest (in ms) Instance Location on startup", autoLocateOptimalInstance),
+						Setting.of("Currently Selected Piped Instance", currentPipedInstance, currentPipedInstanceSelection),
+						Setting.of("Currently Selected Invidious Instance", currentPipedInstance, currentPipedInstanceSelection)),
+
+				Category.of("Music Player",
+						Setting.of("Auto Shuffle Results", autoShuffleResults),
+						Setting.of("Use VLC as Music Player Backend", useVLCBackend)),
+				Category.of("Misc",
+						Setting.of("App Theme", themeToUseItems, themeToUseSelection),
+						Setting.of("Accesibility Features", accessibilityFeatures),
+						Setting.of("Temp Folder Location", defaultLogLocation, true),
+						Setting.of(openTempFolderButton)),
+				Category.of("Media View",
+						Setting.of(preferencesMediaView)
+						)
+		);
+
+		String styleSheetPath = App.class.getResource("/isaatonimov/invy/themes/cupertino-dark-pref.css").toString();
+
+		mainPreferencesDialog.getStylesheets().add(styleSheetPath);
+		mainPreferencesDialog.buttonsVisibility(false);
+
+		Stage prefStage = ((Stage)mainPreferencesDialog.getView().getScene().getWindow());
+		prefStage.initStyle(StageStyle.UNDECORATED);
+		prefStage.setAlwaysOnTop(true);
+		prefStage.setWidth(1000);
+		prefStage.setHeight(450);
+
+		Button closePreferences = new Button("Close");
+		closePreferences.setId("ClosePreferences");
+		VBox buttonWrapper = new VBox(closePreferences);
+		buttonWrapper.setId("ButtonWrapper");
+		buttonWrapper.setAlignment(Pos.BOTTOM_RIGHT);
+
+		Label title = new Label("Invy Preferences");
+		HBox titleWrapper = new HBox(title);
+		titleWrapper.setAlignment(Pos.CENTER);
+
+		((DialogPane)mainPreferencesDialog.getView().getParent()).getChildren().remove(2);
+
+		mainPreferencesDialog.getView().setTop(titleWrapper);
+
+		buttonWrapper.setStyle("-fx-padding: 10px;");
+		mainPreferencesDialog.getView().setBottom(buttonWrapper);
+
+		themeToUseSelection.addListener(new ChangeListener()
+		{
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue)
+			{
+				controller.changeAppTheme((String) newValue);
+			}
+		});
+
+		closePreferences.setOnMouseClicked(new EventHandler<MouseEvent>()
+		{
+			@Override
+			public void handle(MouseEvent event)
+			{
+				mainPreferencesDialog.saveSettings();
+				prefStage.hide();
+			}
+		});
+	}
+
+	private void theBindingOfInvyRepiped()
+	{
+		//For now manage all bindings here -> think of a better method
+		//invidiousInstance.InstanceURLProperty.	bindBidirectional(currentPipedInstanceSleection);
+		pipedInstance.InstanceURLProperty.		bindBidirectional(currentPipedInstanceSelection);
+		useVLCBackend.					bindBidirectional(mainMusicPlayer.UseVLCBackend);
 	}
 
 	private void initBackgroundServices()
@@ -146,54 +309,58 @@ public class App extends Application
 		songTogglePlayService		= new SongTogglePlayService		(controller);
 		songPlayNextService		= new SongPlayNextService			(controller);
 		songPlayPrevService		= new SongPlayPrevService			(controller);
+		preferencesService		= new PreferencesService			(controller);
 	}
 
 	private void initAccessibilityServices(MenuShortcut showHideShortcut, MenuShortcut songToggleShortcut, MenuShortcut playNextShortcut, MenuShortcut playPrevShortcut)
 	{
-		try
+		if(accessibilityFeatures.get())
 		{
-			iRobot 				= new Robot();
-
-			//Native Hook -> Shortcut Listener
 			try
 			{
-				GlobalScreen.registerNativeHook();
-
-				ShortcutKeyListener mainShortcutKeyListener = new ShortcutKeyListener();
-				mainShortcutKeyListener.addShortcutToListenFor		(showHideShortcut, 	toggleViewService);
-				mainShortcutKeyListener.addSimpleShortcutToListenFor	(65, 		songPlayPrevService);
-				mainShortcutKeyListener.addSimpleShortcutToListenFor	(66, 		songTogglePlayService);
-				mainShortcutKeyListener.addSimpleShortcutToListenFor	(67, 		songPlayNextService);
-
-				NativeMouseListener mouseListener = new NativeMouseListener()
+				iRobot 				= new Robot();
+				//Native Hook -> Shortcut Listener
+				try
 				{
-					@Override
-					public void nativeMouseClicked(NativeMouseEvent nativeEvent)
+					GlobalScreen.registerNativeHook();
+
+					ShortcutKeyListener mainShortcutKeyListener = new ShortcutKeyListener();
+					mainShortcutKeyListener.addShortcutToListenFor		(showHideShortcut, 	toggleViewService);
+					mainShortcutKeyListener.addSimpleShortcutToListenFor	(65, 		songPlayPrevService);
+					mainShortcutKeyListener.addSimpleShortcutToListenFor	(66, 		songTogglePlayService);
+					mainShortcutKeyListener.addSimpleShortcutToListenFor	(67, 		songPlayNextService);
+
+					NativeMouseListener mouseListener = new NativeMouseListener()
 					{
-						if(isMouseOutsideMainWindow)
+						@Override
+						public void nativeMouseClicked(NativeMouseEvent nativeEvent)
 						{
-							controller.hideMainWindow();
-							isMouseOutsideMainWindow = false;
+							if(isMouseOutsideMainWindow)
+							{
+								controller.hideMainWindow();
+								isMouseOutsideMainWindow = false;
+							}
 						}
-					}
-				};
+					};
 
-				GlobalScreen.addNativeKeyListener(mainShortcutKeyListener);
-				GlobalScreen.addNativeMouseListener(mouseListener);
+					GlobalScreen.addNativeKeyListener(mainShortcutKeyListener);
+					GlobalScreen.addNativeMouseListener(mouseListener);
+				}
+				catch (Exception e)
+				{
+					GlobalScreen.unregisterNativeHook();
+				}
+
+				controller.setRobot(iRobot);
 			}
-			catch (Exception e)
+			catch (AWTException e)
 			{
-				GlobalScreen.unregisterNativeHook();
+				System.out.println("Enable Accessabilty Features to use Menu Shortcut.");
 			}
-
-			controller.setRobot(iRobot);
-		}
-		catch (AWTException e)
-		{
-			System.out.println("Enable Accessabilty Features to use Menu Shortcut.");
-		} catch (NativeHookException e)
-		{
-			throw new RuntimeException(e);
+			catch (NativeHookException e)
+			{
+				throw new RuntimeException(e);
+			}
 		}
 	}
 
@@ -208,12 +375,13 @@ public class App extends Application
 
 		//music Player instance after background services are started
 		mainMusicPlayer 	= new MusicPlayer(audioStreamLookupService);
+		preferencesMediaView = new MediaView(mainMusicPlayer.getMediaPlayerFX());
 
 		//Sets all Stage settings
 		setStageSettings();
 
 		initUIHelperServices(controller);
-
+		initPreferences();
 		//Configurations concerning TrayIcon and its Menu items
 		//TODO Extend -> add more MenuItems
 		MenuItem showHide 	= new MenuItem("Show Search");
@@ -221,10 +389,8 @@ public class App extends Application
 		MenuItem togglePlay	= new MenuItem("Play");
 		MenuItem prevSong	= new MenuItem("Previous");
 		MenuItem nextSong	= new MenuItem("Next");
+		MenuItem preferences = new MenuItem("Preferences");
 		MenuItem quit		= new MenuItem("Quit Invy");
-
-		FXTrayIcon trayIconTest = new FXTrayIcon(this.mainStage);
-
 
 		invyTrayIcon.addMenuItem(showHide);
 		invyTrayIcon.addSeparator();
@@ -234,6 +400,7 @@ public class App extends Application
 		invyTrayIcon.addMenuItem(prevSong);
 		invyTrayIcon.addMenuItem(nextSong);
 		invyTrayIcon.addSeparator();
+		invyTrayIcon.addMenuItem(preferences);
 		invyTrayIcon.addMenuItem(quit);
 
 		controller.setMenuItemShowHide(showHide);
@@ -269,6 +436,8 @@ public class App extends Application
 		EventQueue.invokeLater(new SetMenuItemShortcut(invyTrayIcon, prevSong, songTogglePlayPrev));
 		EventQueue.invokeLater(new SetMenuItemAction(invyTrayIcon, prevSong, songPlayPrevService));
 
+		EventQueue.invokeLater(new SetMenuItemAction(invyTrayIcon, preferences, preferencesService));
+
 		//Controller -> set fields
 		controller.setTrayIcon				(invyTrayIcon);
 		controller.setInvidiouseInstance		(invidiousInstance);
@@ -280,6 +449,7 @@ public class App extends Application
 		controller.setRecordingLookupService	(recordingLookupService);
 		controller.setArtistLookupService		(artistLookupService);
 		controller.setRobot				(iRobot);
+		controller.setPreferencesFx			(mainPreferencesDialog);
 
 		//UI
 		controller.setToggleViewService		(toggleViewService);
@@ -319,6 +489,10 @@ public class App extends Application
 
 		controller.setMusicPlayer(mainMusicPlayer);
 
+		//TODO Remove
+		theBindingOfInvyRepiped();
+		controller.changeAppTheme((String)themeToUseSelection.get());
+
 		//show the main icon
 		invyTrayIcon.show();
 	}
@@ -329,7 +503,7 @@ public class App extends Application
 		System.out.println("Stage is closing");
 		mainMusicPlayer.shutdown();
 		invyTrayIcon.hide();
-		System.exit(0);
+		//System.exit(0);
 	}
 
     public static void main(String[] args)

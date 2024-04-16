@@ -36,7 +36,8 @@ public class MainStageShownEventHandler implements EventHandler<WindowEvent>
 		var destinationX = whereToMove.localToScreen(0.0, 0.0).getX() + width / 2;
 		var destinationY = whereToMove.localToScreen(0.0, 0.0).getY() + height / 2;
 
-		robot.mouseMove((int)destinationX, (int)destinationY);
+		if(robot != null)
+			robot.mouseMove((int)destinationX, (int)destinationY);
 
 		PauseTransition delay = new PauseTransition(Duration.millis(10));
 		delay.setOnFinished(new EventHandler<ActionEvent>()
@@ -44,10 +45,13 @@ public class MainStageShownEventHandler implements EventHandler<WindowEvent>
 			@Override
 			public void handle(ActionEvent actionEvent)
 			{
-				robot.mousePress(InputEvent.BUTTON1_MASK);
-				robot.mouseRelease(InputEvent.BUTTON1_MASK);
-
-				robotFX.mouseMove(destinationX, destinationY -50);
+				//Accessibility Features turned off?
+				if(robot != null)
+				{
+					robot.mousePress(InputEvent.BUTTON1_MASK);
+					robot.mouseRelease(InputEvent.BUTTON1_MASK);
+					robotFX.mouseMove(destinationX, destinationY -50);
+				}
 
 				//((Window)(windowEvent.getSource())).getScene().setCursor(Cursor.NONE);
 			}

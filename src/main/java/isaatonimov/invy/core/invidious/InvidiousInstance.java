@@ -7,25 +7,39 @@ import isaatonimov.invy.models.invidious.FormatStream;
 import isaatonimov.invy.models.invidious.SearchResponse;
 import isaatonimov.invy.models.invidious.VideoResponse;
 import isaatonimov.invy.models.musicbrainz.Recording;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
 public class InvidiousInstance
 {
-	private SimpleObjectProperty<URI> instanceURL = new SimpleObjectProperty<>(this, "instanceURL");
+	public SimpleStringProperty InstanceURLProperty = new SimpleStringProperty();
 
 	/**
 	 * Constuctor for static instance by instance URL
 	 */
-	public InvidiousInstance(URI instanceURL)
+	public InvidiousInstance(String instanceURL)
 	{
-		this.instanceURL.set(instanceURL);
+		this.setInstanceURL(instanceURL);
+	}
+
+	public InvidiousInstance()
+	{
+
+	}
+
+	private String getInstanceURL()
+	{
+		return this.InstanceURLProperty.get();
+	}
+
+	private void setInstanceURL(String instanceURL)
+	{
+		this.InstanceURLProperty.set(instanceURL);
 	}
 
 
@@ -40,7 +54,7 @@ public class InvidiousInstance
 	{
 		//currently fixed value
 		String searchType = "video";
-		Unirest.config().defaultBaseUrl(instanceURL.get().toString());
+		Unirest.config().defaultBaseUrl(getInstanceURL());
 		//Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
 
 		var response = Unirest.get("/api/v1/search").queryString("q", recording.toSearchTerm()).queryString("type", searchType).asString();
@@ -65,7 +79,7 @@ public class InvidiousInstance
 	@Deprecated
 	public List<FormatStream> fetchFormatStreams(SearchResponse searchResponse) throws IOException
 	{
-		Unirest.config().defaultBaseUrl(instanceURL.get().toString());
+		Unirest.config().defaultBaseUrl(getInstanceURL());
 		//Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
 
 		HttpResponse<String> response = Unirest.get("/api/v1/videos/" + searchResponse.getVideoId()).asString();

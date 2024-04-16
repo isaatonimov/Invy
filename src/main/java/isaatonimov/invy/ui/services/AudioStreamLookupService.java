@@ -48,7 +48,11 @@ public class AudioStreamLookupService extends LookupService<URL>
 
 						for(var stream : streams)
 						{
-							System.out.println("Stream Quality:" + stream.getQuality() + "for -> " + stream.getUrl());
+							System.out.println("Stream Quality: " + stream.getQuality());
+							System.out.println("Stream Codec " + stream.getCodec());
+							System.out.println("Stream Bitrate " + stream.getBitrate());
+							System.out.println("Stream Format " + stream.getFormat());
+							System.out.println("Stream Mime " + stream.getMimeType());
 						}
 
 						response = new URL(streams.getFirst().getUrl());

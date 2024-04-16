@@ -16,7 +16,6 @@ import java.util.*;
 @Generated("jsonschema2pojo")
 public class ArtistResponse
 {
-
     @JsonProperty("created")
     private String created;
     @JsonProperty("count")

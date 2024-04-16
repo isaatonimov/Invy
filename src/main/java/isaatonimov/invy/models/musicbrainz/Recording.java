@@ -19,6 +19,9 @@ import java.util.Map;
 @Generated("jsonschema2pojo")
 public class Recording
 {
+    //public SimpleObjectProperty<Artist> ArtistProperty  = new SimpleObjectProperty<>();
+    //public SimpleObjectProperty<Release> ReleaseProperty        = new SimpleObjectProperty<>();
+    //public SimpleStringProperty TitleProperty                 = new SimpleStringProperty();
     private Artist artist;
     @JsonProperty("first-release-date")
     private String firstReleaseDate;
@@ -38,11 +41,13 @@ public class Recording
 
     public Artist getArtist()
     {
+        //return this.ArtistProperty.get();
         return artist;
     }
 
     public void setArtist(Artist artist)
     {
+        //this.ArtistProperty.set(artist);
         this.artist = artist;
     }
     @JsonProperty("first-release-date")
@@ -77,11 +82,13 @@ public class Recording
 
     @JsonProperty("title")
     public String getTitle() {
+        //return TitleProperty.get();
         return title;
     }
 
     @JsonProperty("title")
     public void setTitle(String title) {
+        //this.TitleProperty.set(title);
         this.title = title;
     }
 

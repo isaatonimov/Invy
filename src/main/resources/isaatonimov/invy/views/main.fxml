@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="rootPane" maxHeight="400.0" maxWidth="400.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="94.0" prefWidth="600.0" style="-fx-background-radius: 12;" stylesheets="@../themes/primer-dark.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isaatonimov.invy.controller.Controller">
+<BorderPane fx:id="rootPane" maxHeight="400.0" maxWidth="400.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="94.0" prefWidth="600.0" style="-fx-background-radius: 12;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="isaatonimov.invy.controller.Controller">
    <center>
       <AnchorPane prefHeight="214.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <children>

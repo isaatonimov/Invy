@@ -29,8 +29,8 @@ import java.util.Map;
     "text-representation"
 })
 @Generated("jsonschema2pojo")
-public class Release {
-
+public class Release
+{
     @JsonProperty("packaging")
     private String packaging;
     @JsonProperty("id")

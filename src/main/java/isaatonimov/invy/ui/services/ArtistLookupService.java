@@ -22,15 +22,15 @@ public class ArtistLookupService extends LookupService<LinkedList<Artist>>
 	@Override
 	protected Task createTask()
 	{
+		System.out.println(">Artist Lookup Service Starting....");
+		System.out.println(">Search query: " + query);
+		LinkedList<Artist> top5 = MusicBrainzInstance.searchForFirstXArtists(query, 5);
+
 		return new Task()
 		{
 			@Override
-			protected LinkedList<Artist> call() throws Exception
+			protected LinkedList<Artist> call()
 			{
-				System.out.println(">Artist Lookup Service Starting....");
-				System.out.println(">Search query: " + query);
-				LinkedList<Artist> top5 = MusicBrainzInstance.searchForFirstXArtists(query, 5);
-
 				return top5;
 			}
 		};

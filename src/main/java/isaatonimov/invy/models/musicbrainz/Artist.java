@@ -33,6 +33,8 @@ import java.util.Map;
 @Generated("jsonschema2pojo")
 public class Artist {
 
+    //public SimpleStringProperty NameProperty = new SimpleStringProperty();
+
     @JsonProperty("id")
     private String id;
     @JsonProperty("type")
@@ -114,11 +116,13 @@ public class Artist {
 
     @JsonProperty("name")
     public String getName() {
-        return name;
+        //return NameProperty.get();
+        return this.name;
     }
 
     @JsonProperty("name")
     public void setName(String name) {
+        //this.NameProperty.set(name);
         this.name = name;
     }
 

@@ -2,29 +2,38 @@ package isaatonimov.invy.helpers;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
 public class AppUtils
 {
-	private static Path tempBase = Paths.get("/private/tmp/invyMusicPlayer");
+	private static Path tempBase = Path.of(System.getProperty("java.io.tmpdir") + "/invyMusicPlayer/");
 
-	public static URI getMainInvidiousInstanceURL() throws URISyntaxException
-	{
-		//TODO -> Replace with dynamic List by Region -> auto-pick
-		return new URI("https://iv.nboeck.de");
-	}
-	public static Path getTempDirectory() throws IOException
+	public static Path getTempDirectoryPath() throws IOException
 	{
 		if(Files.notExists(tempBase))
 			Files.createDirectory(tempBase);
 
 		return tempBase;
+	}
+
+	public static File getTempDirectoryFile()
+	{
+		File tmpDir = null;
+
+		try
+		{
+			tmpDir = new File(getTempDirectoryPath().toString());
+		}
+		catch (IOException e)
+		{
+			//TODO Handle
+			throw new RuntimeException(e);
+		}
+
+		return tmpDir;
 	}
 
 	public static void clearTempFolder() throws IOException

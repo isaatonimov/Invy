@@ -1,5 +1,6 @@
 package isaatonimov.invy.controller;
 
+import com.dlsc.preferencesfx.PreferencesFx;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import isaatonimov.invy.App;
 import isaatonimov.invy.core.MusicPlayer;
@@ -9,10 +10,8 @@ import isaatonimov.invy.core.musicbrainz.MusicBrainzInstance;
 import isaatonimov.invy.exceptions.NoVideoResultsFoundException;
 import isaatonimov.invy.models.musicbrainz.Artist;
 import isaatonimov.invy.models.musicbrainz.Recording;
-import isaatonimov.invy.ui.services.ArtistLookupService;
-import isaatonimov.invy.ui.services.AudioStreamLookupService;
-import isaatonimov.invy.ui.services.RecordingLookupService;
-import isaatonimov.invy.ui.services.ToggleViewService;
+import isaatonimov.invy.ui.NotificationFX;
+import isaatonimov.invy.ui.services.*;
 import javafx.application.Platform;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.Event;
@@ -39,8 +38,9 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable
 {
 	//UI
-	private Stage stage;
-	private FXTrayIcon trayIcon;
+	private Stage 		stage;
+	private FXTrayIcon 	trayIcon;
+	private PreferencesFx preferencesFx;
 
 	//Menu Item References
 	private MenuItem menuItemShowHide;
@@ -54,6 +54,7 @@ public class Controller implements Initializable
 
 	//Services - UI
 	private ToggleViewService 		toggleViewService;
+	private PreferencesService		preferencesService;
 
 	//Services - Background / Other
 	private AudioStreamLookupService audioStreamLookupService;
@@ -271,6 +272,16 @@ public class Controller implements Initializable
 
 	}
 
+	public void setPreferencesFx(PreferencesFx preferencesFx)
+	{
+		this.preferencesFx = preferencesFx;
+	}
+
+	public PreferencesFx getPreferencesFx()
+	{
+		return this.preferencesFx;
+	}
+
 	public void setMenuItemShowHide(MenuItem showHide)
 	{
 		this.menuItemShowHide = showHide;
@@ -357,8 +368,6 @@ public class Controller implements Initializable
 		}
 
 		notificationFX.show();
-
-		//trayIcon.showMessage(;
 	}
 
 	public NotificationFX createNewNotifcation()
@@ -391,5 +400,49 @@ public class Controller implements Initializable
 	public Node getRootPane()
 	{
 		return rootPane;
+	}
+
+	public void showPreferencesWindow()
+	{
+		preferencesFx.show();
+
+//		((VBox) ((MasterDetailPane) preferencesFx.getView().getChildren().getFirst()).getMasterNode()).setPrefWidth(800);
+//		((VBox) ((MasterDetailPane) preferencesFx.getView().getChildren().getFirst()).getMasterNode()).setMaxWidth(800);
+//		((VBox) ((MasterDetailPane) preferencesFx.getView().getChildren().getFirst()).getMasterNode()).setMinWidth(800);
+	}
+
+	public void changeAppTheme(String theme)
+	{
+		String themeToLoad = "";
+		if(theme.equals("Cupertino Dark"))
+			themeToLoad = "cupertino-dark.css";
+		if(theme.equals("Cupertino Light"))
+			themeToLoad = "cupertino-light.css";
+		if(theme.equals("Dracula"))
+			themeToLoad = "dracula.css";
+		if(theme.equals("Nord Dark"))
+			themeToLoad = "nord-dark.css";
+		if(theme.equals("Nord Light"))
+			themeToLoad = "nord-light.css";
+		if(theme.equals("Primer Dark"))
+			themeToLoad = "primer-dark.css";
+		if(theme.equals("Primer Light"))
+			themeToLoad = "primer-light.css";
+
+		String resourceString = App.class.getResource("/isaatonimov/invy/themes/"+themeToLoad).toString();
+
+		preferencesFx.getStylesheets().clear();
+		preferencesFx.getStylesheets().add(resourceString);
+
+		getNotificationFX().setStylesheet(resourceString);
+		stage.getScene().setUserAgentStylesheet(resourceString);
+	}
+
+	public NotificationFX getNotificationFX()
+	{
+		if(notificationFX == null)
+			notificationFX = createNewNotifcation();
+
+		return notificationFX;
 	}
 }

@@ -15,9 +15,12 @@ module isaatonimov.invy {
 	requires com.fasterxml.jackson.core;
 	requires com.fasterxml.jackson.databind;
 	requires com.fasterxml.jackson.annotation;
-	//TODO: Replace with JAVAFX Music Player - vlc is not neccesarry
 	requires uk.co.caprica.vlcj;
 	requires com.dlsc.preferencesfx;
+	requires org.slf4j;
+	requires org.controlsfx.controls;
+	requires javafx.media;
+	requires fontawesomefx;
 
 	opens isaatonimov.invy to javafx.fxml;
 	exports isaatonimov.invy;
@@ -28,4 +31,6 @@ module isaatonimov.invy {
 	opens isaatonimov.invy.controller to javafx.fxml;
 	exports isaatonimov.invy.misc;
 	opens isaatonimov.invy.misc to javafx.fxml;
+	exports isaatonimov.invy.ui;
+	opens isaatonimov.invy.ui to javafx.fxml;
 }
