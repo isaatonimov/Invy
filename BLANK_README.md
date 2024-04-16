@@ -52,23 +52,24 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `isaatonimov`, `Invy`, ``, ``, ``, `isaatonimov@proton.me`, `Invy`, `An easy to use minimalist Piped / Invidious Client for Audio Content Only, that lives in your menu bar`
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 ### Built With
 <br>
 
 [![Java][Java]][Java]
 
-### With the Support of many Users of
+### And
+
 <br>
 
-[![Stack][Stack]][Stack]
+Use Case | Repo                                   |
+--- |----------------------------------------| 
+Themes | [https://github.com/mkpaz/atlantafx]() | 
+FXTrayIcon | [https://github.com/dustinkredmond/FXTrayIcon]() | 
+Piped | [https://github.com/TeamPiped/Piped]() | 
+Invidious | [https://github.com/iv-org/invidious]() | 
+Playback with VLC |  [https://github.com/caprica/vlcj]() | 
+Mouse Listener / Keyboard Listener (Optional!) | [https://github.com/dlsc-software-consulting-gmbh/PreferencesFX]() | 
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -77,9 +78,6 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 <!-- GETTING STARTED -->
 ## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
@@ -114,13 +112,9 @@ In the Preferences Dialog you can change things like your Piped / Invidious Inst
 - [X] Easily switch between Invidious and Piped
 - [X] Auto detect nearest / fastest response time of instances
 - [ ] Native Integration
-    - [ ] Media Key Support
+    - [X] Media Key Support
     - [ ] Native Notifications
-      - [ ] MAC OSX
-      - [ ] Windows
-      - [ ] Linux
     - [ ] Native Media Control
-    
 
 See the [open issues](https://github.com/isaatonimov/Invy/issues) for a full list of proposed features (and known issues).
 
@@ -141,18 +135,6 @@ Dominik Beyerle - isaatonimov@proton.me
 Project Link: [https://github.com/isaatonimov/Invy](https://github.com/isaatonimov/Invy)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
@@ -176,3 +158,4 @@ Project Link: [https://github.com/isaatonimov/Invy](https://github.com/isaatonim
 [Linux]: https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black
 [Windows]: https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white
 [Stack]: https://aleen42.github.io/badges/src/stackoverflow.svg
+[Github]: https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white

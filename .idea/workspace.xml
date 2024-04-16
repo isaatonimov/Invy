@@ -10,34 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c40c023f-133f-4a69-977e-f8df4d43dc6d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/hs_err_pid4098.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/PreferencesService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/themes/cupertino-dark-pref.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BLANK_README.md" beforeDir="false" afterPath="$PROJECT_DIR$/BLANK_README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/screenshot.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Invy_jar/Invy.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Invy_jar/Invy.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/NotificationFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/NotificationFX.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/MusicPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/MusicPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/invidious/InvidiousInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/invidious/InvidiousInstance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/invidious/PipedInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/invidious/PipedInstance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/musicbrainz/MusicBrainzInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/musicbrainz/MusicBrainzInstance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/MainStageShownEventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/MainStageShownEventHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/helpers/AppUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/helpers/AppUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/helpers/JsonModelClassGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/helpers/JsonModelClassGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Artist.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Artist.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/ArtistResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/ArtistResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Recording.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Recording.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Release.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Release.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/ArtistLookupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/ArtistLookupService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/AudioStreamLookupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/AudioStreamLookupService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/main.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/notification.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/notification.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +22,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="273952" />
+    <option name="totalTimeSeconds" value="275471" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
