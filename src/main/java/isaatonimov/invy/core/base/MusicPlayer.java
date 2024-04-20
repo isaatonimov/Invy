@@ -7,7 +7,6 @@ import isaatonimov.invy.utils.InvyUtils;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.concurrent.WorkerStateEvent;
 import kong.unirest.Unirest;
 import org.apache.commons.io.IOUtils;
 
@@ -29,7 +28,7 @@ public abstract class MusicPlayer
 	public SimpleStringProperty CurrentTargetAudioSourceURL 	= new SimpleStringProperty("");
 	public SimpleBooleanProperty BufferFileRequired 			= new SimpleBooleanProperty(false);
 	public SimpleObjectProperty<File> BufferFile	  			= new SimpleObjectProperty<>();
-	public SimpleObjectProperty<Duration>	BufferingTime 		= new SimpleObjectProperty<>(Duration.ofSeconds(6));
+	public SimpleObjectProperty<Duration>	BufferingTime 		= new SimpleObjectProperty<>(Duration.ofSeconds(0));
 
 	private SimpleObjectProperty<Thread> FetchThread			= new SimpleObjectProperty<>();
 
@@ -59,6 +58,8 @@ public abstract class MusicPlayer
 
 	public void AddToSongQueue(LinkedList<Recording> records)
 	{
+		PlayerSpecificPause();
+
 		SongQueue.get().		clear();
 		SongQueue.get().		addAll(records);
 		ShuffleSongQueue();;
@@ -68,7 +69,6 @@ public abstract class MusicPlayer
 	public void Play(Recording toPlay)
 	{
 		CurrentlyPlayingRecord.		set(toPlay);
-		CurrentState.				set(MusicPlayerState.PLAYING);
 
 		System.out.println("Trying to Play Track " + toPlay.getTitle() + " with " + this.getClass().getName());
 
@@ -79,7 +79,7 @@ public abstract class MusicPlayer
 		{
 			CurrentTargetAudioSourceURL.set((String) AudioStreamLookupServiceProperty.get().ResultValueProperty.get());
 
-			if(BufferFile != null)
+			if(RequireLocallyStoredBuffer() && BufferFile != null)
 			{
 				FetchAudioStreamAndStoreInBuffer();
 
@@ -95,15 +95,13 @@ public abstract class MusicPlayer
 					}
 
 					PlayerSpecificPlay();
+					CurrentState.				set(MusicPlayerState.PLAYING);
 				});
 			}
 			else
 				PlayerSpecificPlay();
-		});
 
-		AudioStreamLookupServiceProperty.get().addEventHandler(WorkerStateEvent.WORKER_STATE_FAILED, event ->
-		{
-			System.out.println("Implement -> " + "audioStreamLookupService -> Failed");
+			CurrentState.				set(MusicPlayerState.PLAYING);
 		});
 	}
 

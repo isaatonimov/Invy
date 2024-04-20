@@ -15,8 +15,12 @@
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
   </properties>
-
   <dependencies>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-swing</artifactId>
+      <version>23-ea+3</version>
+    </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
@@ -78,11 +82,6 @@
       <version>2.2.2</version>
     </dependency>
     <dependency>
-      <groupId>com.dustinredmond.fxtrayicon</groupId>
-      <artifactId>FXTrayIcon</artifactId>
-      <version>4.0.1</version>
-    </dependency>
-    <dependency>
       <groupId>com.konghq</groupId>
       <artifactId>unirest-java</artifactId>
       <version>4.0.0-RC2</version>
@@ -114,6 +113,12 @@
         <artifactId>annotations</artifactId>
         <version>24.1.0</version>
         <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.dustinredmond.fxtrayicon</groupId>
+      <artifactId>FXTrayIcon</artifactId>
+      <version>4.2.0-SNAPSHOT</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
   <build>

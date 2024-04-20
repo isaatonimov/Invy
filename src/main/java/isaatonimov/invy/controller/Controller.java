@@ -9,6 +9,7 @@ import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.services.background.ArtistLookupService;
 import isaatonimov.invy.services.background.AudioStreamLookupService;
 import isaatonimov.invy.services.background.RecordingLookupService;
+import isaatonimov.invy.services.ui.PlayTrayAnimationService;
 import isaatonimov.invy.services.ui.PreferencesService;
 import isaatonimov.invy.services.ui.ToggleSearchWindowService;
 import isaatonimov.invy.ui.AudioNotificationFX;
@@ -16,16 +17,18 @@ import isaatonimov.invy.ui.MessageFX;
 import isaatonimov.invy.ui.MessageFXType;
 import isaatonimov.invy.utils.InvyUtils;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.controlsfx.glyphfont.FontAwesome;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
@@ -43,6 +46,8 @@ public class Controller implements Initializable
 	public SimpleObjectProperty<RecordingLookupService>		RecordLookupServiceProperty 	= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<ArtistLookupService>			ArtistLookupServiceProperty 	= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<ToggleSearchWindowService> 	ToggleViewServiceProperty 		= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<PlayTrayAnimationService> 		PlayTrayAnimationServiceProperty = new SimpleObjectProperty<>();
+
 	public SimpleObjectProperty<PreferencesService>			PreferencesServiceProperty 		= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<javafx.scene.robot.Robot>  		FXRobotProperty 			= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<java.awt.Robot>  	    	AWTRobotProperty 			= new SimpleObjectProperty<>();
@@ -74,24 +79,29 @@ public class Controller implements Initializable
 
 	public void ShowErrorMessage(String message)
 	{
-		Toolkit.getDefaultToolkit().beep();
-
+		ShowNotificationDefaults();
 		MessageProperty.get().Show(message, MessageFXType.ERROR);
-		MessageProperty.get().OkButtonProperty.get().setOnMouseClicked(event -> MessageProperty.get().Hide());
 	}
 
 	public void ShowNotification(String message)
 	{
-		Toolkit.getDefaultToolkit().beep();
-
+		ShowNotificationDefaults();
 		MessageProperty.get().Show(message, MessageFXType.NOTIFICATION);
-		MessageProperty.get().OkButtonProperty.get().setOnMouseClicked(event -> MessageProperty.get().Hide());
+	}
+	public void ShowNotification(String message, FontAwesome.Glyph icon)
+	{
+		ShowNotificationDefaults();
+		MessageProperty.get().Show(message, MessageFXType.NOTIFICATION, icon);
+	}
+	public void ShowNotificationDefaults()
+	{
+		Toolkit.getDefaultToolkit().beep();
+		MessageProperty.get().OkButtonProperty.get().setOnMouseClicked(event -> MessageProperty.get().Hide(MessageProperty.get()));
 	}
 
 	public void ShowYesNoDialog(String question, Runnable yesRunThis, Runnable noRunThis)
 	{
-		Toolkit.getDefaultToolkit().beep();
-
+		ShowNotificationDefaults();
 		MessageProperty.get().Show(question, MessageFXType.YES_NO);
 		MessageProperty.get().YesButtonProperty.get().setOnMouseClicked(event ->
 		{
@@ -107,21 +117,10 @@ public class Controller implements Initializable
 	//No Idea where this should really go -> MVC
 	public void handlers()
 	{
-		RecordLookupServiceProperty.addListener((observable, oldValue, newValue) ->
+		//When Record was found start playing
+		RecordLookupServiceProperty.get().ResultValueProperty.addListener((observable, oldValue, newValue) ->
 		{
-			//When Record was found start playing
-			RecordLookupServiceProperty.get().addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event ->
-			{
-				if(RecordLookupServiceProperty.get().getValue() != null)
-				{
-					startMusicPlayerWithPlaylist((LinkedList<Recording>) RecordLookupServiceProperty.get().getValue());
-				}
-			});
-
-			RecordLookupServiceProperty.get().addEventHandler(WorkerStateEvent.WORKER_STATE_FAILED, event ->
-			{
-				//Handle Error
-			});
+			startMusicPlayerWithPlaylist((LinkedList<Recording>) newValue);
 		});
 	}
 
@@ -136,7 +135,7 @@ public class Controller implements Initializable
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
 		properties();
-		handlers();
+		//handlers();
 	}
 
 	public void hideRecommendations()
@@ -195,6 +194,8 @@ public class Controller implements Initializable
 
 	public void searchAndPlay(Artist selectedItem)
 	{
+		TrayProperty.get().play();
+
 		RecordLookupServiceProperty.get().ResultValueProperty.addListener((observable, oldValue, newValue) ->
 		{
 			MusicPlayerProperty.get().AddToSongQueue((LinkedList<Recording>) newValue);
@@ -202,11 +203,23 @@ public class Controller implements Initializable
 
 		RecordLookupServiceProperty.get().CurrentTargetArtistProperty.set(selectedItem);
 		RecordLookupServiceProperty.get().startWorking();
+
+
+
 	}
 
-	public void showNowPlaying()
+	public void ShowAudioNotification(Recording recording) throws IOException, URISyntaxException, InterruptedException
 	{
-		//new Image(String.valueOf(MusicBrainz.searchForCoverArt(recording.getRelease())));
+		//Image coverArtImage = new Image(MusicBrainz.searchForCoverArt(recording.getRelease()));
+		//NotificationProperty.get().Show("Now Playing", recording.getArtist().getName(), recording.getTitle(), coverArtImage);
+
+		ResetTrayIcon();
+	}
+
+	public void ResetTrayIcon()
+	{
+		TrayProperty.get().stop();
+		TrayProperty.get().setGraphic(new Image(App.class.getResource("/isaatonimov/invy/images/logo/logo.0001.png").toString()));
 	}
 
 	public void ShowPreferencesWindow()
@@ -238,6 +251,7 @@ public class Controller implements Initializable
 	{
 		try
 		{
+			ClosePreferencesWindow();
 			Desktop.getDesktop().open(InvyUtils.getTempDirectoryFile());
 		}
 		catch (IOException e)

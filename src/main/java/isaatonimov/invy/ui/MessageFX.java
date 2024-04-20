@@ -3,135 +3,150 @@ package isaatonimov.invy.ui;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import org.controlsfx.glyphfont.FontAwesome;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MessageFX extends SimpleFX implements Initializable
+public class MessageFX extends SimpleFX
 {
 	@FXML
-	private Label 		titleLabel;
+	private Label 			messageLabel;
 	@FXML
-	private Label 		messageLabel;
+	private Button 			okButton;
 	@FXML
-	private Button 		okButton;
+	private Button 			yesButton;
 	@FXML
-	private Button 		yesButton;
+	private Button 			noButton;
 	@FXML
-	private Button 		noButton;
+	private Pane 			imageWrapper;
 	@FXML
-	private Pane 		imageWrapper;
+	private HBox			buttonBar;
 
-	private FontAwesome fontAwesome;
-	private Node 		messageImage;
+	private FontAwesome 		fontAwesome;
+	private Node 			messageImage;
+	private FontAwesome.Glyph selectedGlyph;
+	private FontAwesome.Glyph promptedGlyph;
 
-	public SimpleStringProperty 		TitleProperty 		= new SimpleStringProperty();
 	public SimpleStringProperty 		MessageProperty 	= new SimpleStringProperty();
 	public SimpleObjectProperty<Button>	OkButtonProperty	= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<Button>	YesButtonProperty	= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<Button>	NoButtonProperty	= new SimpleObjectProperty<>();
 
+	public void Show(String message, MessageFXType messageFXType, FontAwesome.Glyph icon)
+	{
+		promptedGlyph = icon;
+		Show(message, messageFXType);
+	}
 
 	public void Show(String message, MessageFXType type)
 	{
 		if(MessageFXType.ERROR == type)
 		{
 			ShowOkButton();
-			messageImage = fontAwesome.create(FontAwesome.Glyph.BOMB.getChar());
+			selectedGlyph = FontAwesome.Glyph.BOMB;
 		}
 
 		if(MessageFXType.YES_NO == type)
 		{
 			ShowYesButton();
 			ShowNoButton();
-			messageImage = fontAwesome.create(FontAwesome.Glyph.QUESTION.getChar());
+			selectedGlyph = FontAwesome.Glyph.QUESTION;
 		}
 
 		if(MessageFXType.NOTIFICATION == type)
 		{
 			ShowOkButton();
-			messageImage = fontAwesome.create(FontAwesome.Glyph.INFO.getChar());
+			selectedGlyph = FontAwesome.Glyph.INFO;
 		}
+
+		if(promptedGlyph != null)
+			selectedGlyph = promptedGlyph;
+
+		messageImage = fontAwesome.create(selectedGlyph.getChar());
+		messageImage.scaleXProperty().set(2);
+		messageImage.scaleYProperty().set(2);
 
 		MessageProperty.set(message);
 		imageWrapper.getChildren().add(messageImage);
-		Show();
+		Show(this);
 	}
 
 	public void ShowOkButton()
 	{
-		okButton.visibleProperty().set(true);
+		buttonBar.getChildren().add(OkButtonProperty.get());
 	}
 
 	public void ShowYesButton()
 	{
-		yesButton.visibleProperty().set(true);
+		buttonBar.getChildren().add(YesButtonProperty.get());
 	}
 
 	public void ShowNoButton()
 	{
-		noButton.visibleProperty().set(true);
+		buttonBar.getChildren().add(NoButtonProperty.get());
 	}
 
 	public void HideOkButton()
 	{
-		okButton.visibleProperty().set(false);
+		buttonBar.getChildren().remove(OkButtonProperty.get());
 	}
 
 	public void HideYesButton()
 	{
-		yesButton.visibleProperty().set(false);
-	}
+		buttonBar.getChildren().remove(YesButtonProperty.get());	}
 
 	public void HideNoButton()
 	{
-		noButton.visibleProperty().set(false);
-	}
+		buttonBar.getChildren().remove(NoButtonProperty.get());	}
 
 	@Override
-	protected String FXMLResourceLocation()
+	public String FXMLResourceLocation()
 	{
 		return "/isaatonimov/invy/views/message.fxml";
 	}
 
 	@Override
-	protected void FXSpecificShowActions()
+	public void FXSpecificShowActions()
 	{
 
 	}
 
 	@Override
-	protected void FXSpecificHideActions()
+	public void FXSpecificHideActions()
 	{
 		HideOkButton();
 		HideYesButton();
 		HideNoButton();
 
-		TitleProperty.set("");
 		MessageProperty.set("");
 		imageWrapper.getChildren().remove(messageImage);
+		promptedGlyph = null;
 	}
 
 	@Override
-	protected void FXSpecificSettings()
+	public void FXSpecificSceneSettings()
 	{
+
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		TitleProperty.		bindBidirectional(titleLabel.textProperty());
 		MessageProperty.		bindBidirectional(messageLabel.textProperty());
 		OkButtonProperty.	set(okButton);
 		YesButtonProperty	.set(yesButton);
 		NoButtonProperty.	set(noButton);
 
 		fontAwesome = new FontAwesome();
+
+		HideYesButton();
+		HideNoButton();
+		HideOkButton();
 	}
 }

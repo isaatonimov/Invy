@@ -2,21 +2,22 @@ package isaatonimov.invy.input;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import isaatonimov.invy.services.base.HelperService;
 import javafx.application.Platform;
-import javafx.concurrent.Service;
 import javafx.concurrent.Worker;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShortcutKeyListener implements NativeKeyListener
 {
 	private List<Integer> 					keyEventQueue 			= new ArrayList<>();
-	private HashMap<MenuShortcut, Service>	shortcutActionMap 		= new HashMap<>();
-	private HashMap<Service, Worker.State>	serviceStates 			= new HashMap<>();
-	private HashMap<Integer, Service>		simpleShortcutActionMap 	= new HashMap<>();
+	private HashMap<int[], HelperService> shortcutActionMap 		= new HashMap<int[], HelperService>();
+	private HashMap<HelperService, Worker.State>	serviceStates 			= new HashMap<>();
+	private HashMap<Integer, HelperService> simpleShortcutActionMap 	= new HashMap<Integer, HelperService>();
 
 	public ShortcutKeyListener() throws InterruptedException
 	{
@@ -38,13 +39,13 @@ public class ShortcutKeyListener implements NativeKeyListener
 		}).start();
 	}
 
-	public void addShortcutToListenFor(MenuShortcut shortcut, Service toStart)
+	public void addShortcutCombinationToListenFor(HelperService toStart, int... keyCodes)
 	{
-		shortcutActionMap.put(shortcut, toStart);
+		shortcutActionMap.put(keyCodes, toStart);
 		updateWorkerStateMap();
 	}
 
-	public void addSimpleShortcutToListenFor(int keyCode, Service toStart)
+	public void addSimpleShortcutToListenFor(int keyCode, HelperService toStart)
 	{
 		System.out.println("Adding: " + keyCode + " -> " + toStart.toString());
 		simpleShortcutActionMap.put(keyCode, toStart);
@@ -56,10 +57,10 @@ public class ShortcutKeyListener implements NativeKeyListener
 		{
 			serviceStates.clear();
 
-			for(var entry : shortcutActionMap.entrySet())
+			for(Map.Entry<int[], HelperService> entry : shortcutActionMap.entrySet())
 			{
 				//System.out.println("Updated Service State Map: " + entry.getValue().toString() + " -> " + entry.getValue().getState().toString());
-				serviceStates.put(entry.getValue(), entry.getValue().getState());
+				serviceStates.put(entry.getValue(), entry.getValue().ServiceProperty.get().getState());
 			}
 		});
 	}
@@ -74,7 +75,7 @@ public class ShortcutKeyListener implements NativeKeyListener
 				for(var entry : serviceStates.entrySet())
 				{
 					if(entry.getValue() == Worker.State.SUCCEEDED)
-						entry.getKey().reset();
+						entry.getKey().startWorking();
 				}
 			}
 		});
@@ -89,9 +90,9 @@ public class ShortcutKeyListener implements NativeKeyListener
 		return keyCodes;
 	}
 
-	public void StartServiceInCorrectThread(Service toStart)
+	public void StartServiceInCorrectThread(HelperService toStart)
 	{
-		Platform.runLater(() -> toStart.restart());
+		Platform.runLater(() -> toStart.startWorking());
 	}
 
 	@Override
@@ -113,7 +114,7 @@ public class ShortcutKeyListener implements NativeKeyListener
 	{
 		System.out.println("Keycode: " + nativeEvent.getKeyCode());
 
-		for(var entry : simpleShortcutActionMap.entrySet())
+		for(Map.Entry<Integer, HelperService> entry : simpleShortcutActionMap.entrySet())
 		{
 			if(nativeEvent.getKeyCode() == entry.getKey())
 				StartServiceInCorrectThread(entry.getValue());

@@ -4,6 +4,7 @@ import isaatonimov.invy.controller.Controller;
 import isaatonimov.invy.models.musicbrainz.Artist;
 import isaatonimov.invy.services.background.ArtistLookupService;
 import isaatonimov.invy.services.background.RecordingLookupService;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
@@ -35,13 +36,18 @@ public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.s
 
 			artistsSuggestionList = FXCollections.observableArrayList((List<Artist>) artistLookupService.ResultValueProperty.get());
 
-			if(artistsSuggestionList.size() > 0)
+			Platform.runLater(() ->
 			{
-				recommendationsView.setItems(artistsSuggestionList);
-				controller.showRecommendations();
-			}
-			else
-				controller.hideRecommendations();
+				if(artistsSuggestionList.size() > 0)
+				{
+
+					recommendationsView.setItems(artistsSuggestionList);
+					controller.showRecommendations();
+
+				}
+				else
+					controller.hideRecommendations();
+			});
 		});
 	}
 

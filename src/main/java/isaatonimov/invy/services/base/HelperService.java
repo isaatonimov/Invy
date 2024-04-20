@@ -4,94 +4,87 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
+import javafx.concurrent.Worker;
 
-public abstract class HelperService extends Service
+public abstract class HelperService
 {
-	public 	SimpleObjectProperty<Object> 	ResultValueProperty 	= new SimpleObjectProperty<>();
-	private 	Thread backgroundThread;
-	private	Task   customHelperTask;
-	private 	Task						ReturnResultTask		= new Task()
-	{
-		@Override
-		protected Object call() throws Exception
-		{
-			return ResultValueProperty.get();
-		}
-	};
+	public	SimpleObjectProperty<Service>	ServiceProperty		= new SimpleObjectProperty<>();
+	public 	SimpleObjectProperty<Thread>	ThreadProperty		= new SimpleObjectProperty<>();
+	public 	SimpleObjectProperty<Object> 	ResultValueProperty 	= new SimpleObjectProperty<>(null);
 
 	public HelperService()
 	{
 		ResultValueProperty.addListener((observable, oldValue, newValue) ->
 		{
-			ServiceSpecificOnValuePropertyChanged();
+			OnSuccessDo();
 		});
 
-		this.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, 	event -> OnSuccessDo());
-		this.addEventHandler(WorkerStateEvent.WORKER_STATE_FAILED, 		event -> ServiceSpecificOnFailureDo());
-		this.addEventHandler(WorkerStateEvent.WORKER_STATE_CANCELLED, 	event -> ServiceSpecificOnInterruptionDo());
-		this.addEventHandler(WorkerStateEvent.WORKER_STATE_RUNNING, 		event -> ServerSpecificOnRunningDo());
+		if(IsBackgroundService())
+		{
+			System.out.println("Creating Background Thread for " + getClass().getName() + " Service...");
+
+			ThreadProperty.set(new Thread(() ->
+			{
+				ResultValueProperty.set(ServiceSpecificDo());
+			}));
+		}
+		else
+		{
+			System.out.println("Creating UI Service for " + getClass().getName() + " Service...");
+
+			ServiceProperty.set(new Service()
+			{
+				@Override
+				protected Task createTask()
+				{
+					Platform.runLater(() -> ResultValueProperty.set(ServiceSpecificDo()));
+
+					return new Task()
+					{
+						@Override
+						protected Object call() throws Exception
+						{
+							return "null";
+						}
+					};
+				}
+			});
+		}
 	}
 
 	public void startWorking()
 	{
 		System.out.println("Service " + this.getClass().getName() + " started....");
 
-		if(this.stateProperty().get() != State.RUNNING)
+		if (this instanceof BackgroundHelperService)
 		{
-			this.reset();
+			ThreadProperty.set(new Thread(() ->
+			{
+				ResultValueProperty.set(ServiceSpecificDo());
+			}));
 
-			if(customHelperTask != null)
-				this.executeTask(customHelperTask);
-			else
-				this.executeTask(customHelperServiceTask());
+			ThreadProperty.get().start();
+		}
+		else if (this instanceof UIHelperService)
+		{
+			Platform.runLater(() ->
+			{
+				if(this.ServiceProperty.get().stateProperty().get() != Worker.State.RUNNING)
+				{
+					this.ServiceProperty.get().restart();
+				}
+			});
 		}
 	}
 
 	public void OnSuccessDo()
 	{
-		System.out.println("Service " + this.getClass().getName() + " finished succesfully.");
-		if(backgroundThread != null)
-			backgroundThread.interrupt();
-
-		this.reset();
 		ServiceSpecificOnSuccessDo();
+
+		System.out.println("Service " + this.getClass().getName() + " finished succesfully and was reset.");
 	}
 
-	private Task customHelperServiceTask()
-	{
-		if(this instanceof BackgroundHelperService)
-		{
-			System.out.println("Background Service detected -> Running in its own Thread");
-			backgroundThread = new Thread(() ->
-			{
-				Platform.runLater(() -> ResultValueProperty.set(ServiceSpecificDo()));
-			});
-
-			backgroundThread.start();
-		}
-		else if(this instanceof UIHelperService)
-		{
-			System.out.println("UI Helper Service detected -> Running in FX Thread");
-			Platform.runLater(() -> ResultValueProperty.set(ServiceSpecificDo()));
-		}
-
-		return ReturnResultTask;
-	}
-
-	@Override
-	protected Task createTask()
-	{
-		customHelperTask = customHelperServiceTask();
-
-		customHelperTask.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, 	event -> OnSuccessDo());
-		customHelperTask.addEventHandler(WorkerStateEvent.WORKER_STATE_FAILED, 		event -> ServiceSpecificOnFailureDo());
-		customHelperTask.addEventHandler(WorkerStateEvent.WORKER_STATE_CANCELLED, 	event -> ServiceSpecificOnInterruptionDo());
-		customHelperTask.addEventHandler(WorkerStateEvent.WORKER_STATE_RUNNING, 	event -> ServerSpecificOnRunningDo());
-
-		return customHelperTask;
-	}
-
+	protected abstract boolean IsBackgroundService();
 	protected abstract Object  ServiceSpecificDo();
 	protected abstract boolean 	ServiceSpecificOnSuccessDo();
 	protected abstract boolean 	ServiceSpecificOnFailureDo();

@@ -10,12 +10,93 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c40c023f-133f-4a69-977e-f8df4d43dc6d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/hs_err_pid30296.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid30310.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hs_err_pid8297.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hs_err_pid40928.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hs_err_pid46665.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hs_err_pid46692.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hs_err_pid46715.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hs_err_pid46793.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/PlayTrayAnimationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0001.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0002.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0003.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0004.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0005.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0006.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0007.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0008.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0009.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0010.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0011.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0012.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0013.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0014.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0015.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0016.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0017.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0018.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0019.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0020.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0021.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0022.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0023.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0024.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0025.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0026.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0027.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0028.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0029.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0030.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0031.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0032.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0033.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0034.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0035.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0036.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0037.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0038.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0039.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0040.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0041.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0042.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0043.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0044.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0045.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0046.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0047.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0048.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0049.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0050.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0051.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0052.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0053.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0054.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0055.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0056.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0057.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0058.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0059.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo/logo.0060.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs_err_pid4098.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/MusicPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/MusicPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/mediaplayers/VLC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/mediaplayers/VLC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/SmartSearchBoxHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/SmartSearchBoxHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/SongViewSearchhandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/input/ShortcutKeyListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/input/ShortcutKeyListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/BackgroundHelperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/BackgroundHelperService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/HelperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/HelperService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/UIHelperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/UIHelperService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/AudioNotificationFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/AudioNotificationFX.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/MessageFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/MessageFX.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/SimpleFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/SimpleFX.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/message.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/message.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/notification.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/notification.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +107,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="366754" />
+    <option name="totalTimeSeconds" value="389992" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
@@ -54,6 +135,7 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
         <option name="useMavenConfig" value="false" />
       </MavenGeneralSettings>
     </option>
@@ -102,8 +184,8 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;22&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/dbeyerle/IdeaProjects/Invy/images&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/dbeyerle/IdeaProjects/Invy/src/main/resources/isaatonimov/invy/images/logo&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.34731084&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.5143885&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.statistic.project.settings&quot;
@@ -118,11 +200,11 @@
       <recent name="isaatonimov.invy.exceptions" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo" />
       <recent name="$PROJECT_DIR$/images" />
       <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/themes" />
       <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images" />
       <recent name="$PROJECT_DIR$/target/icons" />
-      <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/media" />

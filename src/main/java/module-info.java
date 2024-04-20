@@ -3,11 +3,11 @@ module isaatonimov.invy {
 	requires java.desktop;
 	requires java.compiler;
     requires javafx.controls;
-	requires javafx.swing;
 	requires javafx.fxml;
+	requires javafx.swing;
+	requires com.dustinredmond.fxtrayicon;
 	requires java.net.http;
 	requires unirest.java;
-	requires com.dustinredmond.fxtrayicon;
 	requires com.github.kwhat.jnativehook;
 	requires org.jetbrains.annotations;
 	requires jsonschema2pojo.core;

@@ -2,7 +2,6 @@ package isaatonimov.invy.core.mediaplayers;
 
 import isaatonimov.invy.core.base.MusicPlayer;
 import isaatonimov.invy.enums.MusicPlayerState;
-import javafx.application.Platform;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
@@ -22,19 +21,19 @@ public class VLC extends MusicPlayer
 	@Override
 	protected void PlayerSpecificPlay()
 	{
-		vlcMediaPlayer.media().play(CurrentTargetAudioSourceURL.get(), ":no-video");
+		vlcMediaPlayer.submit(() -> vlcMediaPlayer.media().play(CurrentTargetAudioSourceURL.get(), ":no-video"));
 	}
 
 	@Override
 	protected void PlayerSpecificResume()
 	{
-		vlcMediaPlayer.controls().play();
+		vlcMediaPlayer.submit(() -> vlcMediaPlayer.controls().play());
 	}
 
 	@Override
 	protected void PlayerSpecificPause()
 	{
-		vlcMediaPlayer.controls().pause();
+		vlcMediaPlayer.submit(() -> vlcMediaPlayer.controls().pause());
 	}
 
 	@Override
@@ -52,9 +51,9 @@ public class VLC extends MusicPlayer
 		vlcMediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter()
 		{
 			@Override
-			public void finished(MediaPlayer mediaPlayer)
+			public void finished(final MediaPlayer mediaPlayer)
 			{
-				Platform.runLater(() -> PlayNext());
+				mediaPlayer.submit(() -> PlayNext());
 			}
 			@Override
 			public void paused(MediaPlayer mediaPlayer)
