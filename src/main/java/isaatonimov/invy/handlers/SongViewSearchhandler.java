@@ -1,9 +1,8 @@
 package isaatonimov.invy.handlers;
 
-import isaatonimov.invy.core.MusicPlayer;
-import isaatonimov.invy.exceptions.NoVideoResultsFoundException;
+import isaatonimov.invy.core.base.MusicPlayer;
 import isaatonimov.invy.models.musicbrainz.Recording;
-import isaatonimov.invy.ui.services.RecordingLookupService;
+import isaatonimov.invy.services.background.RecordingLookupService;
 import javafx.concurrent.Service;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventType;
@@ -11,16 +10,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class SongViewSearchhandler implements javafx.event.EventHandler<javafx.scene.input.KeyEvent>
 {
-	private MusicPlayer mainMusicPlayer;
-	private List<Service> toStart;
+	private MusicPlayer 	mainMusicPlayer;
+	private List<Service> 	toStart;
 
 	/*
 		Starts all services that where given to handler
@@ -37,59 +34,13 @@ public class SongViewSearchhandler implements javafx.event.EventHandler<javafx.s
 	{
 		EventType<WorkerStateEvent> ifSuccess = WorkerStateEvent.WORKER_STATE_SUCCEEDED;
 
-		//Domino tick
 		toStart.getFirst().start();
 
 		if(toStart.getFirst() instanceof RecordingLookupService)
 			toStart.getFirst().addEventHandler(ifSuccess, event ->
 			{
-				try
-				{
-					mainMusicPlayer.AddToQueue((LinkedList<Recording>) toStart.getFirst().getValue());
-				}
-				catch (URISyntaxException e)
-				{
-					throw new RuntimeException(e);
-				}
-				catch (IOException e)
-				{
-					throw new RuntimeException(e);
-				}
-				catch (InterruptedException e)
-				{
-					throw new RuntimeException(e);
-				}
-				catch (NoVideoResultsFoundException e)
-				{
-					throw new RuntimeException(e);
-				}
+				mainMusicPlayer.AddToSongQueue((LinkedList<Recording>) toStart.getFirst().getValue());
 			});
-
-//		final boolean[] serviceChainSuccessful = {false};
-//		for(var service : toStart)
-//		{
-//			service.addEventFilter(WorkerStateEvent.WORKER_STATE_SUCCEEDED, new EventHandler()
-//			{
-//				@Override
-//				public void handle(Event event)
-//				{
-//					if(!toStart.getFirst().isRunning())
-//					{
-//						if(toStart.isEmpty())
-//							serviceChainSuccessful[0] = true;
-//						else
-//						{
-//							//Start service
-//							toStart.getFirst().restart();
-//							//Remove Service from queue
-//							toStart.remove(service);
-//						}
-//					}
-//				}
-//			});
-//		}
-//
-//		return serviceChainSuccessful[0];
 
 		return true;
 	}

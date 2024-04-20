@@ -36,6 +36,6 @@ public class MainStageHiddenEventHandler implements EventHandler<WindowEvent>
 		});
 
 		delay.play();
-		controller.updateShowHideMenuItem(true);
+		//controller.updateShowHideMenuItem(true);
 	}
 }

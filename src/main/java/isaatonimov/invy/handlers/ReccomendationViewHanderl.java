@@ -40,8 +40,8 @@ public class ReccomendationViewHanderl implements EventHandler<Event>
 		if(event instanceof MouseEvent)
 		{
 			String toSet = artistSelectionModel.getSelectedItem().toString();
-			controller.getArtistSearchTextField().setText(toSet);
-			controller.hideMainWindow();
+			controller.SearchFieldProperty.get().setText(toSet);
+			controller.hideSearchBar();
 			controller.searchAndPlay(artistSelectionModel.getSelectedItem());
 		}
 	}

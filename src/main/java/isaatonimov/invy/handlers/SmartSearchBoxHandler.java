@@ -2,13 +2,10 @@ package isaatonimov.invy.handlers;
 
 import isaatonimov.invy.controller.Controller;
 import isaatonimov.invy.models.musicbrainz.Artist;
-import isaatonimov.invy.ui.services.ArtistLookupService;
-import isaatonimov.invy.ui.services.RecordingLookupService;
+import isaatonimov.invy.services.background.ArtistLookupService;
+import isaatonimov.invy.services.background.RecordingLookupService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -19,7 +16,7 @@ import java.util.List;
 public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.scene.input.KeyEvent>
 {
 	private ArtistLookupService 	artistLookupService;
-	private RecordingLookupService 	recordingLookupService;
+	private RecordingLookupService   recordingLookupService;
 	private TextField 			textField;
 	private ListView				recommendationsView;
 	private ObservableList<Artist>	artistsSuggestionList;
@@ -27,26 +24,24 @@ public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.s
 	public SmartSearchBoxHandler(Controller controller)
 	{
 		this.controller 			= controller;
-		this.recommendationsView 	= controller.getRecommendationsView();
-		this.textField 			= controller.getArtistSearchTextField();
-		this.artistLookupService 	= controller.getArtisLookupService();
-		this.recordingLookupService	= controller.getRecordingLookupService();
+		this.recommendationsView 	= controller.RecommendationsProperty.get();
+		this.textField 			= controller.SearchFieldProperty.get();
+		this.artistLookupService 	= controller.ArtistLookupServiceProperty.get();
+		this.recordingLookupService	= controller.RecordLookupServiceProperty.get();
 
-		artistLookupService.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, new EventHandler()
+		artistLookupService.ResultValueProperty.addListener((observable, oldValue, newValue) ->
 		{
-			@Override
-			public void handle(Event event)
-			{
-				artistsSuggestionList = FXCollections.observableArrayList((List<Artist>)artistLookupService.getValue());
+			System.out.println(artistLookupService.ResultValueProperty.get().toString());
 
-				if(artistsSuggestionList.size() > 0)
-				{
-					recommendationsView.setItems(artistsSuggestionList);
-					controller.showRecommendations();
-				}
-				else
-					controller.hideRecommendations();
+			artistsSuggestionList = FXCollections.observableArrayList((List<Artist>) artistLookupService.ResultValueProperty.get());
+
+			if(artistsSuggestionList.size() > 0)
+			{
+				recommendationsView.setItems(artistsSuggestionList);
+				controller.showRecommendations();
 			}
+			else
+				controller.hideRecommendations();
 		});
 	}
 
@@ -54,20 +49,18 @@ public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.s
 	public void handle(KeyEvent event)
 	{
 		if(textField == null)
-			textField = controller.getArtistSearchTextField();
+			textField = controller.SearchFieldProperty.get();
 
 		if(textField.getText() != null && textField.getText().length() == 0)
 			controller.hideRecommendations();
 
 		if(event.getCode() == KeyCode.ESCAPE)
-			controller.hideMainWindow();
+			controller.hideSearchBar();
 
 		if(textField.getText() != null && textField.getText().length() > 2)
 		{
-			artistLookupService.updateQuery(textField.getText());
-			artistLookupService.restart();
-
-			System.out.println("Key Pressed - current String: " + textField.getText());
+			artistLookupService.QueryProperty.set(textField.getText());
+			artistLookupService.startWorking();
 		}
 
 		if(event.getCode() == KeyCode.ENTER)

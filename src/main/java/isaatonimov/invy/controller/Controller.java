@@ -3,34 +3,29 @@ package isaatonimov.invy.controller;
 import com.dlsc.preferencesfx.PreferencesFx;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import isaatonimov.invy.App;
-import isaatonimov.invy.core.MusicPlayer;
-import isaatonimov.invy.core.invidious.InvidiousInstance;
-import isaatonimov.invy.core.invidious.PipedInstance;
-import isaatonimov.invy.core.musicbrainz.MusicBrainzInstance;
-import isaatonimov.invy.exceptions.NoVideoResultsFoundException;
+import isaatonimov.invy.core.base.MusicPlayer;
 import isaatonimov.invy.models.musicbrainz.Artist;
 import isaatonimov.invy.models.musicbrainz.Recording;
-import isaatonimov.invy.ui.NotificationFX;
-import isaatonimov.invy.ui.services.*;
-import javafx.application.Platform;
+import isaatonimov.invy.services.background.ArtistLookupService;
+import isaatonimov.invy.services.background.AudioStreamLookupService;
+import isaatonimov.invy.services.background.RecordingLookupService;
+import isaatonimov.invy.services.ui.PreferencesService;
+import isaatonimov.invy.services.ui.ToggleSearchWindowService;
+import isaatonimov.invy.ui.AudioNotificationFX;
+import isaatonimov.invy.ui.MessageFX;
+import isaatonimov.invy.ui.MessageFXType;
+import isaatonimov.invy.utils.InvyUtils;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.WorkerStateEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
@@ -38,32 +33,19 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable
 {
 	//UI
-	private Stage 		stage;
-	private FXTrayIcon 	trayIcon;
-	private PreferencesFx preferencesFx;
-
-	//Menu Item References
-	private MenuItem menuItemShowHide;
-	private MenuItem menuItemSong;
-	private MenuItem menuItemTogglePlay;
-
-	//Core
-	private InvidiousInstance 		invidiousInstance;
-	private PipedInstance 			pipedInstance;
-	private MusicPlayer 			musicPlayer;
-
-	//Services - UI
-	private ToggleViewService 		toggleViewService;
-	private PreferencesService		preferencesService;
-
-	//Services - Background / Other
-	private AudioStreamLookupService audioStreamLookupService;
-	private RecordingLookupService 	recordingLookupService;
-	private ArtistLookupService		artistLookupService;
-
-	private Robot robot;
-
-	private static NotificationFX notificationFX;
+	public SimpleObjectProperty<Stage> SearchBarStageProperty = new SimpleObjectProperty<>();
+	public SimpleObjectProperty<FXTrayIcon> 				TrayProperty 		= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<PreferencesFx> 				PreferencesProperty 	= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<AudioNotificationFX>				NotificationProperty	  	= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<MessageFX>				MessageProperty		  	= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<MusicPlayer> 				MusicPlayerProperty 	= new SimpleObjectProperty<>();
+	public SimpleObjectProperty <AudioStreamLookupService>		AudioStreamLookupServiceProperty = new SimpleObjectProperty<>();
+	public SimpleObjectProperty<RecordingLookupService>		RecordLookupServiceProperty 	= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<ArtistLookupService>			ArtistLookupServiceProperty 	= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<ToggleSearchWindowService> 	ToggleViewServiceProperty 		= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<PreferencesService>			PreferencesServiceProperty 		= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<javafx.scene.robot.Robot>  		FXRobotProperty 			= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<java.awt.Robot>  	    	AWTRobotProperty 			= new SimpleObjectProperty<>();
 
 	//FXML References
 	@FXML
@@ -73,376 +55,194 @@ public class Controller implements Initializable
 	@FXML
 	private Node 		rootPane;
 
-	//GETTERS
-	public ListView getRecommendationsView()
-	{
-		return recommendationsView;
-	}
-	//GETTERS
+	public SimpleObjectProperty<TextField>				SearchFieldProperty = new SimpleObjectProperty<>();
+	public SimpleObjectProperty<ListView>				RecommendationsProperty = new SimpleObjectProperty<>();
+	public SimpleObjectProperty<Node>				ViewProperty = new SimpleObjectProperty<>();
 
-	public TextField getArtistSearchTextField()
+	public void ClearTempFolder()
 	{
-		return artistSearchTextField;
-	}
-
-	//SETTERS
-	public void setStage(Stage stage)
-	{
-		this.stage = stage;
-	}
-	public void setInvidiouseInstance(InvidiousInstance invidiousInstance)
-	{
-		this.invidiousInstance = invidiousInstance;
-	}
-	public void setPipedInstance(PipedInstance pipedInstance)
-	{
-		this.pipedInstance = pipedInstance;
-	}
-	public void setMusicPlayer(MusicPlayer musicPlayer)
-	{
-		this.musicPlayer = musicPlayer;
-
-		this.musicPlayer.currentlyPlaying.addListener((observable, oldValue, newValue) ->
+		try
 		{
-			updateTogglePlayMenuItem();
-			updateCurrentlyPlayingSongMenuItem();
-			showNowPlaying();
+			InvyUtils.clearTempFolder();
+		}
+		catch (IOException e)
+		{
+			ShowErrorMessage("Temp Folder could not be cleared. \n " +
+						 "Try checking your set Temp Folder in Preferences");
+		}
+	}
+
+	public void ShowErrorMessage(String message)
+	{
+		Toolkit.getDefaultToolkit().beep();
+
+		MessageProperty.get().Show(message, MessageFXType.ERROR);
+		MessageProperty.get().OkButtonProperty.get().setOnMouseClicked(event -> MessageProperty.get().Hide());
+	}
+
+	public void ShowNotification(String message)
+	{
+		Toolkit.getDefaultToolkit().beep();
+
+		MessageProperty.get().Show(message, MessageFXType.NOTIFICATION);
+		MessageProperty.get().OkButtonProperty.get().setOnMouseClicked(event -> MessageProperty.get().Hide());
+	}
+
+	public void ShowYesNoDialog(String question, Runnable yesRunThis, Runnable noRunThis)
+	{
+		Toolkit.getDefaultToolkit().beep();
+
+		MessageProperty.get().Show(question, MessageFXType.YES_NO);
+		MessageProperty.get().YesButtonProperty.get().setOnMouseClicked(event ->
+		{
+			yesRunThis.run();
 		});
 
-		this.musicPlayer.currentlyPlayingState.addListener((observable, oldValue, newValue) ->
+		MessageProperty.get().NoButtonProperty.get().setOnMouseClicked(event ->
 		{
-			updateTogglePlayMenuItem();
+			noRunThis.run();
 		});
 	}
-	public void setTrayIcon(FXTrayIcon invyTrayIcon)
+
+	//No Idea where this should really go -> MVC
+	public void handlers()
 	{
-		trayIcon = invyTrayIcon;
-	}
-	public void setVideoLookupService(AudioStreamLookupService audioStreamLookupService)
-	{
-		this.audioStreamLookupService = audioStreamLookupService;
-	}
-	public void setRecordingLookupService(RecordingLookupService recordingLookupService)
-	{
-		this.recordingLookupService = recordingLookupService;
+		RecordLookupServiceProperty.addListener((observable, oldValue, newValue) ->
+		{
+			//When Record was found start playing
+			RecordLookupServiceProperty.get().addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event ->
+			{
+				if(RecordLookupServiceProperty.get().getValue() != null)
+				{
+					startMusicPlayerWithPlaylist((LinkedList<Recording>) RecordLookupServiceProperty.get().getValue());
+				}
+			});
+
+			RecordLookupServiceProperty.get().addEventHandler(WorkerStateEvent.WORKER_STATE_FAILED, event ->
+			{
+				//Handle Error
+			});
+		});
 	}
 
-	public void hideRecommendations()
+	private void properties()
 	{
-		recommendationsView.setVisible(false);
-		stage.setHeight(95);
-	}
-
-	public void showRecommendations()
-	{
-		recommendationsView.setVisible(true);
-		stage.setHeight(300);
-	}
-
-	public void setArtistLookupService(ArtistLookupService artistLookupService)
-	{
-		this.artistLookupService = artistLookupService;
-	}
-	public void setToggleViewService(ToggleViewService toggleViewService)
-	{
-		this.toggleViewService = toggleViewService;
+		SearchFieldProperty.		set(artistSearchTextField);
+		RecommendationsProperty.	set(recommendationsView);
+		ViewProperty.			set(rootPane);
 	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
-
+		properties();
+		handlers();
 	}
 
-
-	public ArtistLookupService getArtisLookupService()
+	public void hideRecommendations()
 	{
-		return artistLookupService;
+		recommendationsView.setVisible(false);
+		SearchBarStageProperty.get().setHeight(95);
 	}
 
-	public void hideMainWindow()
+	public void showRecommendations()
 	{
-		Platform.runLater(new Runnable()
+		recommendationsView.setVisible(true);
+		SearchBarStageProperty.get().setHeight(300);
+	}
+
+	public void ToggleSearchBar()
+	{
+		System.out.println("Trying to toggle Search Bar Window...");
+
+		if(SearchBarStageProperty.get().isShowing())
+			hideSearchBar();
+		else
+			showSearchBar();
+	}
+
+	public void hideSearchBar()
+	{
+		SearchBarStageProperty.get().hide();
+	}
+
+	public void showSearchBar()
+	{
+		SearchBarStageProperty.get().show();
+	}
+
+	public java.awt.MenuItem searchMenuItem(String toMatch)
+	{
+		for (int i = 0; i < TrayProperty.get().getMenuItemCount(); i++)
 		{
-			@Override
-			public void run()
-			{
-				stage.hide();
-			}
-		});
-	}
+			if(TrayProperty.get().getMenuItem(i).getLabel().contains(toMatch))
+				return TrayProperty.get().getMenuItem(i);
+		}
 
-	public void showMainWindow()
-	{
-		this.stage.show();
-	}
-
-	public void updateShowHideMenuItem(boolean hidden)
-	{
-		if(hidden)
-			menuItemShowHide.setText("Show Search");
-		else
-			menuItemShowHide.setText("Hide Search");
-	}
-
-	public void updateTogglePlayMenuItem()
-	{
-		if(musicPlayer.isCurrentlySomethingPlaying())
-			menuItemTogglePlay.setText("Play");
-		else
-			menuItemTogglePlay.setText("Pause");
+		return null;
 	}
 
 	public void updateCurrentlyPlayingSongMenuItem()
 	{
-		Recording record = musicPlayer.currentlyPlaying.get();
-		menuItemSong.setText(record.getArtist().getName() + ": " + record.getTitle());
+		Recording record = MusicPlayerProperty.get().CurrentlyPlayingRecord.get();
+		searchMenuItem("Current").setLabel(record.getArtist().getName() + ": " + record.getTitle());
 	}
 
 	public void startMusicPlayerWithPlaylist(LinkedList<Recording> initialPlaylist)
 	{
-		try
-		{
-			musicPlayer.AddToQueue(initialPlaylist);
-		}
-		catch (URISyntaxException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (IOException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (InterruptedException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (NoVideoResultsFoundException e)
-		{
-			throw new RuntimeException(e);
-		}
-
-	}
-
-	public RecordingLookupService getRecordingLookupService()
-	{
-		return recordingLookupService;
-	}
-
-	public Artist getSelectedRecommendation()
-	{
-		SelectionModel<Artist> selectionModel = recommendationsView.getSelectionModel();
-
-		return selectionModel.getSelectedItem();
-	}
-
-	public Robot getRobot()
-	{
-		return robot;
-	}
-
-	public void setRobot(Robot iRobot)
-	{
-		this.robot = iRobot;
+		MusicPlayerProperty.get().AddToSongQueue(initialPlaylist);
 	}
 
 	public void searchAndPlay(Artist selectedItem)
 	{
-		recordingLookupService.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, event ->
+		RecordLookupServiceProperty.get().ResultValueProperty.addListener((observable, oldValue, newValue) ->
 		{
-			if(recordingLookupService.getValue() != null)
-			{
-				startMusicPlayerWithPlaylist((LinkedList<Recording>) recordingLookupService.getValue());
-
-				musicPlayer.getAudioStreamLookupService().addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED, new EventHandler()
-				{
-					@Override
-					public void handle(Event event)
-					{
-						updateCurrentlyPlayingSongMenuItem();
-						updateTogglePlayMenuItem();
-					}
-				});
-			}
+			MusicPlayerProperty.get().AddToSongQueue((LinkedList<Recording>) newValue);
 		});
 
-		recordingLookupService.updateArtist(selectedItem);
-		recordingLookupService.restart();
-
-
-	}
-
-	public void setPreferencesFx(PreferencesFx preferencesFx)
-	{
-		this.preferencesFx = preferencesFx;
-	}
-
-	public PreferencesFx getPreferencesFx()
-	{
-		return this.preferencesFx;
-	}
-
-	public void setMenuItemShowHide(MenuItem showHide)
-	{
-		this.menuItemShowHide = showHide;
-	}
-
-	public void setMenuItemSong(MenuItem song)
-	{
-		this.menuItemSong = song;
-	}
-
-	public void setMenuItemTogglePlay(MenuItem togglePlay)
-	{
-		this.menuItemTogglePlay = togglePlay;
-	}
-
-	public InvidiousInstance getInvidiousInstance()
-	{
-		return invidiousInstance;
-	}
-
-	public MusicPlayer getMusicPlayer()
-	{
-		return musicPlayer;
-	}
-
-	public void toggleMainView()
-	{
-		if(stage.isShowing())
-			hideMainWindow();
-		else
-			showMainWindow();
-	}
-
-	public void playWarningSound()
-	{
-		Toolkit.getDefaultToolkit().beep();
-	}
-
-	public Stage getStage()
-	{
-		return stage;
-	}
-
-	public PipedInstance getPipedInstance()
-	{
-		return this.pipedInstance;
-	}
-
-	public AudioStreamLookupService getAudioStreamLookupService()
-	{
-		return audioStreamLookupService;
+		RecordLookupServiceProperty.get().CurrentTargetArtistProperty.set(selectedItem);
+		RecordLookupServiceProperty.get().startWorking();
 	}
 
 	public void showNowPlaying()
 	{
-		Recording recording 		= musicPlayer.currentlyPlaying.get();
-		String notificationTitle 	= "Playing";
-		String notificationSubtitle 	= recording.getArtist().getName();
-		String notificationMessage 	= recording.getTitle();
-		Image coverArt			= null;
+		//new Image(String.valueOf(MusicBrainz.searchForCoverArt(recording.getRelease())));
+	}
 
-		NotificationFX notificationFX = createNewNotifcation();
+	public void ShowPreferencesWindow()
+	{
+		PreferencesProperty.get().getView().autosize();
+		PreferencesProperty.get().show();
+	}
 
-		notificationFX.title.set(notificationTitle);
-		notificationFX.subtitle.set(notificationSubtitle);
-		notificationFX.message.set(notificationMessage);
+	public void SetAppTheme(String theme)
+	{
+		System.out.println		("Trying to set theme: " + theme);
+		String resourceString 		= App.class.getResource("/" + theme).toString();
 
+		PreferencesProperty.		get().getStylesheets().clear();
+		PreferencesProperty.		get().getStylesheets().add(resourceString);
+
+		SearchBarStageProperty.	get().getScene().setUserAgentStylesheet(resourceString);
+		NotificationProperty.		get().StylesheetResourceProperty.set(resourceString);
+		MessageProperty.			get().StylesheetResourceProperty.set(resourceString);
+	}
+
+	public void ClosePreferencesWindow()
+	{
+		PreferencesProperty.get().saveSettings();
+		PreferencesProperty.get().getView().getScene().getWindow().hide();
+	}
+
+	public void OpenTempFolder()
+	{
 		try
 		{
-			coverArt = new Image(String.valueOf(MusicBrainzInstance.searchForCoverArt(recording.getRelease())));
-			notificationFX.image.set(coverArt);
+			Desktop.getDesktop().open(InvyUtils.getTempDirectoryFile());
 		}
 		catch (IOException e)
 		{
 			throw new RuntimeException(e);
 		}
-		catch (InterruptedException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (URISyntaxException e)
-		{
-			throw new RuntimeException(e);
-		}
-
-		notificationFX.show();
-	}
-
-	public NotificationFX createNewNotifcation()
-	{
-		if(notificationFX != null)
-			return notificationFX;
-		else
-		{
-			FXMLLoader notifcationLoader;
-			notifcationLoader = new FXMLLoader(App.class.getResource("/isaatonimov/invy/views/notification.fxml"));
-			Scene notificationScene;
-
-			NotificationFX notificationFX;
-
-			try
-			{
-				notificationScene = new Scene(notifcationLoader.load());
-				notificationFX = notifcationLoader.getController();
-				notificationFX.setScene(notificationScene);
-			}
-			catch (IOException e)
-			{
-				throw new RuntimeException(e);
-			}
-
-			return notificationFX;
-		}
-	}
-
-	public Node getRootPane()
-	{
-		return rootPane;
-	}
-
-	public void showPreferencesWindow()
-	{
-		preferencesFx.show();
-
-//		((VBox) ((MasterDetailPane) preferencesFx.getView().getChildren().getFirst()).getMasterNode()).setPrefWidth(800);
-//		((VBox) ((MasterDetailPane) preferencesFx.getView().getChildren().getFirst()).getMasterNode()).setMaxWidth(800);
-//		((VBox) ((MasterDetailPane) preferencesFx.getView().getChildren().getFirst()).getMasterNode()).setMinWidth(800);
-	}
-
-	public void changeAppTheme(String theme)
-	{
-		String themeToLoad = "";
-		if(theme.equals("Cupertino Dark"))
-			themeToLoad = "cupertino-dark.css";
-		if(theme.equals("Cupertino Light"))
-			themeToLoad = "cupertino-light.css";
-		if(theme.equals("Dracula"))
-			themeToLoad = "dracula.css";
-		if(theme.equals("Nord Dark"))
-			themeToLoad = "nord-dark.css";
-		if(theme.equals("Nord Light"))
-			themeToLoad = "nord-light.css";
-		if(theme.equals("Primer Dark"))
-			themeToLoad = "primer-dark.css";
-		if(theme.equals("Primer Light"))
-			themeToLoad = "primer-light.css";
-
-		String resourceString = App.class.getResource("/isaatonimov/invy/themes/"+themeToLoad).toString();
-
-		preferencesFx.getStylesheets().clear();
-		preferencesFx.getStylesheets().add(resourceString);
-
-		getNotificationFX().setStylesheet(resourceString);
-		stage.getScene().setUserAgentStylesheet(resourceString);
-	}
-
-	public NotificationFX getNotificationFX()
-	{
-		if(notificationFX == null)
-			notificationFX = createNewNotifcation();
-
-		return notificationFX;
 	}
 }

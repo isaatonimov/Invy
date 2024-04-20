@@ -1,6 +1,7 @@
 package isaatonimov.invy;
 
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * Credits to https://stackoverflow.com/users/1990216/cai
@@ -12,7 +13,7 @@ import java.awt.*;
 
 public class AWTMain {
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
 
 		// This is awt property which enables dock-icon-less

@@ -21,8 +21,8 @@ public class MainStageShownEventHandler implements EventHandler<WindowEvent>
 	{
 		this.controller = controller;
 		this.robotFX = new javafx.scene.robot.Robot();
-		this.robot = controller.getRobot();
-		this.whereToMove = controller.getArtistSearchTextField();
+		//this.robot = controller.getRobot();
+		//this.whereToMove = controller.getArtistSearchTextField();
 	}
 	@Override
 	public void handle(WindowEvent windowEvent)
@@ -59,6 +59,6 @@ public class MainStageShownEventHandler implements EventHandler<WindowEvent>
 
 		delay.play();
 
-		controller.updateShowHideMenuItem(false);
+		//controller.updateShowHideMenuItem(false);
 	}
 }

@@ -163,28 +163,12 @@ public class Recording
     }
 
     @Override
-    public int hashCode() {
-        int result = 1;
-        result = ((result* 31)+((this.firstReleaseDate == null)? 0 :this.firstReleaseDate.hashCode()));
-        result = ((result* 31)+((this.length == null)? 0 :this.length.hashCode()));
-        result = ((result* 31)+((this.disambiguation == null)? 0 :this.disambiguation.hashCode()));
-        result = ((result* 31)+((this.id == null)? 0 :this.id.hashCode()));
-        result = ((result* 31)+((this.video == null)? 0 :this.video.hashCode()));
-        result = ((result* 31)+((this.additionalProperties == null)? 0 :this.additionalProperties.hashCode()));
-        result = ((result* 31)+((this.title == null)? 0 :this.title.hashCode()));
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
+    public boolean equals(Object other)
+    {
+        if(other instanceof Recording && ((Recording)other).title.contains(this.title))
             return true;
-        }
-        if ((other instanceof Recording) == false) {
+        else
             return false;
-        }
-        Recording rhs = ((Recording) other);
-        return ((((((((this.firstReleaseDate == rhs.firstReleaseDate)||((this.firstReleaseDate!= null)&&this.firstReleaseDate.equals(rhs.firstReleaseDate)))&&((this.length == rhs.length)||((this.length!= null)&&this.length.equals(rhs.length))))&&((this.disambiguation == rhs.disambiguation)||((this.disambiguation!= null)&&this.disambiguation.equals(rhs.disambiguation))))&&((this.id == rhs.id)||((this.id!= null)&&this.id.equals(rhs.id))))&&((this.video == rhs.video)||((this.video!= null)&&this.video.equals(rhs.video))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.title == rhs.title)||((this.title!= null)&&this.title.equals(rhs.title))));
     }
 
     public String toSearchTerm()

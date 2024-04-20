@@ -20,7 +20,8 @@ module isaatonimov.invy {
 	requires org.slf4j;
 	requires org.controlsfx.controls;
 	requires javafx.media;
-	requires fontawesomefx;
+	requires io.github.classgraph;
+	requires org.apache.commons.io;
 
 	opens isaatonimov.invy to javafx.fxml;
 	exports isaatonimov.invy;
@@ -29,8 +30,8 @@ module isaatonimov.invy {
 	exports isaatonimov.invy.models.invidious to com.fasterxml.jackson.databind;
 	exports isaatonimov.invy.controller;
 	opens isaatonimov.invy.controller to javafx.fxml;
-	exports isaatonimov.invy.misc;
-	opens isaatonimov.invy.misc to javafx.fxml;
+	exports isaatonimov.invy.input;
+	opens isaatonimov.invy.input to javafx.fxml;
 	exports isaatonimov.invy.ui;
 	opens isaatonimov.invy.ui to javafx.fxml;
 }

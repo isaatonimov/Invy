@@ -22,8 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "uploaderAvatar",
     "uploadedDate",
     "shortDescription",
-    "duration",
-    "views",
+    "duration", "isaatonimov/invy/views",
     "uploaded",
     "uploaderVerified",
     "isShort"
@@ -51,7 +50,7 @@ public class Item {
     private Object shortDescription;
     @JsonProperty("duration")
     private Integer duration;
-    @JsonProperty("views")
+    @JsonProperty("isaatonimov/invy/views")
     private Integer views;
     @JsonProperty("uploaded")
     private Long uploaded;
@@ -162,12 +161,12 @@ public class Item {
         this.duration = duration;
     }
 
-    @JsonProperty("views")
+    @JsonProperty("isaatonimov/invy/views")
     public Integer getViews() {
         return views;
     }
 
-    @JsonProperty("views")
+    @JsonProperty("isaatonimov/invy/views")
     public void setViews(Integer views) {
         this.views = views;
     }
@@ -256,7 +255,7 @@ public class Item {
         sb.append('=');
         sb.append(((this.duration == null)?"<null>":this.duration));
         sb.append(',');
-        sb.append("views");
+        sb.append("isaatonimov/invy/views");
         sb.append('=');
         sb.append(((this.views == null)?"<null>":this.views));
         sb.append(',');
