@@ -53,6 +53,7 @@ public abstract class SimpleFX implements Initializable
 	private static void setSettings()
 	{
 		StageProperty.get().initStyle(StageStyle.TRANSPARENT);
+		StageProperty.get().setAlwaysOnTop(true);
 	}
 
 	public void Show()

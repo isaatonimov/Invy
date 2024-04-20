@@ -48,7 +48,7 @@ public class AudioNotificationFX extends SimpleFX
 	@Override
 	protected void FXSpecificSettings()
 	{
-
+		
 	}
 
 	@Override

@@ -13,80 +13,9 @@
       <change afterPath="$PROJECT_DIR$/hs_err_pid30296.log" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/hs_err_pid30310.log" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/hs_err_pid8297.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/audiosources/Invidious.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/audiosources/Piped.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/audiosources/Soundcloud.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/AudioMetadataSource.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/AudioStreamSource.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/MusicPlayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/mediaplayers/JMF.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/mediaplayers/VLC.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/enums/MediaPlayerType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/enums/MusicPlayerState.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/exceptions/NotYetImplementedException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/background/AudioStreamLookupService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/BackgroundHelperService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/HelperService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/UIHelperService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/ApplicationShutdownService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/PreferencesService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/SongInfoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/SongPlayNextService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/SongPlayPrevService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/SongTogglePlayService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/ToggleSearchWindowService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/AudioNotificationFX.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/MessageFX.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/MessageFXType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/SimpleFX.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/utils/InvyUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/media/dummy.mp3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Invy_jar/Invy.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Invy_jar/Invy.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/AWTMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/AWTMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/DashboardController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/SimpleController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/MusicPlayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/invidious/InvidiousInstance.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/invidious/PipedInstance.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/musicbrainz/MusicBrainzInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/metadatasources/MusicBrainz.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/MainStageHiddenEventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/MainStageHiddenEventHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/MainStageShownEventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/MainStageShownEventHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/ReccomendationViewHanderl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/ReccomendationViewHanderl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/RecordingLookupSuccessHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/SmartSearchBoxHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/SmartSearchBoxHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/SongViewSearchhandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/SongViewSearchhandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/VideoLookupSuccessHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/helpers/AppUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/helpers/JsonModelClassGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/JsonModelClassGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/misc/ShortcutKeyListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/input/ShortcutKeyListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Recording.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Recording.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/piped/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/piped/Item.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/piped/RelatedStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/piped/RelatedStream.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/piped/StreamResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/piped/StreamResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/runnables/runPickARandomSongFromThePlaylist.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/NotificationFX.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/runnables/SetMenuItemAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/runnables/SetMenuItemAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/runnables/SetMenuItemShortcut.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/runnables/SetMenuItemShortcut.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/ApplicationShutdownService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/ArtistLookupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/background/ArtistLookupService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/AudioStreamLookupService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/LookupService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/PreferencesService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/RecordingLookupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/background/RecordingLookupService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/SongInfoService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/SongPlayNextService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/SongPlayPrevService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/SongTogglePlayService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/services/ToggleViewService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/media/video.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/themes/cupertino-dark-pref.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/message.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/notification.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/notification.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/AudioNotificationFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/AudioNotificationFX.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/SimpleFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/SimpleFX.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +26,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="366489" />
+    <option name="totalTimeSeconds" value="366754" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
