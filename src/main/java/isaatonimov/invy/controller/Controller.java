@@ -4,6 +4,7 @@ import com.dlsc.preferencesfx.PreferencesFx;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import isaatonimov.invy.App;
 import isaatonimov.invy.core.base.MusicPlayer;
+import isaatonimov.invy.core.metadatasources.MusicBrainz;
 import isaatonimov.invy.models.musicbrainz.Artist;
 import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.services.background.ArtistLookupService;
@@ -16,6 +17,7 @@ import isaatonimov.invy.ui.AudioNotificationFX;
 import isaatonimov.invy.ui.MessageFX;
 import isaatonimov.invy.ui.MessageFXType;
 import isaatonimov.invy.utils.InvyUtils;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,18 +30,21 @@ import org.controlsfx.glyphfont.FontAwesome;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable
 {
+	private Random randomGenerator = new Random();
 	//UI
 	public SimpleObjectProperty<Stage> SearchBarStageProperty = new SimpleObjectProperty<>();
 	public SimpleObjectProperty<FXTrayIcon> 				TrayProperty 		= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<PreferencesFx> 				PreferencesProperty 	= new SimpleObjectProperty<>();
-	public SimpleObjectProperty<AudioNotificationFX>				NotificationProperty	  	= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<AudioNotificationFX>			NotificationProperty	  	= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<MessageFX>				MessageProperty		  	= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<MusicPlayer> 				MusicPlayerProperty 	= new SimpleObjectProperty<>();
 	public SimpleObjectProperty <AudioStreamLookupService>		AudioStreamLookupServiceProperty = new SimpleObjectProperty<>();
@@ -47,6 +52,8 @@ public class Controller implements Initializable
 	public SimpleObjectProperty<ArtistLookupService>			ArtistLookupServiceProperty 	= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<ToggleSearchWindowService> 	ToggleViewServiceProperty 		= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<PlayTrayAnimationService> 		PlayTrayAnimationServiceProperty = new SimpleObjectProperty<>();
+
+	public SimpleListProperty							TryThisProperty				= new SimpleListProperty();
 
 	public SimpleObjectProperty<PreferencesService>			PreferencesServiceProperty 		= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<javafx.scene.robot.Robot>  		FXRobotProperty 			= new SimpleObjectProperty<>();
@@ -114,16 +121,6 @@ public class Controller implements Initializable
 		});
 	}
 
-	//No Idea where this should really go -> MVC
-	public void handlers()
-	{
-		//When Record was found start playing
-		RecordLookupServiceProperty.get().ResultValueProperty.addListener((observable, oldValue, newValue) ->
-		{
-			startMusicPlayerWithPlaylist((LinkedList<Recording>) newValue);
-		});
-	}
-
 	private void properties()
 	{
 		SearchFieldProperty.		set(artistSearchTextField);
@@ -135,7 +132,6 @@ public class Controller implements Initializable
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
 		properties();
-		//handlers();
 	}
 
 	public void hideRecommendations()
@@ -148,6 +144,12 @@ public class Controller implements Initializable
 	{
 		recommendationsView.setVisible(true);
 		SearchBarStageProperty.get().setHeight(300);
+	}
+
+	public void showRecommendationMessage()
+	{
+		recommendationsView.setVisible(true);
+		SearchBarStageProperty.get().setHeight(123);
 	}
 
 	public void ToggleSearchBar()
@@ -163,33 +165,28 @@ public class Controller implements Initializable
 	public void hideSearchBar()
 	{
 		SearchBarStageProperty.get().hide();
+		SearchFieldProperty.get().setText("");
+		hideRecommendations();
 	}
 
 	public void showSearchBar()
 	{
+		int index = randomGenerator.nextInt(TryThisProperty.get().size());
+		SearchFieldProperty.get().setPromptText((String) TryThisProperty.get().get(index));
 		SearchBarStageProperty.get().show();
 	}
 
-	public java.awt.MenuItem searchMenuItem(String toMatch)
+	public void TestAudioNotification() throws IOException, URISyntaxException, InterruptedException
 	{
-		for (int i = 0; i < TrayProperty.get().getMenuItemCount(); i++)
-		{
-			if(TrayProperty.get().getMenuItem(i).getLabel().contains(toMatch))
-				return TrayProperty.get().getMenuItem(i);
-		}
-
-		return null;
+		NotificationProperty.get().Show("Test Title", "Subtitle", "Message", null);
 	}
 
 	public void updateCurrentlyPlayingSongMenuItem()
 	{
+		System.out.println("Updating Currently Playin....");
 		Recording record = MusicPlayerProperty.get().CurrentlyPlayingRecord.get();
-		searchMenuItem("Current").setLabel(record.getArtist().getName() + ": " + record.getTitle());
-	}
-
-	public void startMusicPlayerWithPlaylist(LinkedList<Recording> initialPlaylist)
-	{
-		MusicPlayerProperty.get().AddToSongQueue(initialPlaylist);
+		MenuItem menuItem = TrayProperty.get().getMenuItem(1);
+		menuItem.setLabel(record.getArtist().getName() + ": " + record.getTitle());
 	}
 
 	public void searchAndPlay(Artist selectedItem)
@@ -203,15 +200,12 @@ public class Controller implements Initializable
 
 		RecordLookupServiceProperty.get().CurrentTargetArtistProperty.set(selectedItem);
 		RecordLookupServiceProperty.get().startWorking();
-
-
-
 	}
 
 	public void ShowAudioNotification(Recording recording) throws IOException, URISyntaxException, InterruptedException
 	{
-		//Image coverArtImage = new Image(MusicBrainz.searchForCoverArt(recording.getRelease()));
-		//NotificationProperty.get().Show("Now Playing", recording.getArtist().getName(), recording.getTitle(), coverArtImage);
+		Image coverArtImage = new Image(MusicBrainz.searchForCoverArt(recording.getRelease()));
+		NotificationProperty.get().Show("Now Playing", recording.getArtist().getName(), recording.getTitle(), coverArtImage);
 
 		ResetTrayIcon();
 	}
@@ -258,5 +252,28 @@ public class Controller implements Initializable
 		{
 			throw new RuntimeException(e);
 		}
+	}
+
+	public void ShowSongInfo()
+	{
+		if(MusicPlayerProperty.get().CurrentlyPlayingRecord.get() != null)
+		{
+			String targetURL = InvyUtils.getMusicBrainzRecordingInformationBaseURL() + MusicPlayerProperty.get().CurrentlyPlayingRecord.get().getId();
+
+			try
+			{
+				Desktop.getDesktop().browse(new URI(targetURL));
+			}
+			catch (IOException e)
+			{
+				throw new RuntimeException(e);
+			}
+			catch (URISyntaxException e)
+			{
+				throw new RuntimeException(e);
+			}
+		}
+		else
+			ShowNotification("No Song is currently Playing, so no song information is available...");
 	}
 }

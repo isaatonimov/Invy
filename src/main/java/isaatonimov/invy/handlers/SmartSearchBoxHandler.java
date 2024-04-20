@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.scene.input.KeyEvent>
@@ -21,6 +22,7 @@ public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.s
 	private TextField 			textField;
 	private ListView				recommendationsView;
 	private ObservableList<Artist>	artistsSuggestionList;
+	private ObservableList<String>	messagesList = FXCollections.observableArrayList(Arrays.asList("No Results found..."));
 	private Controller 			controller;
 	public SmartSearchBoxHandler(Controller controller)
 	{
@@ -32,21 +34,25 @@ public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.s
 
 		artistLookupService.ResultValueProperty.addListener((observable, oldValue, newValue) ->
 		{
-			System.out.println(artistLookupService.ResultValueProperty.get().toString());
-
-			artistsSuggestionList = FXCollections.observableArrayList((List<Artist>) artistLookupService.ResultValueProperty.get());
+			if(artistLookupService.ResultValueProperty.get() != null)
+				artistsSuggestionList 	= FXCollections.observableArrayList((List<Artist>) artistLookupService.ResultValueProperty.get());
 
 			Platform.runLater(() ->
 			{
-				if(artistsSuggestionList.size() > 0)
+				if(artistLookupService.ResultValueProperty.get() == null)
 				{
-
-					recommendationsView.setItems(artistsSuggestionList);
-					controller.showRecommendations();
-
+					recommendationsView.setItems(messagesList);
+					controller.showRecommendationMessage();
 				}
+
 				else
-					controller.hideRecommendations();
+					if(artistsSuggestionList.size() > 0)
+					{
+						recommendationsView.setItems(artistsSuggestionList);
+						controller.showRecommendations();
+					}
+					else
+						controller.hideRecommendations();
 			});
 		});
 	}

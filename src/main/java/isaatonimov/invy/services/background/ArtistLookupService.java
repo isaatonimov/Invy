@@ -1,6 +1,7 @@
 package isaatonimov.invy.services.background;
 
 import isaatonimov.invy.core.metadatasources.MusicBrainz;
+import isaatonimov.invy.exceptions.NoArtistFoundException;
 import isaatonimov.invy.models.musicbrainz.Artist;
 import isaatonimov.invy.services.base.BackgroundHelperService;
 import javafx.beans.property.SimpleStringProperty;
@@ -15,7 +16,17 @@ public class ArtistLookupService extends BackgroundHelperService
 	protected Object ServiceSpecificDo()
 	{
 		System.out.println("Search query: " + QueryProperty.get());
-		LinkedList<Artist> top5 = MusicBrainz.searchForFirstXArtists(QueryProperty.get(), 5);
+
+		LinkedList<Artist> top5 = null;
+
+		try
+		{
+			top5 = MusicBrainz.searchForFirstXArtists(QueryProperty.get(), 5);
+		}
+		catch (NoArtistFoundException e)
+		{
+			return null;
+		}
 
 		return top5;
 	}

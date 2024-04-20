@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import isaatonimov.invy.App;
 import isaatonimov.invy.core.base.AudioMetadataSource;
+import isaatonimov.invy.exceptions.NoArtistFoundException;
 import isaatonimov.invy.models.musicbrainz.*;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 public class MusicBrainz extends AudioMetadataSource
 {
 
-	public static LinkedList<Artist> searchForFirstXArtists(String query, int numberOfResults)
+	public static LinkedList<Artist> searchForFirstXArtists(String query, int numberOfResults) throws NoArtistFoundException
 	{
 		//Set Base URL
 		String baseURL = "https://musicbrainz.org/ws/2/";
@@ -47,10 +48,15 @@ public class MusicBrainz extends AudioMetadataSource
 
 			LinkedList<Artist> xResults = new LinkedList<>();
 
-			for(int i = 0; i < numberOfResults; i++)
-				xResults.add(musicBrainzArtistResponse.getArtists().get(i));
+			if(musicBrainzArtistResponse.getArtists().size() == 0)
+				throw new NoArtistFoundException();
+			else
+			{
+				for(int i = 0; i < numberOfResults; i++)
+					xResults.add(musicBrainzArtistResponse.getArtists().get(i));
 
-			return xResults;
+				return xResults;
+			}
 		}
 		catch (JsonProcessingException e)
 		{

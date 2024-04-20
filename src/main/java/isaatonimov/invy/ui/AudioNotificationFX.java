@@ -36,7 +36,7 @@ public class AudioNotificationFX extends SimpleFX
 		MessageProperty.set(message);
 		CoverProperty.set(coverArtImage);
 
-		Show(this);
+		AnimatedShow(this);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class AudioNotificationFX extends SimpleFX
 	public void FXSpecificSceneSettings()
 	{
 		SceneProperty.get().setFill(Color.TRANSPARENT);
-		SceneProperty.get().setOnMouseClicked(event -> ((SimpleFX)(event.getSource())).Hide((SimpleFX) event.getSource()));
+		SceneProperty.get().setOnMouseClicked(event -> SimpleFX.Hide(this));
 	}
 
 
@@ -80,7 +80,5 @@ public class AudioNotificationFX extends SimpleFX
 
 		StageProperty.get().setY(screenBounds.getMinY() + 20);
 		StageProperty.get().setX(screenBounds.getWidth() - StageProperty.get().getWidth() - 20);
-
-		//On Click -> Hide
 	}
 }

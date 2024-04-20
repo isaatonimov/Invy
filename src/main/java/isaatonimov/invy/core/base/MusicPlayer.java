@@ -107,8 +107,6 @@ public abstract class MusicPlayer
 
 	public void PlayNext()
 	{
-		FetchThread.get().interrupt();
-
 		if(SongQueue.get().indexOf(CurrentlyPlayingRecord.get()) + 1 <= SongQueue.get().size()-1)
 			Play(SongQueue.get().get(SongQueue.get().indexOf(CurrentlyPlayingRecord.get()) + 1));
 		else

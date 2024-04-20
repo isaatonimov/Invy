@@ -168,7 +168,7 @@ public class InvyUtils
 		return "https://yewtu.be/";
 	}
 
-	public static String getMusicBrainzRecordingURL()
+	public static String getMusicBrainzRecordingInformationBaseURL()
 	{
 		return "https://musicbrainz.org/recording/";
 	}

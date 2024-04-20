@@ -63,6 +63,8 @@ public class App extends Application
 	Label 			placeHolderNode				= new Label("           ");
 	ObjectProperty  	defaultLogLocation			= new SimpleObjectProperty(InvyUtils.getTempDirectoryFile());
 	BooleanProperty 	accessibilityFeaturesActive 		= new SimpleBooleanProperty(true);
+	ListProperty		recommendationsToUse			= new SimpleListProperty(FXCollections.observableArrayList(Arrays.asList("Chopin", "Pink Floyd", "Bob Marley", "Frank Sinatra", "Gorillaz", "Bob Marley", "David Bowie", "The Beatles")));
+	ObjectProperty		recommendationToUseSelection	= new SimpleObjectProperty("Chopin");
 	ListProperty 		playbackBackendToUse;
 	ObjectProperty 		playbackBackendToUseSelelction 	= new SimpleObjectProperty<>();
 
@@ -97,7 +99,6 @@ public class App extends Application
 	private SimpleObjectProperty<Controller>				ControllerProperty    			= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<AudioNotificationFX>			AudioNotificationProperty			= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<MessageFX>				MessageProperty					= new SimpleObjectProperty<>();
-
 
 	private Controller 			loadMainScene(Stage mainStage) throws IOException
 	{
@@ -431,6 +432,11 @@ public class App extends Application
 				throw new RuntimeException(e);
 			}
 		});
+
+		MainMusicPlayerProperty.get().CurrentlyPlayingRecord.addListener((observable, oldValue, newValue) ->
+		{
+			ControllerProperty.get().updateCurrentlyPlayingSongMenuItem();
+		});
 	}
 	private void				initRecordLookupServiceHandler()
 	{
@@ -456,6 +462,8 @@ public class App extends Application
 		controller.PreferencesProperty.			bindBidirectional(PreferencesProperty);
 		controller.MessageProperty.				bindBidirectional(MessageProperty);
 		controller.NotificationProperty.			bindBidirectional(AudioNotificationProperty);
+
+		controller.TryThisProperty.				bindBidirectional(recommendationsToUse);
 
 		//Services To control
 		controller.ArtistLookupServiceProperty.		bindBidirectional(ArtistLookupServiceProperty);
@@ -503,12 +511,10 @@ public class App extends Application
 		initRecordLookupServiceHandler();
 		initArtistLookupServiceHandlers();
 
+		ControllerProperty.get().hideRecommendations();
 		ControllerProperty.get().SetAppTheme((String)themeToUseSelection.get());
 
 		TrayIconProperty.get().show();
-
-		TrayIconProperty.get().play();
-		TrayIconProperty.get().stop();
 	}
 
 	@Override
