@@ -67,16 +67,19 @@ public abstract class SimpleFX implements Initializable
 
 	public static void Show(SimpleFX toShow)
 	{
-		Platform.runLater(() ->
+		if(toShow.StageProperty.get().isShowing() == false)
 		{
-			System.out.println("Started Normal Show for -> " + toShow.getClass().getName());
-			if(toShow.ParentProperty.get() != null)
-				toShow.ParentProperty.get().getScene().getRoot().setDisable(true);
+			Platform.runLater(() ->
+			{
+				System.out.println("Started Normal Show for -> " + toShow.getClass().getName());
+				if (toShow.ParentProperty.get() != null)
+					toShow.ParentProperty.get().getScene().getRoot().setDisable(true);
 
-			toShow.FXSpecificShowActions();
+				toShow.FXSpecificShowActions();
 
-			toShow.StageProperty.get().show();
-		});
+				toShow.StageProperty.get().show();
+			});
+		}
 	}
 
 	public static void Hide(SimpleFX roHide)
@@ -96,14 +99,14 @@ public abstract class SimpleFX implements Initializable
 
 	public static void AnimatedHide(SimpleFX toHide)
 	{
+
 		Platform.runLater(() ->
 		{
 			System.out.println("Started Animated Hide for -> " + toHide.getClass().getName());
 			toHide.SceneProperty.get().getRoot().setOpacity(1);
 			toHide.SceneProperty.get().setFill(Color.WHITE);
 			Timeline timeline = new Timeline();
-			KeyFrame key = new KeyFrame(Duration.millis(2000),
-					new KeyValue(toHide.SceneProperty.get().getRoot().opacityProperty(), 0));
+			KeyFrame key = new KeyFrame(Duration.millis(2000), new KeyValue(toHide.SceneProperty.get().getRoot().opacityProperty(), 0));
 			timeline.getKeyFrames().add(key);
 			timeline.setOnFinished((ae) -> Hide(toHide));
 			toHide.SceneProperty.get().setFill(Color.TRANSPARENT);
@@ -115,22 +118,25 @@ public abstract class SimpleFX implements Initializable
 
 	public static void AnimatedShow(SimpleFX toShow)
 	{
-		Platform.runLater(() ->
+		if(toShow.StageProperty.get().isShowing() == false)
 		{
-			System.out.println("Started Animated Show for -> " + toShow.getClass().getName());
-			toShow.SceneProperty.get().getRoot().setOpacity(0);
-			toShow.SceneProperty.get().setFill(Color.TRANSPARENT);
-			toShow.StageProperty.get().show();
-			Timeline timeline = new Timeline();
-			KeyFrame key = new KeyFrame(Duration.millis(2000),
-					new KeyValue(toShow.SceneProperty.get().getRoot().opacityProperty(), 1));
-			timeline.getKeyFrames().add(key);
-			timeline.setOnFinished((ae) -> AnimatedHide(toShow));
-			timeline.play();
-			toShow.SceneProperty.get().setFill(Color.TRANSPARENT);
+			Platform.runLater(() ->
+			{
+				System.out.println("Started Animated Show for -> " + toShow.getClass().getName());
+				toShow.SceneProperty.get().getRoot().setOpacity(1);
+				toShow.SceneProperty.get().setFill(Color.TRANSPARENT);
+				toShow.StageProperty.get().show();
+				Timeline timeline = new Timeline();
+				KeyFrame key = new KeyFrame(Duration.millis(4000),
+						new KeyValue(toShow.SceneProperty.get().getRoot().opacityProperty(), 1));
+				timeline.getKeyFrames().add(key);
+				timeline.setOnFinished((ae) -> AnimatedHide(toShow));
+				timeline.play();
+				toShow.SceneProperty.get().setFill(Color.TRANSPARENT);
 
-			toShow.FXSpecificShowActions();
-		});
+				toShow.FXSpecificShowActions();
+			});
+		}
 	}
 
 	public abstract String 	FXMLResourceLocation();

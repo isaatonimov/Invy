@@ -9,7 +9,6 @@ import com.github.kwhat.jnativehook.NativeHookException;
 import isaatonimov.invy.controller.Controller;
 import isaatonimov.invy.core.base.AudioStreamSource;
 import isaatonimov.invy.core.base.MusicPlayer;
-import isaatonimov.invy.enums.MusicPlayerState;
 import isaatonimov.invy.handlers.ReccomendationViewHanderl;
 import isaatonimov.invy.handlers.SmartSearchBoxHandler;
 import isaatonimov.invy.input.ShortcutKeyListener;
@@ -48,7 +47,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.*;
 
@@ -414,28 +412,15 @@ public class App extends Application
 	{
 		MainMusicPlayerProperty.get().CurrentState.addListener((observable, oldValue, newValue) ->
 		{
-			try
-			{
-				if((MusicPlayerState)newValue == MusicPlayerState.PLAYING)
-					ControllerProperty.get().ShowAudioNotification(MainMusicPlayerProperty.get().CurrentlyPlayingRecord.get());
-			}
-			catch (IOException e)
-			{
-				throw new RuntimeException(e);
-			}
-			catch (URISyntaxException e)
-			{
-				throw new RuntimeException(e);
-			}
-			catch (InterruptedException e)
-			{
-				throw new RuntimeException(e);
-			}
+			ControllerProperty.get().	UpdateToggleMenutItem(newValue);
 		});
 
 		MainMusicPlayerProperty.get().CurrentlyPlayingRecord.addListener((observable, oldValue, newValue) ->
 		{
 			ControllerProperty.get().updateCurrentlyPlayingSongMenuItem();
+
+			ControllerProperty.get().	ShowAudioNotification(MainMusicPlayerProperty.get().CurrentlyPlayingRecord.get());
+			ControllerProperty.get().    ResetTrayIcon();
 		});
 	}
 	private void				initRecordLookupServiceHandler()
@@ -453,6 +438,16 @@ public class App extends Application
 		//Handler for Search Completion
 		controller.SearchFieldProperty.get().					setOnKeyReleased(smartSearchBoxHandler);
 		controller.RecommendationsProperty.get().				setOnMouseClicked(recommendationViewHandler);
+
+		StageProperty.get().setOnShown(event ->
+		{
+			controller.UpdateSearchBarToggleMenu(true);
+		});
+
+		StageProperty.get().setOnHidden(event ->
+		{
+			controller.UpdateSearchBarToggleMenu(false);
+		});
 	}
 	private Controller 			bindToController(Controller controller)
 	{

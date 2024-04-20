@@ -10,6 +10,7 @@ public class SongPlayPrevService extends UIHelperService
 	{
 		if(ControllerProperty.get().MusicPlayerProperty.get() != null && ControllerProperty.get().MusicPlayerProperty.get().CurrentlyPlayingRecord.get() != null)
 		{
+			ControllerProperty.get().TrayProperty.get().play();
 			ControllerProperty.get().MusicPlayerProperty.get().PlayPrevious();
 			return true;
 		}

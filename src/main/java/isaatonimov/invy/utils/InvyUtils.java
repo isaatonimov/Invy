@@ -146,14 +146,10 @@ public class InvyUtils
 
 		return resourcePaths;
 	}
-
 	public static String themeNameToCss(String themeName)
 	{
 		return "";
 	}
-
-
-	//TODO Make Dynamic
 	public static String getUserAgentString()
 	{
 		return "InvyMediaPlayer/0.0.1";

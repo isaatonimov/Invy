@@ -5,6 +5,8 @@ import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import isaatonimov.invy.App;
 import isaatonimov.invy.core.base.MusicPlayer;
 import isaatonimov.invy.core.metadatasources.MusicBrainz;
+import isaatonimov.invy.enums.InvyTrayMenuItems;
+import isaatonimov.invy.enums.MusicPlayerState;
 import isaatonimov.invy.models.musicbrainz.Artist;
 import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.services.background.ArtistLookupService;
@@ -183,10 +185,37 @@ public class Controller implements Initializable
 
 	public void updateCurrentlyPlayingSongMenuItem()
 	{
-		System.out.println("Updating Currently Playin....");
 		Recording record = MusicPlayerProperty.get().CurrentlyPlayingRecord.get();
-		MenuItem menuItem = TrayProperty.get().getMenuItem(1);
+		MenuItem menuItem = TrayProperty.get().getMenuItem(InvyTrayMenuItems.CURRENTLY_PLAYING);
 		menuItem.setLabel(record.getArtist().getName() + ": " + record.getTitle());
+	}
+
+	public void UpdateToggleMenutItem(MusicPlayerState playerState)
+	{
+		MenuItem playPause = TrayProperty.get().getMenuItem(InvyTrayMenuItems.TOGGLE_PLAY);
+
+		if(playerState == MusicPlayerState.PLAYING)
+		{
+			playPause.setLabel("Pause");
+		}
+		else if(playerState == MusicPlayerState.PAUSED)
+		{
+			playPause.setLabel("Play");
+		}
+	}
+
+	public void UpdateSearchBarToggleMenu(boolean searchBarShown)
+	{
+		MenuItem searchToggle = TrayProperty.get().getMenuItem(InvyTrayMenuItems.SHOW_SEARCHBAR);
+
+		if(searchBarShown == true)
+		{
+			searchToggle.setLabel("Hide Search");
+		}
+		else if(searchBarShown == false)
+		{
+			searchToggle.setLabel("Show Search");
+		}
 	}
 
 	public void searchAndPlay(Artist selectedItem)
@@ -195,19 +224,41 @@ public class Controller implements Initializable
 
 		RecordLookupServiceProperty.get().ResultValueProperty.addListener((observable, oldValue, newValue) ->
 		{
-			MusicPlayerProperty.get().AddToSongQueue((LinkedList<Recording>) newValue);
+			if(((LinkedList<Recording>) newValue).size() > 0)
+				MusicPlayerProperty.get().AddToSongQueue((LinkedList<Recording>) newValue);
+			else
+				ShowErrorMessage("There was a Problem fetching the song information. Maybe try again later....");
 		});
 
 		RecordLookupServiceProperty.get().CurrentTargetArtistProperty.set(selectedItem);
 		RecordLookupServiceProperty.get().startWorking();
 	}
 
-	public void ShowAudioNotification(Recording recording) throws IOException, URISyntaxException, InterruptedException
+	public void ShowAudioNotification(Recording recording)
 	{
-		Image coverArtImage = new Image(MusicBrainz.searchForCoverArt(recording.getRelease()));
-		NotificationProperty.get().Show("Now Playing", recording.getArtist().getName(), recording.getTitle(), coverArtImage);
+		System.out.println("Triggered Controller Method Show Audio Notification");
 
-		ResetTrayIcon();
+		Image coverArtImage = null;
+		String coverAartURL = "";
+
+		try
+		{
+			coverAartURL = MusicBrainz.searchForCoverArt(recording.getRelease());
+
+			if(coverAartURL != "")
+				coverArtImage = new Image(coverAartURL);
+		}
+		catch (IOException e)
+		{
+		}
+		catch (InterruptedException e)
+		{
+		}
+		catch (URISyntaxException e)
+		{
+		}
+
+		NotificationProperty.get().Show("Now Playing", recording.getArtist().getName(), recording.getTitle(), coverArtImage);
 	}
 
 	public void ResetTrayIcon()
@@ -256,24 +307,20 @@ public class Controller implements Initializable
 
 	public void ShowSongInfo()
 	{
-		if(MusicPlayerProperty.get().CurrentlyPlayingRecord.get() != null)
+		if (MusicPlayerProperty.get().CurrentlyPlayingRecord.get() != null)
 		{
 			String targetURL = InvyUtils.getMusicBrainzRecordingInformationBaseURL() + MusicPlayerProperty.get().CurrentlyPlayingRecord.get().getId();
 
 			try
 			{
 				Desktop.getDesktop().browse(new URI(targetURL));
-			}
-			catch (IOException e)
+			} catch (IOException e)
+			{
+				throw new RuntimeException(e);
+			} catch (URISyntaxException e)
 			{
 				throw new RuntimeException(e);
 			}
-			catch (URISyntaxException e)
-			{
-				throw new RuntimeException(e);
-			}
-		}
-		else
-			ShowNotification("No Song is currently Playing, so no song information is available...");
+		} else ShowNotification("No Song is currently Playing, so no song information is available...");
 	}
 }

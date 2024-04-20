@@ -12,12 +12,8 @@ import kong.unirest.Unirest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class MusicBrainz extends AudioMetadataSource
 {
@@ -33,41 +29,42 @@ public class MusicBrainz extends AudioMetadataSource
 		Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
 
 		//Get JSON for given Artist (ID)
-		var response = Unirest.get("artist").queryString("query", query).queryString("fmt", "json").asString();
-
-		//Generate JSON Model Class from JSON - enabled just in development
-		//JsonModelClassGenerator.generateJSONModelClassFromJSONString(response.getBody().toString(), "ArtistModel");
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		ArtistResponse musicBrainzArtistResponse = null;
-
 		try
 		{
-			musicBrainzArtistResponse = objectMapper.readValue(response.getBody(), ArtistResponse.class);
+			var response = Unirest.get("artist").queryString("query", query).queryString("fmt", "json").asString();
 
-			LinkedList<Artist> xResults = new LinkedList<>();
+			//Generate JSON Model Class from JSON - enabled just in development
+			//JsonModelClassGenerator.generateJSONModelClassFromJSONString(response.getBody().toString(), "ArtistModel");
 
-			if(musicBrainzArtistResponse.getArtists().size() == 0)
-				throw new NoArtistFoundException();
-			else
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			ArtistResponse musicBrainzArtistResponse = null;
+
+			try
 			{
-				for(int i = 0; i < numberOfResults; i++)
-					xResults.add(musicBrainzArtistResponse.getArtists().get(i));
+				musicBrainzArtistResponse = objectMapper.readValue(response.getBody(), ArtistResponse.class);
 
-				return xResults;
+				LinkedList<Artist> xResults = new LinkedList<>();
+
+				if(musicBrainzArtistResponse.getArtists().size() == 0)
+					throw new NoArtistFoundException();
+				else
+				{
+					for(int i = 0; i < numberOfResults; i++)
+						xResults.add(musicBrainzArtistResponse.getArtists().get(i));
+
+					return xResults;
+				}
+			}
+			catch (JsonProcessingException e)
+			{
+				return null;
 			}
 		}
-		catch (JsonProcessingException e)
+		catch (Exception e)
 		{
-			LinkedList<Artist> nothingFound = new LinkedList<>();
-			Artist dummyArtist = new Artist();
-			dummyArtist.setName("Search did not complete successfully... do you have an internet Connection?");
-			nothingFound.add(dummyArtist);
-			return nothingFound;
+			return null;
 		}
-
-
 	}
 
 	public static String searchForCoverArt(Release release) throws IOException, InterruptedException, URISyntaxException
@@ -79,23 +76,31 @@ public class MusicBrainz extends AudioMetadataSource
 
 		TimeUnit.MILLISECONDS.sleep(30);
 
-		HttpResponse<String> response = Unirest.get("release/"+release.getId()).asString();
+
+		try
+		{
+			HttpResponse<String> response = Unirest.get("release/"+release.getId()).asString();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			CoverArtResponse coverArtResponse = objectMapper.readValue(response.getBody(), CoverArtResponse.class);
+
+			System.out.println("Cover Art for Release -> " + release.getDisambiguation() + " -> " + coverArtResponse.getImages().getFirst().getImage());
+			System.out.println(response.getStatus());
+
+			if(coverArtResponse.getImages() != null)
+				return coverArtResponse.getImages().getFirst().getThumbnails().getSmall();
+			else if(App.class.getResource("/images/logo.png") != null)
+				return Objects.requireNonNull(App.class.getResource("/images/logo.png")).getPath();
+			else
+				return "";
+		}
+		catch (Exception e)
+		{
+			return "";
+		}
 
 		//Generate JSON Model Class from JSON - enabled just in development
 		//JsonModelClassGenerator.generateJSONModelClassFromJSONString(response.getBody().toString(), "CoverArtResponse");
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		CoverArtResponse coverArtResponse = objectMapper.readValue(response.getBody(), CoverArtResponse.class);
-
-		System.out.println("Cover Art for Release -> " + release.getDisambiguation() + " -> " + coverArtResponse.getImages().getFirst().getImage());
-		System.out.println(response.getStatus());
-
-		if(coverArtResponse.getImages() != null)
-			return coverArtResponse.getImages().getFirst().getThumbnails().getSmall();
-		else if(App.class.getResource("/images/logo.png") != null)
-			return Objects.requireNonNull(App.class.getResource("/images/logo.png")).getPath();
-		else
-			return "";
 	}
 
 	public static List<Release> searchForReleases(Artist artist) throws IOException, InterruptedException
@@ -153,6 +158,22 @@ public class MusicBrainz extends AudioMetadataSource
 		return tracklistReleaseResponse.getRecordings();
 	}
 
+	/*
+		@Credits to: https://stackoverflow.com/users/1571871/samyonnou
+	 */
+	static void removeDuplicateRecords(List<Recording> array) {
+		for (int i = 0; i < array.size(); i++) {
+			Recording next = array.get(i);
+
+			for (int j = 0; j < i; j++) {
+				if (next.equals(array.get(j))) {
+					array.remove(i);
+					i--;
+					break;
+				}
+			}
+		}
+	}
 
 	/*
 		First Draft of search Function, not that nice
@@ -160,12 +181,18 @@ public class MusicBrainz extends AudioMetadataSource
 	public static List<Recording> searchForSongs(Artist artist) throws IOException, InterruptedException
 	{
 		LinkedList<Recording> allRecordings = new LinkedList<>();
+
 		List<Release> releases = searchForReleases(artist);
 
 		for (var release : releases)
 		{
 			allRecordings.addAll(getTrackList(release));
 		}
+		System.out.println("-------------------------------------------------------------------------------");
+		System.out.println("Returning the following Releases found by MusicBrainz:");
+
+
+		removeDuplicateRecords(allRecordings);
 
 		for(var record : allRecordings)
 		{
@@ -173,6 +200,8 @@ public class MusicBrainz extends AudioMetadataSource
 			System.out.println("Song from Release -> " + record.getRelease().getTitle() + " = " + record.getTitle());
 		}
 
-		return allRecordings.stream().distinct().collect(Collectors.toList());
+		System.out.println("-------------------------------------------------------------------------------");
+
+		return allRecordings;
 	}
 }

@@ -24,7 +24,7 @@ public class AudioStreamLookupService extends BackgroundHelperService
 			}
 			catch (Exception e)
 			{
-				throw new RuntimeException(e);
+
 			}
 
 			//currently just picks first id then picks stream

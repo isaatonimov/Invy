@@ -1,5 +1,6 @@
 package isaatonimov.invy.ui;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -31,10 +32,18 @@ public class AudioNotificationFX extends SimpleFX
 
 	public void Show(String title, String subtitle, String message, Image coverArtImage)
 	{
-		TitleProperty.set(title);
-		SubtitleProperty.set(subtitle);
-		MessageProperty.set(message);
-		CoverProperty.set(coverArtImage);
+		if(StageProperty.get().isShowing())
+		{
+			Hide(this);
+		}
+
+		Platform.runLater(() ->
+		{
+			TitleProperty.set(title);
+			SubtitleProperty.set(subtitle);
+			MessageProperty.set(message);
+			CoverProperty.set(coverArtImage);
+		});
 
 		AnimatedShow(this);
 	}

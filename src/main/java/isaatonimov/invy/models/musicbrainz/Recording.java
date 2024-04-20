@@ -165,7 +165,7 @@ public class Recording
     @Override
     public boolean equals(Object other)
     {
-        if(other instanceof Recording && ((Recording)other).title.contains(this.title))
+        if(other instanceof Recording && ((Recording)other).getTitle().contains(this.getTitle()))
             return true;
         else
             return false;

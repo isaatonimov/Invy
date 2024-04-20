@@ -56,8 +56,11 @@ public abstract class HelperService
 	{
 		System.out.println("Service " + this.getClass().getName() + " started....");
 
-		if (this instanceof BackgroundHelperService)
+		if (IsBackgroundService())
 		{
+			if(ThreadProperty.get() != null)
+				ThreadProperty.get().interrupt();
+
 			ThreadProperty.set(new Thread(() ->
 			{
 				ResultValueProperty.set(ServiceSpecificDo());

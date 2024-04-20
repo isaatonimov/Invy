@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="Invy:jar" />
+      <artifact name="Invy" />
     </artifacts-to-build>
   </component>
   <component name="AutoImportSettings">
@@ -10,20 +10,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c40c023f-133f-4a69-977e-f8df4d43dc6d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/enums/InvyTrayMenuItems.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/exceptions/NoArtistFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Invy_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Invy_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/Invy_jar/Invy.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Invy_jar/Invy.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controller/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/MusicPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/MusicPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/metadatasources/MusicBrainz.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/metadatasources/MusicBrainz.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/SmartSearchBoxHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/handlers/SmartSearchBoxHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/background/ArtistLookupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/background/ArtistLookupService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/SongInfoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/SongInfoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/enums/InvyTrayMenuItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/enums/InvyTrayMenuItems.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Recording.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/models/musicbrainz/Recording.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/background/AudioStreamLookupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/background/AudioStreamLookupService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/HelperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/HelperService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/SongPlayNextService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/SongPlayNextService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/SongPlayPrevService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/ui/SongPlayPrevService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/AudioNotificationFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/AudioNotificationFX.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/SimpleFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/SimpleFX.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/utils/InvyUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/utils/InvyUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/views/main.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,7 +37,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="396337" />
+    <option name="totalTimeSeconds" value="404430" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
@@ -82,43 +85,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Application.App.executor&quot;: &quot;Run&quot;,
-    &quot;Application.InvyApp.executor&quot;: &quot;Run&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Maven.invy [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [com.github.akman:jpackage-maven-plugin:0.1.5:jpackage].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [install:install-file...].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [io.github.fvarrui:javapackager:1.7.5:package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [org.apache.maven.plugins:maven-clean-plugin:2.5:clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [org.apache.maven.plugins:maven-clean-plugin:2.5:help].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [org.apache.maven.plugins:maven-dependency-plugin:2.8:copy-dependencies].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [org.apache.maven.plugins:maven-dependency-plugin:3.6.1:tree].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [org.apache.maven.plugins:maven-install-plugin:2.4:help].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [org.apache.maven.plugins:maven-install-plugin:2.4:install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [org.panteleyev:jpackage-maven-plugin:1.6.3:jpackage].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [reload].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [validate].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.invy [verify].executor&quot;: &quot;Run&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;true&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;22&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/dbeyerle/IdeaProjects/Invy/src/main/resources/isaatonimov/invy/images/logo&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.34731084&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.5143885&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.statistic.project.settings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Application.App.executor": "Run",
+    "Application.InvyApp.executor": "Run",
+    "Downloaded.Files.Path.Enabled": "false",
+    "Maven.invy [clean].executor": "Run",
+    "Maven.invy [com.github.akman:jpackage-maven-plugin:0.1.5:jpackage].executor": "Run",
+    "Maven.invy [install:install-file...].executor": "Run",
+    "Maven.invy [io.github.fvarrui:javapackager:1.7.5:package].executor": "Run",
+    "Maven.invy [org.apache.maven.plugins:maven-clean-plugin:2.5:clean].executor": "Run",
+    "Maven.invy [org.apache.maven.plugins:maven-clean-plugin:2.5:help].executor": "Run",
+    "Maven.invy [org.apache.maven.plugins:maven-dependency-plugin:2.8:copy-dependencies].executor": "Run",
+    "Maven.invy [org.apache.maven.plugins:maven-dependency-plugin:3.6.1:tree].executor": "Run",
+    "Maven.invy [org.apache.maven.plugins:maven-install-plugin:2.4:help].executor": "Run",
+    "Maven.invy [org.apache.maven.plugins:maven-install-plugin:2.4:install].executor": "Run",
+    "Maven.invy [org.panteleyev:jpackage-maven-plugin:1.6.3:jpackage].executor": "Run",
+    "Maven.invy [package].executor": "Run",
+    "Maven.invy [reload].executor": "Run",
+    "Maven.invy [validate].executor": "Run",
+    "Maven.invy [verify].executor": "Run",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "true",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "jdk.selected.JAVA_MODULE": "22",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/dbeyerle/IdeaProjects/Invy/src/main/resources/isaatonimov/invy/images/logo",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.34731084",
+    "project.structure.side.proportion": "0.14204544",
+    "settings.editor.selected.configurable": "reference.settings.project.statistic.project.settings"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="isaatonimov.invy.exceptions" />
@@ -167,7 +170,6 @@
   <component name="RunManager">
     <configuration name="InvyApp" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="22" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="isaatonimov.invy.AWTMain" />
       <module name="Invy" />
       <selectedOptions>

@@ -68,8 +68,6 @@ public abstract class MusicPlayer
 
 	public void Play(Recording toPlay)
 	{
-		CurrentlyPlayingRecord.		set(toPlay);
-
 		System.out.println("Trying to Play Track " + toPlay.getTitle() + " with " + this.getClass().getName());
 
 		AudioStreamLookupServiceProperty.get().TargetRecordingProperty.set(toPlay);
@@ -101,6 +99,7 @@ public abstract class MusicPlayer
 			else
 				PlayerSpecificPlay();
 
+			CurrentlyPlayingRecord.		set(toPlay);
 			CurrentState.				set(MusicPlayerState.PLAYING);
 		});
 	}
