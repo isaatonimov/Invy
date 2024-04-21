@@ -1,24 +1,19 @@
 package isaatonimov.invy.core.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import isaatonimov.invy.models.JsonModelClassGenerator;
+import isaatonimov.invy.models.generator.JsonModelClassGenerator;
 import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.utils.InvyUtils;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AudioStreamSource
@@ -26,7 +21,7 @@ public abstract class AudioStreamSource
 	public SimpleBooleanProperty 			HasMultipleInstances 	= new SimpleBooleanProperty(false);
 	public SimpleBooleanProperty 			CacheResponses   	= new SimpleBooleanProperty(true);
 	public SimpleStringProperty 			CurrentTargetURL 	= new SimpleStringProperty("");
-	public SimpleListProperty<String> 		AllAvailableTargets 	= new SimpleListProperty<>(FXCollections.observableArrayList());
+	public SimpleObjectProperty<List<String>> 	AllAvailableTargets 	= new SimpleObjectProperty<>(new ArrayList<>());
 	public SimpleObjectProperty<HttpRequest>	CurrentRequest		= new SimpleObjectProperty<>(Unirest.get(""));
 	public SimpleBooleanProperty			SpeedTestInProgress	= new SimpleBooleanProperty(false);
 	public SimpleObjectProperty<ObjectMapper>	ObjectMapper		= new SimpleObjectProperty<>(new ObjectMapper());
@@ -89,9 +84,9 @@ public abstract class AudioStreamSource
 		return defaultURl;
 	}
 
-	public ObservableList<String> LookupInstances() throws Exception
+	public List<String> LookupInstances() throws Exception
 	{
-		ObservableList<String> instances = ServiceSpecificInstanceLookup();
+		List<String> instances = ServiceSpecificInstanceLookup();
 		AllAvailableTargets.set(instances);
 
 		return instances;
@@ -119,10 +114,26 @@ public abstract class AudioStreamSource
 		return Unirest.get("").asString();
 	}
 
-	public void DoSpeedTestAndSetAppropriately()
+	public void DoSpeedTestAndSetAppropriately() throws Exception
 	{
-		String targetURL = SimpleSpeedTest();
-		CurrentTargetURL.set(targetURL);
+		Thread backgroundThread = new Thread(() ->
+		{
+			String targetURL = null;
+
+			try
+			{
+				targetURL = SimpleSpeedTest();
+			}
+			catch (Exception e)
+			{
+				throw new RuntimeException(e);
+			}
+
+			CurrentTargetURL.set(targetURL);
+			System.out.println("Did Speedtest and set " + targetURL + " as Target Instance");
+		});
+
+		backgroundThread.start();
 	}
 
 	/*
@@ -132,7 +143,7 @@ public abstract class AudioStreamSource
 	public static String SimpleSpeedTest(List<String> InstanceURLsToCheck)
 	{
 		Map<String, Long> connectionResults = new HashMap<>();
-		System.out.println("Starting Piped Connection Test:");
+		System.out.println("Starting Connection Test");
 
 		for(var instanceURL : InstanceURLsToCheck)
 		{
@@ -157,10 +168,10 @@ public abstract class AudioStreamSource
 	/*
 		Same Method but non-static - uses AllAvailableInstances Property
 	 */
-	public String SimpleSpeedTest()
+	public String SimpleSpeedTest() throws Exception
 	{
 		SpeedTestInProgress.set(true);
-		List<String> InstanceURLsToCheck = AllAvailableTargets.get();
+		List<String> InstanceURLsToCheck = LookupInstances();
 		SpeedTestInProgress.set(false);
 		return SimpleSpeedTest(InstanceURLsToCheck);
 	}

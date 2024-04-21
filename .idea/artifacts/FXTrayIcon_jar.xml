@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FXTrayIcon:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FXTrayIcon_jar</output-path>
+    <root id="archive" name="FXTrayIcon.jar">
+      <element id="module-output" name="FXTrayIcon" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-swing/19/javafx-swing-19-mac-aarch64.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/19/javafx-graphics-19.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/19/javafx-base-19.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/19/javafx-controls-19-mac-aarch64.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/19/javafx-base-19-mac-aarch64.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/19/javafx-controls-19.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/19/javafx-graphics-19-mac-aarch64.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-swing/19/javafx-swing-19.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

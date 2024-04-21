@@ -36,7 +36,7 @@ public class AudioStreamLookupService extends BackgroundHelperService
 			}
 			catch (Exception e)
 			{
-				throw new RuntimeException(e);
+				System.out.println("Error with Search by ID");
 			}
 			//Does the same for streams, does not prioritize high quality
 
@@ -70,6 +70,5 @@ public class AudioStreamLookupService extends BackgroundHelperService
 	@Override
 	protected void ServiceSpecificOnValuePropertyChanged()
 	{
-
 	}
 }

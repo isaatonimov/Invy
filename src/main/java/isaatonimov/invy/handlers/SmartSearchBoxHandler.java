@@ -1,6 +1,6 @@
 package isaatonimov.invy.handlers;
 
-import isaatonimov.invy.controller.Controller;
+import isaatonimov.invy.controllers.Controller;
 import isaatonimov.invy.models.musicbrainz.Artist;
 import isaatonimov.invy.services.background.ArtistLookupService;
 import isaatonimov.invy.services.background.RecordingLookupService;
@@ -42,17 +42,17 @@ public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.s
 				if(artistLookupService.ResultValueProperty.get() == null)
 				{
 					recommendationsView.setItems(messagesList);
-					controller.showRecommendationMessage();
+					controller.ShowRecommendationMessage();
 				}
 
 				else
 					if(artistsSuggestionList.size() > 0)
 					{
 						recommendationsView.setItems(artistsSuggestionList);
-						controller.showRecommendations();
+						controller.ShowRecommendations();
 					}
 					else
-						controller.hideRecommendations();
+						controller.HideRecommendations();
 			});
 		});
 	}
@@ -64,10 +64,10 @@ public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.s
 			textField = controller.SearchFieldProperty.get();
 
 		if(textField.getText() != null && textField.getText().length() == 0)
-			controller.hideRecommendations();
+			controller.HideRecommendations();
 
 		if(event.getCode() == KeyCode.ESCAPE)
-			controller.hideSearchBar();
+			controller.HideSearchBar();
 
 		if(textField.getText() != null && textField.getText().length() > 2)
 		{

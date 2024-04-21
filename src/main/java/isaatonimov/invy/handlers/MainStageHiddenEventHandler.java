@@ -1,6 +1,6 @@
 package isaatonimov.invy.handlers;
 
-import isaatonimov.invy.controller.Controller;
+import isaatonimov.invy.controllers.Controller;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

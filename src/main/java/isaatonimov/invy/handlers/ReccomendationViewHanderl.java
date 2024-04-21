@@ -1,6 +1,6 @@
 package isaatonimov.invy.handlers;
 
-import isaatonimov.invy.controller.Controller;
+import isaatonimov.invy.controllers.Controller;
 import isaatonimov.invy.models.musicbrainz.Artist;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -34,15 +34,15 @@ public class ReccomendationViewHanderl implements EventHandler<Event>
 			KeyEvent keyEvent = (KeyEvent) event;
 
 			if(keyEvent.getCode() == KeyCode.ENTER)
-				controller.searchAndPlay(artistSelectionModel.getSelectedItem());
+				controller.SearchAndPlay(artistSelectionModel.getSelectedItem());
 		}
 
 		if(event instanceof MouseEvent)
 		{
 			String toSet = artistSelectionModel.getSelectedItem().toString();
 			controller.SearchFieldProperty.get().setText(toSet);
-			controller.hideSearchBar();
-			controller.searchAndPlay(artistSelectionModel.getSelectedItem());
+			controller.HideSearchBar();
+			controller.SearchAndPlay(artistSelectionModel.getSelectedItem());
 		}
 	}
 }

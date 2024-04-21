@@ -1,6 +1,6 @@
 package isaatonimov.invy.services.base;
 
-import isaatonimov.invy.controller.Controller;
+import isaatonimov.invy.controllers.Controller;
 import javafx.beans.property.SimpleObjectProperty;
 
 public class UIHelperService extends HelperService

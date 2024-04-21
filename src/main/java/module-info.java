@@ -28,10 +28,14 @@ module isaatonimov.invy {
 	exports isaatonimov.invy.models.piped to com.fasterxml.jackson.databind;
 	exports isaatonimov.invy.models.musicbrainz to com.fasterxml.jackson.databind;
 	exports isaatonimov.invy.models.invidious to com.fasterxml.jackson.databind;
-	exports isaatonimov.invy.controller;
-	opens isaatonimov.invy.controller to javafx.fxml;
+	exports isaatonimov.invy.controllers;
+	opens isaatonimov.invy.controllers to javafx.fxml;
 	exports isaatonimov.invy.input;
 	opens isaatonimov.invy.input to javafx.fxml;
 	exports isaatonimov.invy.ui;
 	opens isaatonimov.invy.ui to javafx.fxml;
+	exports isaatonimov.invy.enums;
+	opens isaatonimov.invy.enums to javafx.fxml;
+	exports isaatonimov.invy.ui.base;
+	opens isaatonimov.invy.ui.base to javafx.fxml;
 }

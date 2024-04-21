@@ -1,5 +1,7 @@
 package isaatonimov.invy.ui;
 
+import isaatonimov.invy.enums.MessageFXType;
+import isaatonimov.invy.ui.base.SimpleFX;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;

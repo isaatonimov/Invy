@@ -18,15 +18,14 @@ public class InvyUtils
 {
 	private static Path tempBase = Path.of(System.getProperty("java.io.tmpdir") + "/invyMusicPlayer/");
 
-	public static Path getTempDirectoryPath() throws IOException
+	public static Path 		getTempDirectoryPath() throws IOException
 	{
 		if(Files.notExists(tempBase))
 			Files.createDirectory(tempBase);
 
 		return tempBase;
 	}
-
-	public static File getTempDirectoryFile()
+	public static File 		getTempDirectoryFile()
 	{
 		File tmpDir = null;
 
@@ -42,8 +41,7 @@ public class InvyUtils
 
 		return tmpDir;
 	}
-
-	public static void clearTempFolder() throws IOException
+	public static void 		clearTempFolder() throws IOException
 	{
 		if(Files.notExists(tempBase))
 			Files.createDirectory(tempBase);
@@ -52,8 +50,7 @@ public class InvyUtils
 		for(var file : files)
 			file.delete();
 	}
-
-	public static List<String> getAvailableMediaPlayersAsList() throws IOException
+	public static List<String> 	getAvailableMediaPlayersAsList() throws IOException
 	{
 		String pkg = "isaatonimov.invy.core.mediaplayers";
 
@@ -69,8 +66,7 @@ public class InvyUtils
 
 		return mediaPlayers;
 	}
-
-	public static Class getMusicPlayerClassFromName(String className)
+	public static Class 		getMusicPlayerClassFromName(String className)
 	{
 		String pkg = "isaatonimov.invy.core.mediaplayers";
 		Class firstFound = null;
@@ -93,8 +89,7 @@ public class InvyUtils
 
 		return firstFound;
 	}
-
-	public static Class getAudioSourcerClassFromClassName(String className)
+	public static Class 		getAudioSourcerClassFromClassName(String className)
 	{
 		String pkg = "iaatonimov.invy.core.audiosources";
 		Class firsFound = null;
@@ -114,8 +109,7 @@ public class InvyUtils
 
 		return firsFound;
 	}
-
-	public static List<String> getAvailableAudioSourcesAsList()
+	public static List<String> 	getAvailableAudioSourcesAsList()
 	{
 		String pkg = "isaatonimov.invy.core.audiosources";
 
@@ -131,8 +125,7 @@ public class InvyUtils
 
 		return audioSources;
 	}
-
-	public static List<String> getAllAvailableThemesAsList() throws IOException
+	public static List<String> 	getAllAvailableThemesAsList() throws IOException
 	{
 		List<String> resourcePaths;
 
@@ -154,7 +147,6 @@ public class InvyUtils
 	{
 		return "InvyMediaPlayer/0.0.1";
 	}
-
 	public static String getFallBackPipedInstance()
 	{
 		return "https://pipedapi.kavin.rocks";
@@ -163,7 +155,6 @@ public class InvyUtils
 	{
 		return "https://yewtu.be/";
 	}
-
 	public static String getMusicBrainzRecordingInformationBaseURL()
 	{
 		return "https://musicbrainz.org/recording/";

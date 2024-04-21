@@ -1,5 +1,6 @@
 package isaatonimov.invy.ui;
 
+import isaatonimov.invy.ui.base.SimpleFX;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

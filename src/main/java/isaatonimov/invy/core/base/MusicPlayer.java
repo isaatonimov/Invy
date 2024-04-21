@@ -29,7 +29,6 @@ public abstract class MusicPlayer
 	public SimpleBooleanProperty BufferFileRequired 			= new SimpleBooleanProperty(false);
 	public SimpleObjectProperty<File> BufferFile	  			= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<Duration>	BufferingTime 		= new SimpleObjectProperty<>(Duration.ofSeconds(0));
-
 	private SimpleObjectProperty<Thread> FetchThread			= new SimpleObjectProperty<>();
 
 	public MusicPlayer() throws IOException, URISyntaxException
@@ -62,7 +61,7 @@ public abstract class MusicPlayer
 
 		SongQueue.get().		clear();
 		SongQueue.get().		addAll(records);
-		ShuffleSongQueue();;
+		ShuffleSongQueue();
 		Play(SongQueue.get().	getFirst());
 	}
 

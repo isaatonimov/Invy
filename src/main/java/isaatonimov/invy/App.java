@@ -6,7 +6,9 @@ import com.dlsc.preferencesfx.model.Setting;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
-import isaatonimov.invy.controller.Controller;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ScanResult;
+import isaatonimov.invy.controllers.Controller;
 import isaatonimov.invy.core.base.AudioStreamSource;
 import isaatonimov.invy.core.base.MusicPlayer;
 import isaatonimov.invy.handlers.ReccomendationViewHanderl;
@@ -21,7 +23,7 @@ import isaatonimov.invy.services.base.UIHelperService;
 import isaatonimov.invy.services.ui.*;
 import isaatonimov.invy.ui.AudioNotificationFX;
 import isaatonimov.invy.ui.MessageFX;
-import isaatonimov.invy.ui.SimpleFX;
+import isaatonimov.invy.ui.base.SimpleFX;
 import isaatonimov.invy.utils.InvyUtils;
 import javafx.application.Application;
 import javafx.beans.property.*;
@@ -43,12 +45,14 @@ import org.controlsfx.glyphfont.FontAwesome;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
+import java.util.Objects;
 
 
 public class App extends Application
@@ -119,14 +123,16 @@ public class App extends Application
 	}
 	private void 				initTrayAnimationCreation(FXTrayIcon trayIcon) throws MalformedURLException
 	{
-		File[]  files = new File(getClass().getResource("/isaatonimov/invy/images/logo").getFile()).listFiles();
-		LinkedList<File> fileList = new LinkedList<>(Arrays.asList(files));
-		fileList.sort(Comparator.comparing(File::getName));
+		List<URL> resourcePaths;
+		try (ScanResult scanResult = new ClassGraph().acceptPaths("/isaatonimov/invy/images/logo").scan())
+		{
+			resourcePaths = scanResult.getAllResources().getURLs();
+		}
 
 		animationImageList = new LinkedList<>();
 
-		for(var file : fileList)
-			animationImageList.add(new Image(file.toURI().toURL().toString()));
+		for(var resource : resourcePaths)
+			animationImageList.add(new Image(resource.toString()));
 
 		trayIcon.setIconSize(150, 150);
 		trayIcon.newAnimation(animationImageList, 30);
@@ -207,13 +213,16 @@ public class App extends Application
 
 		MainMusicPlayerProperty.get().AudioStreamLookupServiceProperty.bindBidirectional(AudioStreamLookupServiceProperty);
 	}
-	private void 				initAudioSourceProvider() throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ClassNotFoundException
+	private void 				initAudioSourceProvider() throws Exception
 	{
 		System.out.println("Trying to load Audio Source " + audioStreamSourceToUseSelection.get());
 		AudioSourceToLoad.set(Class.forName("isaatonimov.invy.core.audiosources." + audioStreamSourceToUseSelection.get()));
 		AudioStreamSource audioSourceProvider = (AudioStreamSource) AudioSourceToLoad.get().getDeclaredConstructor().newInstance();
 		MainAudioStreamSourceProperty.set(audioSourceProvider);
 		System.out.println("Finished loading Audio Source " + audioStreamSourceToUseSelection.get());
+
+		if(autoLocateOptimalInstanceOnStartup.get() == true)
+			MainAudioStreamSourceProperty.get().DoSpeedTestAndSetAppropriately();
 
 		AudioStreamLookupServiceProperty.get().StreamSourceProperty.bindBidirectional(MainAudioStreamSourceProperty);
 	}
@@ -380,16 +389,21 @@ public class App extends Application
 			catch (InstantiationException e)
 			{
 				throw new RuntimeException(e);
-			} catch (IllegalAccessException e)
+			}
+			catch (IllegalAccessException e)
 			{
 				throw new RuntimeException(e);
-			} catch (NoSuchMethodException e)
+			}
+			catch (NoSuchMethodException e)
 			{
 				throw new RuntimeException(e);
 			} catch (InvocationTargetException e)
 			{
 				throw new RuntimeException(e);
 			} catch (ClassNotFoundException e)
+			{
+				throw new RuntimeException(e);
+			} catch (Exception e)
 			{
 				throw new RuntimeException(e);
 			}
@@ -417,7 +431,7 @@ public class App extends Application
 
 		MainMusicPlayerProperty.get().CurrentlyPlayingRecord.addListener((observable, oldValue, newValue) ->
 		{
-			ControllerProperty.get().updateCurrentlyPlayingSongMenuItem();
+			ControllerProperty.get().UpdateCurrentlyPlayingSongMenuItem();
 
 			ControllerProperty.get().	ShowAudioNotification(MainMusicPlayerProperty.get().CurrentlyPlayingRecord.get());
 			ControllerProperty.get().    ResetTrayIcon();
@@ -477,7 +491,7 @@ public class App extends Application
 		return controller;
 	}
     @Override
-    public void 				start(Stage stage) throws IOException, AWTException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
+    public void 				start(Stage stage) throws Exception
 	{
 		StageProperty.		set(stage);
 		PreferencesProperty	.set(initPreferencesPropertiesAndDialog());
@@ -506,7 +520,7 @@ public class App extends Application
 		initRecordLookupServiceHandler();
 		initArtistLookupServiceHandlers();
 
-		ControllerProperty.get().hideRecommendations();
+		ControllerProperty.get().HideRecommendations();
 		ControllerProperty.get().SetAppTheme((String)themeToUseSelection.get());
 
 		TrayIconProperty.get().show();

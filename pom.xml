@@ -15,7 +15,29 @@
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
   </properties>
+
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.springframework.build</groupId>
+        <artifactId>aws-maven</artifactId>
+        <version>5.0.0.RELEASE</version>
+      </extension>
+    </extensions>
+  </build>
   <dependencies>
+    <dependency>
+      <groupId>com.dustinredmond.fxtrayicon</groupId>
+      <artifactId>FXTrayIcon</artifactId>
+      <version>4.2.0-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>/Users/dbeyerle/IdeaProjects/Invy/out/artifacts/FXTrayIcon_jar/FXTrayIcon.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <version>3.4.0</version>
+    </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-swing</artifactId>
@@ -96,7 +118,7 @@
       <artifactId>javafx-fxml</artifactId>
       <version>23-ea+3</version>
     </dependency>
-<dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>${junit.version}</version>
@@ -114,56 +136,5 @@
         <version>24.1.0</version>
         <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>com.dustinredmond.fxtrayicon</groupId>
-      <artifactId>FXTrayIcon</artifactId>
-      <version>4.2.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
   </dependencies>
-  <build>
-    <extensions>
-      <extension>
-        <groupId>org.springframework.build</groupId>
-        <artifactId>aws-maven</artifactId>
-        <version>5.0.0.RELEASE</version>
-      </extension>
-    </extensions>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.panteleyev</groupId>
-          <artifactId>jpackage-maven-plugin</artifactId>
-          <version>1.6.3</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.6.1</version>
-        </plugin>
-          <plugin>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-maven-plugin</artifactId>
-            <version>0.0.8</version>
-            <executions>
-              <execution>
-                <!-- Default configuration for running with: mvn clean javafx:run -->
-                <id>default-cli</id>
-                <configuration>
-                  <mainClass>isaatonimov.invy/isaatonimov.invy.AWTMain</mainClass>
-                  <launcher>app</launcher>
-                  <jlinkZipName>app</jlinkZipName>
-                  <jlinkImageName>app</jlinkImageName>
-                  <noManPages>true</noManPages>
-                  <stripDebug>true</stripDebug>
-                  <noHeaderFiles>true</noHeaderFiles>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-  </build>
 </project>
