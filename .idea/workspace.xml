@@ -10,8 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c40c023f-133f-4a69-977e-f8df4d43dc6d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/images/logo.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/AudioStreamSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/AudioStreamSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/input/ShortcutKeyListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/input/ShortcutKeyListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/HelperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/HelperService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/base/SimpleFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/base/SimpleFX.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/search.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +27,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="413694" />
+    <option name="totalTimeSeconds" value="418435" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>
@@ -70,47 +75,47 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Application.App.executor": "Run",
-    "Application.InvyApp.executor": "Run",
-    "Downloaded.Files.Path.Enabled": "false",
-    "JAR Application.Invy.jar.executor": "Run",
-    "Maven.FXTrayIcon [clean,package...].executor": "Run",
-    "Maven.FXTrayIcon [package].executor": "Run",
-    "Maven.invy [clean].executor": "Run",
-    "Maven.invy [com.github.akman:jpackage-maven-plugin:0.1.5:jpackage].executor": "Run",
-    "Maven.invy [install:install-file...].executor": "Run",
-    "Maven.invy [io.github.fvarrui:javapackager:1.7.5:package].executor": "Run",
-    "Maven.invy [org.apache.maven.plugins:maven-clean-plugin:2.5:clean].executor": "Run",
-    "Maven.invy [org.apache.maven.plugins:maven-clean-plugin:2.5:help].executor": "Run",
-    "Maven.invy [org.apache.maven.plugins:maven-dependency-plugin:2.8:copy-dependencies].executor": "Run",
-    "Maven.invy [org.apache.maven.plugins:maven-dependency-plugin:3.6.1:tree].executor": "Run",
-    "Maven.invy [org.apache.maven.plugins:maven-install-plugin:2.4:help].executor": "Run",
-    "Maven.invy [org.apache.maven.plugins:maven-install-plugin:2.4:install].executor": "Run",
-    "Maven.invy [org.panteleyev:jpackage-maven-plugin:1.6.3:jpackage].executor": "Run",
-    "Maven.invy [package].executor": "Run",
-    "Maven.invy [reload].executor": "Run",
-    "Maven.invy [validate].executor": "Run",
-    "Maven.invy [verify].executor": "Run",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "true",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "jdk.selected.JAVA_MODULE": "22",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/dbeyerle/IdeaProjects/Invy",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.34731084",
-    "project.structure.side.proportion": "0.22338831",
-    "settings.build.tools.auto.reload": "SELECTIVE",
-    "settings.editor.selected.configurable": "build.tools"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Application.App.executor&quot;: &quot;Run&quot;,
+    &quot;Application.InvyApp.executor&quot;: &quot;Run&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;JAR Application.Invy.jar.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.FXTrayIcon [clean,package...].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.FXTrayIcon [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [com.github.akman:jpackage-maven-plugin:0.1.5:jpackage].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [install:install-file...].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [io.github.fvarrui:javapackager:1.7.5:package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [org.apache.maven.plugins:maven-clean-plugin:2.5:clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [org.apache.maven.plugins:maven-clean-plugin:2.5:help].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [org.apache.maven.plugins:maven-dependency-plugin:2.8:copy-dependencies].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [org.apache.maven.plugins:maven-dependency-plugin:3.6.1:tree].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [org.apache.maven.plugins:maven-install-plugin:2.4:help].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [org.apache.maven.plugins:maven-install-plugin:2.4:install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [org.panteleyev:jpackage-maven-plugin:1.6.3:jpackage].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [reload].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [validate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.invy [verify].executor&quot;: &quot;Run&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;22&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/dbeyerle/IdeaProjects/Invy&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.34731084&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.22338831&quot;,
+    &quot;settings.build.tools.auto.reload&quot;: &quot;SELECTIVE&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;build.tools&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="isaatonimov.invy.exceptions" />
@@ -120,18 +125,18 @@
       <recent name="isaatonimov.invy.core" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/icons" />
       <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images/logo" />
       <recent name="$PROJECT_DIR$/images" />
       <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/themes" />
-      <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/images" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/images" />
       <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy/media" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/src/main/resources/isaatonimov/invy" />
       <recent name="$PROJECT_DIR$/target/dependency" />
-      <recent name="$PROJECT_DIR$/config/jpackage/resources" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="isaatonimov.invy" />

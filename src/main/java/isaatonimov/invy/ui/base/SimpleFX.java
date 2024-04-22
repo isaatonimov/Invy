@@ -40,7 +40,6 @@ public abstract class SimpleFX implements Initializable
 
 		loader.setController(instance);
 
-
 		try
 		{
 			instance.StageProperty.set(new Stage());

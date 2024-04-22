@@ -14,10 +14,10 @@ import java.util.Map;
 
 public class ShortcutKeyListener implements NativeKeyListener
 {
-	private List<Integer> 					keyEventQueue 			= new ArrayList<>();
-	private HashMap<int[], HelperService> shortcutActionMap 		= new HashMap<int[], HelperService>();
+	private List<Integer> 						keyEventQueue 			= new ArrayList<>();
+	private HashMap<int[], HelperService> 			shortcutActionMap 		= new HashMap<int[], HelperService>();
 	private HashMap<HelperService, Worker.State>	serviceStates 			= new HashMap<>();
-	private HashMap<Integer, HelperService> simpleShortcutActionMap 	= new HashMap<Integer, HelperService>();
+	private HashMap<Integer, HelperService> 		simpleShortcutActionMap 	= new HashMap<Integer, HelperService>();
 
 	public ShortcutKeyListener() throws InterruptedException
 	{

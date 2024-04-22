@@ -55,35 +55,36 @@ import java.util.List;
 import java.util.Objects;
 
 
+//TODO MAKE TESTABLE
+//TODO TEST AUTOMATION
+//TODO FX TRAYICON -> JAR FILE
 public class App extends Application
 {
 	BooleanProperty 	autoLocateOptimalInstanceOnStartup 	= new SimpleBooleanProperty(false);
 	BooleanProperty 	autoShuffleResultsActive 			= new SimpleBooleanProperty(true);
 	ListProperty 		themeToUseItems;
 	ObjectProperty 		themeToUseSelection;
-	Button 			openTempFolderButton 		= new Button("Open Temp Folder");
-	Label 			placeHolderNode				= new Label("           ");
-	ObjectProperty  	defaultLogLocation			= new SimpleObjectProperty(InvyUtils.getTempDirectoryFile());
-	BooleanProperty 	accessibilityFeaturesActive 		= new SimpleBooleanProperty(true);
-	ListProperty		recommendationsToUse			= new SimpleListProperty(FXCollections.observableArrayList(Arrays.asList("Chopin", "Pink Floyd", "Bob Marley", "Frank Sinatra", "Gorillaz", "Bob Marley", "David Bowie", "The Beatles")));
-	ObjectProperty		recommendationToUseSelection	= new SimpleObjectProperty("Chopin");
+	Button 			openTempFolderButton 			= new Button("Open Temp Folder");
+	Label 			placeHolderNode					= new Label("           ");
+	ObjectProperty  	defaultLogLocation				= new SimpleObjectProperty(InvyUtils.getTempDirectoryFile());
+	BooleanProperty 	accessibilityFeaturesActive 			= new SimpleBooleanProperty(true);
+	ListProperty		recommendationsToUse				= new SimpleListProperty(FXCollections.observableArrayList(Arrays.asList("Chopin", "Pink Floyd", "Bob Marley", "Frank Sinatra", "Gorillaz", "Bob Marley", "David Bowie", "The Beatles")));
+	ObjectProperty		recommendationToUseSelection		= new SimpleObjectProperty("Chopin");
 	ListProperty 		playbackBackendToUse;
-	ObjectProperty 		playbackBackendToUseSelelction 	= new SimpleObjectProperty<>();
+	ObjectProperty 		playbackBackendToUseSelelction 		= new SimpleObjectProperty<>();
 
-	ListProperty 		audioStreamSourceToUse		= new SimpleListProperty();
-	ObjectProperty 		audioStreamSourceToUseSelection  = new SimpleObjectProperty();
+	ListProperty 		audioStreamSourceToUse			= new SimpleListProperty();
+	ObjectProperty 		audioStreamSourceToUseSelection  	= new SimpleObjectProperty();
 
 	LinkedList<Image>	animationImageList;
 
-	private SimpleObjectProperty<Class>					MusicPlayerToLoad			= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<MusicPlayer> 				MainMusicPlayerProperty 		= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<Class>					AudioSourceToLoad			= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<AudioStreamSource>			MainAudioStreamSourceProperty 	= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<AudioStreamLookupService> 	AudioStreamLookupServiceProperty = new SimpleObjectProperty<>();
-	private SimpleObjectProperty<RecordingLookupService>		RecordingLookupServiceProperty 	= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<ArtistLookupService>			ArtistLookupServiceProperty 	= new SimpleObjectProperty<>();
-
-	//UI Services
+	private SimpleObjectProperty<Class>					MusicPlayerToLoad				= new SimpleObjectProperty<>();
+	private SimpleObjectProperty<MusicPlayer> 				MainMusicPlayerProperty 			= new SimpleObjectProperty<>();
+	private SimpleObjectProperty<Class>					AudioSourceToLoad				= new SimpleObjectProperty<>();
+	private SimpleObjectProperty<AudioStreamSource>			MainAudioStreamSourceProperty 		= new SimpleObjectProperty<>();
+	private SimpleObjectProperty<AudioStreamLookupService> 	AudioStreamLookupServiceProperty 	= new SimpleObjectProperty<>();
+	private SimpleObjectProperty<RecordingLookupService>		RecordingLookupServiceProperty 		= new SimpleObjectProperty<>();
+	private SimpleObjectProperty<ArtistLookupService>			ArtistLookupServiceProperty 		= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<ToggleSearchWindowService> 	ToggleSearchViewServiceProperty 		= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<SongInfoService>			ShowSongInfoServiceProperty 		= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<SongTogglePlayService>		SongTogglePlayServiceProperty 		= new SimpleObjectProperty<>();
@@ -91,7 +92,6 @@ public class App extends Application
 	private SimpleObjectProperty<SongPlayPrevService>			SongPlayPreviousServiceProperty 		= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<PreferencesService>			PreferencesServiceProperty 			= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<PlayTrayAnimationService>		PlayTrayAnimationServiceProperty 	= new SimpleObjectProperty<>();
-
 	private SimpleObjectProperty<ApplicationShutdownService> 	ApplicationShutdownServiceProperty 	= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<javafx.scene.robot.Robot> 		FXRobotProperty 				= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<java.awt.Robot> 			AWTRobotProperty 				= new SimpleObjectProperty<>();
@@ -137,7 +137,6 @@ public class App extends Application
 		trayIcon.setIconSize(150, 150);
 		trayIcon.newAnimation(animationImageList, 30);
 	}
-
 	private AudioNotificationFX 		initAudioNotificationFX()
 	{
 		return SimpleFX.Create(new AudioNotificationFX());
@@ -328,13 +327,6 @@ public class App extends Application
 		audioStreamSourceToUse				= new SimpleListProperty<>(FXCollections.observableArrayList(availableAudioStreamSources));
 		audioStreamSourceToUseSelection			= new SimpleObjectProperty(availableAudioStreamSources.getFirst());
 
-		//Instance - Auto Locate
-		//		if(autoLocateOptimalInstanceOnStartup.get() == true)
-		//			currentPipedInstanceSelection = new SimpleObjectProperty(Piped.getNearestPipedInstanceRelativeToHost(pipedInstances));
-		//		else
-		//			currentPipedInstanceSelection = new SimpleObjectProperty();
-
-
 		//Themes
 		themeToUseItems = new SimpleListProperty<>(FXCollections.observableArrayList(InvyUtils.getAllAvailableThemesAsList()));
 		themeToUseSelection = new SimpleObjectProperty(InvyUtils.getAllAvailableThemesAsList().getFirst());
@@ -463,6 +455,8 @@ public class App extends Application
 			controller.UpdateSearchBarToggleMenu(false);
 		});
 	}
+
+	//TODO -> BINDINGS
 	private Controller 			bindToController(Controller controller)
 	{
 		//Music Player to control
@@ -493,7 +487,7 @@ public class App extends Application
     @Override
     public void 				start(Stage stage) throws Exception
 	{
-		StageProperty.		set(stage);
+		StageProperty		.set(stage);
 		PreferencesProperty	.set(initPreferencesPropertiesAndDialog());
 
 		initBackgroundServices();
@@ -509,10 +503,10 @@ public class App extends Application
 		setCustomPreferenceDialogSettings(PreferencesProperty.get());
 		initAudioSourceProvider();
 		initMusicPlayer();
-		bindToController		(ControllerProperty.get());
-		initSearchBarHandlers	(ControllerProperty.get());
-		setTrayMenuSettings	(TrayIconProperty.get());
-		initTrayAnimationCreation(TrayIconProperty.get());
+		bindToController			(ControllerProperty.get());
+		initSearchBarHandlers		(ControllerProperty.get());
+		setTrayMenuSettings		(TrayIconProperty.get());
+		initTrayAnimationCreation	(TrayIconProperty.get());
 
 		initAccessibilityServicesIfActive();
 
@@ -525,7 +519,6 @@ public class App extends Application
 
 		TrayIconProperty.get().show();
 	}
-
 	@Override
 	public void 				stop()
 	{
@@ -535,7 +528,6 @@ public class App extends Application
 		TrayIconProperty.get().hide();
 		//System.exit(0);
 	}
-
     public static void 			main(String[] args) throws IOException
 	{
 		InvyUtils.clearTempFolder();

@@ -101,11 +101,6 @@ public abstract class AudioStreamSource
 	{
 		HttpResponse response = customRequest.asString();
 
-		//System.out.println("Reveiced HTTP Response from " + CurrentTargetURL.get() + " -> \n" +
-				//response.getBody().toString());
-		//System.out.println("Request was the following -> \n " +
-				//customRequest.asString().getBody().toString());
-
 		return response;
 	}
 

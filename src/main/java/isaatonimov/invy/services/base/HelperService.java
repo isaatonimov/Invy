@@ -14,10 +14,7 @@ public abstract class HelperService
 
 	public HelperService()
 	{
-		ResultValueProperty.addListener((observable, oldValue, newValue) ->
-		{
-			OnSuccessDo();
-		});
+		ResultValueProperty.addListener((observable, oldValue, newValue) -> OnSuccessDo());
 
 		if(IsBackgroundService())
 		{
@@ -61,10 +58,7 @@ public abstract class HelperService
 			if(ThreadProperty.get() != null)
 				ThreadProperty.get().interrupt();
 
-			ThreadProperty.set(new Thread(() ->
-			{
-				ResultValueProperty.set(ServiceSpecificDo());
-			}));
+			ThreadProperty.set(new Thread(() -> ResultValueProperty.set(ServiceSpecificDo())));
 
 			ThreadProperty.get().start();
 		}
