@@ -24,7 +24,7 @@ public abstract class MusicPlayer
 	public SimpleObjectProperty<Recording> CurrentlyPlayingRecord = new SimpleObjectProperty<>(null);
 	public SimpleObjectProperty<MusicPlayerState> CurrentState 	= new SimpleObjectProperty<>(MusicPlayerState.NOT_INITIALIZED);
 	public SimpleObjectProperty<LinkedList<Recording>> SongQueue = new SimpleObjectProperty<>(new LinkedList<>());
-	public SimpleObjectProperty<AudioStreamLookupService>	AudioStreamLookupServiceProperty = new SimpleObjectProperty<>();
+	public SimpleObjectProperty<AudioStreamLookupService>		AudioStreamLookupServiceProperty = new SimpleObjectProperty<>();
 	public SimpleStringProperty CurrentTargetAudioSourceURL 	= new SimpleStringProperty("");
 	public SimpleBooleanProperty BufferFileRequired 			= new SimpleBooleanProperty(false);
 	public SimpleObjectProperty<File> BufferFile	  			= new SimpleObjectProperty<>();
@@ -38,6 +38,41 @@ public abstract class MusicPlayer
 
 		Init();
 		InitPlayerSpecificHandlers();
+
+		AudioStreamLookupServiceProperty.addListener((observable, oldValue, newValue) ->
+		{
+			AudioStreamLookupServiceProperty.get().ResultValueProperty.addListener((observable1, oldValue1, newValue1) ->
+			{
+				CurrentTargetAudioSourceURL.set((String) AudioStreamLookupServiceProperty.get().ResultValueProperty.get());
+
+				if(RequireLocallyStoredBuffer() && BufferFile != null)
+				{
+					FetchAudioStreamAndStoreInBuffer();
+
+					Buffer(BufferingTime.get(), () ->
+					{
+						try
+						{
+							TimeUnit.MILLISECONDS.sleep(BufferingTime.get().toMillis());
+						}
+						catch (InterruptedException e)
+						{
+							throw new RuntimeException(e);
+						}
+
+						PlayerSpecificPlay();
+						CurrentState.set(MusicPlayerState.PLAYING);
+					});
+				}
+				else
+					PlayerSpecificPlay();
+					CurrentState.set(MusicPlayerState.PLAYING);
+
+				CurrentlyPlayingRecord.set(AudioStreamLookupServiceProperty.get().TargetRecordingProperty.get());
+			});
+		});
+
+
 	}
 
 	public void ShuffleSongQueue()
@@ -51,14 +86,12 @@ public abstract class MusicPlayer
 
 		SongQueue.get().clear();
 
-		for(var record : shuffledRecords)
-			SongQueue.get().add(record);
+		SongQueue.get().addAll(shuffledRecords);
 	}
 
 	public void AddToSongQueue(LinkedList<Recording> records)
 	{
 		PlayerSpecificPause();
-
 		SongQueue.get().		clear();
 		SongQueue.get().		addAll(records);
 		ShuffleSongQueue();
@@ -71,36 +104,6 @@ public abstract class MusicPlayer
 
 		AudioStreamLookupServiceProperty.get().TargetRecordingProperty.set(toPlay);
 		AudioStreamLookupServiceProperty.get().startWorking();
-
-		AudioStreamLookupServiceProperty.get().ResultValueProperty.addListener((observable, oldValue, newValue) ->
-		{
-			CurrentTargetAudioSourceURL.set((String) AudioStreamLookupServiceProperty.get().ResultValueProperty.get());
-
-			if(RequireLocallyStoredBuffer() && BufferFile != null)
-			{
-				FetchAudioStreamAndStoreInBuffer();
-
-				Buffer(BufferingTime.get(), () ->
-				{
-					try
-					{
-						TimeUnit.MILLISECONDS.sleep(BufferingTime.get().toMillis());
-					}
-					catch (InterruptedException e)
-					{
-						throw new RuntimeException(e);
-					}
-
-					PlayerSpecificPlay();
-					CurrentState.				set(MusicPlayerState.PLAYING);
-				});
-			}
-			else
-				PlayerSpecificPlay();
-
-			CurrentlyPlayingRecord.		set(toPlay);
-			CurrentState.				set(MusicPlayerState.PLAYING);
-		});
 	}
 
 	public void PlayNext()

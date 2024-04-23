@@ -58,6 +58,8 @@ import java.util.Objects;
 //TODO MAKE TESTABLE
 //TODO TEST AUTOMATION
 //TODO FX TRAYICON -> JAR FILE
+//TODO RAMAZURI
+//TODO Wer spielt -> bei Klassik
 public class App extends Application
 {
 	BooleanProperty 	autoLocateOptimalInstanceOnStartup 	= new SimpleBooleanProperty(false);

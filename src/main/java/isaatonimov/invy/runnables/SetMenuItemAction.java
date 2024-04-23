@@ -4,20 +4,25 @@ import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import isaatonimov.invy.services.base.UIHelperService;
 import javafx.scene.control.MenuItem;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 public class SetMenuItemAction implements Runnable
 {
 	private MenuItem 	menuItem;
 	private FXTrayIcon 	trayIcon;
 	private UIHelperService toStart;
+	private Runnable		 toRun;
 
 	public SetMenuItemAction(FXTrayIcon trayIcon, MenuItem menuItem, UIHelperService toStart)
 	{
 		this.trayIcon	= trayIcon;
 		this.menuItem 	= menuItem;
 		this.toStart 	= toStart;
+	}
+
+	public SetMenuItemAction(FXTrayIcon trayIcon, MenuItem menuItem, Runnable runnable)
+	{
+		this.trayIcon	= trayIcon;
+		this.menuItem 	= menuItem;
+		this.toRun 		= toRun;
 	}
 
 	@Override
@@ -27,14 +32,7 @@ public class SetMenuItemAction implements Runnable
 		{
 			if(trayIcon.getMenuItem(i).getLabel() == menuItem.getText())
 			{
-				trayIcon.getMenuItem(i).addActionListener(new ActionListener()
-				{
-					@Override
-					public void actionPerformed(ActionEvent e)
-					{
-						toStart.startWorking();
-					}
-				});
+				trayIcon.getMenuItem(i).addActionListener(e -> toStart.startWorking());
 			}
 		}
 	}

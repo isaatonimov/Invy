@@ -11,6 +11,7 @@ public abstract class HelperService
 	public	SimpleObjectProperty<Service>	ServiceProperty		= new SimpleObjectProperty<>();
 	public 	SimpleObjectProperty<Thread>	ThreadProperty		= new SimpleObjectProperty<>();
 	public 	SimpleObjectProperty<Object> 	ResultValueProperty 	= new SimpleObjectProperty<>(null);
+	private 	Runnable					MainTask 			= () -> ResultValueProperty.set(ServiceSpecificDo());
 
 	public HelperService()
 	{
@@ -20,10 +21,7 @@ public abstract class HelperService
 		{
 			System.out.println("Creating Background Thread for " + getClass().getName() + " Service...");
 
-			ThreadProperty.set(new Thread(() ->
-			{
-				ResultValueProperty.set(ServiceSpecificDo());
-			}));
+			ThreadProperty.set(new Thread(() -> MainTask.run()));
 		}
 		else
 		{
@@ -51,18 +49,21 @@ public abstract class HelperService
 
 	public void startWorking()
 	{
-		System.out.println("Service " + this.getClass().getName() + " started....");
-
 		if (IsBackgroundService())
 		{
-			if(ThreadProperty.get() != null)
+			try
+			{
 				ThreadProperty.get().interrupt();
-
-			ThreadProperty.set(new Thread(() -> ResultValueProperty.set(ServiceSpecificDo())));
-
-			ThreadProperty.get().start();
+				ThreadProperty.get().join();
+				ThreadProperty.set(new Thread(() -> MainTask.run()));
+				ThreadProperty.get().start();
+			}
+			catch (InterruptedException e)
+			{
+				throw new RuntimeException(e);
+			}
 		}
-		else if (this instanceof UIHelperService)
+		else
 		{
 			Platform.runLater(() ->
 			{

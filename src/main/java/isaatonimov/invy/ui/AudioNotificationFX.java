@@ -33,11 +33,6 @@ public class AudioNotificationFX extends SimpleFX
 
 	public void Show(String title, String subtitle, String message, Image coverArtImage)
 	{
-		if(StageProperty.get().isShowing())
-		{
-			Hide(this);
-		}
-
 		Platform.runLater(() ->
 		{
 			TitleProperty.set(title);
@@ -46,7 +41,7 @@ public class AudioNotificationFX extends SimpleFX
 			CoverProperty.set(coverArtImage);
 		});
 
-		AnimatedShow(this);
+		SimpleFX.AnimatedShow(this);
 	}
 
 	@Override

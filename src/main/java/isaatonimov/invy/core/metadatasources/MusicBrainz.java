@@ -1,7 +1,6 @@
 package isaatonimov.invy.core.metadatasources;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import isaatonimov.invy.App;
 import isaatonimov.invy.core.base.AudioMetadataSource;
@@ -12,7 +11,10 @@ import kong.unirest.Unirest;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class MusicBrainz extends AudioMetadataSource
@@ -37,7 +39,6 @@ public class MusicBrainz extends AudioMetadataSource
 			//JsonModelClassGenerator.generateJSONModelClassFromJSONString(response.getBody().toString(), "ArtistModel");
 
 			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			ArtistResponse musicBrainzArtistResponse = null;
 
 			try
@@ -58,11 +59,13 @@ public class MusicBrainz extends AudioMetadataSource
 			}
 			catch (JsonProcessingException e)
 			{
+				//e.printStackTrace();
 				return null;
 			}
 		}
 		catch (Exception e)
 		{
+			//e.printStackTrace();
 			return null;
 		}
 	}
