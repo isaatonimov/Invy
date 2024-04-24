@@ -104,6 +104,8 @@ public class App extends Application
 	private SimpleObjectProperty<AudioNotificationFX>			AudioNotificationProperty			= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<MessageFX>				MessageProperty					= new SimpleObjectProperty<>();
 
+	private SimpleBooleanProperty						ApplicationLockProperty			= new SimpleBooleanProperty(false);
+
 	private Controller 			loadMainScene(Stage mainStage) throws IOException
 	{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/isaatonimov/invy/views/main.fxml"));
@@ -227,6 +229,7 @@ public class App extends Application
 
 		AudioStreamLookupServiceProperty.get().StreamSourceProperty.bindBidirectional(MainAudioStreamSourceProperty);
 	}
+
 	private void 				setCustomPreferenceDialogSettings(PreferencesFx mainPreferencesDialog)
 	{
 		//Temp Folder Button Styling and Event Handler
@@ -437,6 +440,16 @@ public class App extends Application
 	private void				initArtistLookupServiceHandlers()
 	{
 	}
+	private void				initAudioStreamLookupServiceHandlers()
+	{
+		AudioStreamLookupServiceProperty.get().StreamSourceProperty.get().SpeedTestInProgress.addListener((observable, oldValue, newValue) ->
+		{
+			if(newValue == true)
+				ApplicationLockProperty.set(true);
+			else
+				ApplicationLockProperty.set(false);
+		});
+	}
 	private void 				initSearchBarHandlers(Controller controller)
 	{
 		//Handler for Search Init
@@ -457,8 +470,6 @@ public class App extends Application
 			controller.UpdateSearchBarToggleMenu(false);
 		});
 	}
-
-	//TODO -> BINDINGS
 	private Controller 			bindToController(Controller controller)
 	{
 		//Music Player to control
@@ -479,18 +490,20 @@ public class App extends Application
 		controller.FXRobotProperty.				bindBidirectional(FXRobotProperty);
 		controller.AWTRobotProperty.			bindBidirectional(AWTRobotProperty);
 
-		//Views to control (?)
+		//Views to control
 		controller.ToggleViewServiceProperty.		bindBidirectional(ToggleSearchViewServiceProperty);
 		controller.PlayTrayAnimationServiceProperty.	bindBidirectional(PlayTrayAnimationServiceProperty);
 		controller.TrayProperty.				bindBidirectional(TrayIconProperty);
+
+		controller.ApplicationLockProperty.			bindBidirectional(ApplicationLockProperty);
 
 		return controller;
 	}
     @Override
     public void 				start(Stage stage) throws Exception
 	{
-		StageProperty		.set(stage);
-		PreferencesProperty	.set(initPreferencesPropertiesAndDialog());
+		StageProperty			.set(stage);
+		PreferencesProperty		.set(initPreferencesPropertiesAndDialog());
 
 		initBackgroundServices();
 		initPreferencesHandlers();
@@ -515,6 +528,7 @@ public class App extends Application
 		initMusicPlayerHandlers();
 		initRecordLookupServiceHandler();
 		initArtistLookupServiceHandlers();
+		initAudioStreamLookupServiceHandlers();
 
 		ControllerProperty.get().HideRecommendations();
 		ControllerProperty.get().SetAppTheme((String)themeToUseSelection.get());
@@ -525,7 +539,6 @@ public class App extends Application
 	public void 				stop()
 	{
 		System.out.println("Invy is shutting down...");
-
 		MainMusicPlayerProperty.get().Shutdown();
 		TrayIconProperty.get().hide();
 		//System.exit(0);

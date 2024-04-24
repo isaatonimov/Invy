@@ -11,14 +11,12 @@
   <component name="ChangeListManager">
     <list default="true" id="c40c023f-133f-4a69-977e-f8df4d43dc6d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/Invy_jar/Invy.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/Invy_jar/Invy.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/MusicPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/MusicPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/metadatasources/MusicBrainz.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/metadatasources/MusicBrainz.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/runnables/SetMenuItemAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/runnables/SetMenuItemAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controllers/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/controllers/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/AudioStreamSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/core/base/AudioStreamSource.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/background/AudioStreamLookupService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/background/AudioStreamLookupService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/HelperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/services/base/HelperService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/AudioNotificationFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/isaatonimov/invy/ui/AudioNotificationFX.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +27,7 @@
     <option name="optimizeImportsOnTheFly" value="true" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="425305" />
+    <option name="totalTimeSeconds" value="426993" />
     <option name="gitIntegration" value="true" />
     <option name="naggedAbout" value="1" />
   </component>

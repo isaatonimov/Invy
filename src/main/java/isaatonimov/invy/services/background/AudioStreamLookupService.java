@@ -9,8 +9,8 @@ import java.util.List;
 
 public class AudioStreamLookupService extends BackgroundHelperService
 {
-	public SimpleObjectProperty<AudioStreamSource> 	StreamSourceProperty 	= new SimpleObjectProperty<>();
-	public SimpleObjectProperty<Recording>	   		TargetRecordingProperty 	= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<AudioStreamSource> 	StreamSourceProperty 			= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<Recording>	   		TargetRecordingProperty 			= new SimpleObjectProperty<>();
 	@Override
 	protected Object ServiceSpecificDo()
 	{

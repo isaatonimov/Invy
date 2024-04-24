@@ -111,6 +111,8 @@ public abstract class AudioStreamSource
 
 	public void DoSpeedTestAndSetAppropriately() throws Exception
 	{
+		SpeedTestInProgress.set(true);
+
 		Thread backgroundThread = new Thread(() ->
 		{
 			String targetURL = null;
@@ -126,6 +128,8 @@ public abstract class AudioStreamSource
 
 			CurrentTargetURL.set(targetURL);
 			System.out.println("Did Speedtest and set " + targetURL + " as Target Instance");
+
+			SpeedTestInProgress.set(false);
 		});
 
 		backgroundThread.start();

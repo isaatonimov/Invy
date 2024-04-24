@@ -19,6 +19,7 @@ import isaatonimov.invy.ui.AudioNotificationFX;
 import isaatonimov.invy.ui.MessageFX;
 import isaatonimov.invy.enums.MessageFXType;
 import isaatonimov.invy.utils.InvyUtils;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -55,6 +56,7 @@ public class Controller implements Initializable
 	public SimpleObjectProperty<ToggleSearchWindowService> 	ToggleViewServiceProperty 		= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<PlayTrayAnimationService> 		PlayTrayAnimationServiceProperty = new SimpleObjectProperty<>();
 
+	public SimpleBooleanProperty						ApplicationLockProperty		= new SimpleBooleanProperty();
 	public SimpleListProperty							TryThisProperty				= new SimpleListProperty();
 
 	public SimpleObjectProperty<PreferencesService>			PreferencesServiceProperty 		= new SimpleObjectProperty<>();
@@ -214,18 +216,25 @@ public class Controller implements Initializable
 
 	public void SearchAndPlay(Artist selectedItem)
 	{
-		TrayProperty.get().play();
-
-		RecordLookupServiceProperty.get().ResultValueProperty.addListener((observable, oldValue, newValue) ->
+		if(ApplicationLockProperty.get() == false)
 		{
-			if(((LinkedList<Recording>) newValue).size() > 0)
-				MusicPlayerProperty.get().AddToSongQueue((LinkedList<Recording>) newValue);
-			else
-				ShowErrorMessage("There was a Problem fetching the song information. Maybe try again later....");
-		});
+			TrayProperty.get().play();
 
-		RecordLookupServiceProperty.get().CurrentTargetArtistProperty.set(selectedItem);
-		RecordLookupServiceProperty.get().startWorking();
+			RecordLookupServiceProperty.get().ResultValueProperty.addListener((observable, oldValue, newValue) ->
+			{
+				if(((LinkedList<Recording>) newValue).size() > 0)
+					MusicPlayerProperty.get().AddToSongQueue((LinkedList<Recording>) newValue);
+				else
+					ShowErrorMessage("There was a Problem fetching the song information. Maybe try again later....");
+			});
+
+			RecordLookupServiceProperty.get().CurrentTargetArtistProperty.set(selectedItem);
+			RecordLookupServiceProperty.get().startWorking();
+		}
+		else
+		{
+			ShowNotification("Application is currently locked. Is Instance Lookup in Progress?");
+		}
 	}
 
 	public void ShowAudioNotification(Recording recording)
