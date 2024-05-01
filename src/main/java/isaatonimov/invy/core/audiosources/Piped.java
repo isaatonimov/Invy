@@ -7,7 +7,7 @@ import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.models.piped.PipedInstanceInformation;
 import isaatonimov.invy.models.piped.PipedSearchResponse;
 import isaatonimov.invy.models.piped.StreamResponse;
-import isaatonimov.invy.utils.InvyUtils;
+import isaatonimov.invy.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import kong.unirest.HttpResponse;
@@ -59,7 +59,7 @@ public class Piped extends AudioStreamSource
 	@Override
 	protected String ServiceSpecificDefaultURL()
 	{
-		return InvyUtils.getFallBackPipedInstance();
+		return Utils.getFallBackPipedInstance();
 	}
 
 	@Override

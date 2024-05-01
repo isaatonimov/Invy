@@ -3,126 +3,116 @@ package isaatonimov.invy.core.base;
 import isaatonimov.invy.enums.MusicPlayerState;
 import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.services.background.AudioStreamLookupService;
-import isaatonimov.invy.utils.InvyUtils;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import kong.unirest.Unirest;
-import org.apache.commons.io.IOUtils;
 
-import java.io.*;
-import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public abstract class MusicPlayer
 {
-	public SimpleObjectProperty<Recording> CurrentlyPlayingRecord = new SimpleObjectProperty<>(null);
-	public SimpleObjectProperty<MusicPlayerState> CurrentState 	= new SimpleObjectProperty<>(MusicPlayerState.NOT_INITIALIZED);
-	public SimpleObjectProperty<LinkedList<Recording>> SongQueue = new SimpleObjectProperty<>(new LinkedList<>());
-	public SimpleObjectProperty<AudioStreamLookupService>		AudioStreamLookupServiceProperty = new SimpleObjectProperty<>();
-	public SimpleStringProperty CurrentTargetAudioSourceURL 	= new SimpleStringProperty("");
-	public SimpleBooleanProperty BufferFileRequired 			= new SimpleBooleanProperty(false);
-	public SimpleObjectProperty<File> BufferFile	  			= new SimpleObjectProperty<>();
-	public SimpleObjectProperty<Duration>	BufferingTime 		= new SimpleObjectProperty<>(Duration.ofSeconds(0));
-	private SimpleObjectProperty<Thread> FetchThread			= new SimpleObjectProperty<>();
 
-	public MusicPlayer() throws IOException, URISyntaxException
+	private SimpleObjectProperty<Recording>						PreparedRecord				= new SimpleObjectProperty<>();
+	public SimpleIntegerProperty									URLSPrefetched				= new SimpleIntegerProperty(0);
+	public SimpleIntegerProperty									URLSToPreload				= new SimpleIntegerProperty(2);
+	public SimpleObjectProperty<Recording> 						CurrentlyPlayingRecord 		= new SimpleObjectProperty<>(null);
+	public SimpleObjectProperty<MusicPlayerState> 					CurrentState 				= new SimpleObjectProperty<>(MusicPlayerState.NOT_INITIALIZED);
+	private SimpleObjectProperty<LinkedList<Recording>> 				FullRecordList = new SimpleObjectProperty<>();
+	public SimpleObjectProperty<LinkedHashMap<Recording, String>> 		SongQueue 				= new SimpleObjectProperty<>(new LinkedHashMap<>());
+	public SimpleObjectProperty<AudioStreamSource>					CurrentAudioStreamSource		= new SimpleObjectProperty<>();
+	public MusicPlayer()
 	{
-		if(RequireLocallyStoredBuffer() == true)
-			CreateBufferFile();
-
 		Init();
 		InitPlayerSpecificHandlers();
 
-		AudioStreamLookupServiceProperty.addListener((observable, oldValue, newValue) ->
+		CurrentState.addListener((observable, oldValue, newValue) ->
 		{
-			AudioStreamLookupServiceProperty.get().ResultValueProperty.addListener((observable1, oldValue1, newValue1) ->
+			CurrentlyPlayingRecord.set(PreparedRecord.get());
+		});
+	}
+
+	public void AddToSongQueue(LinkedList<Recording> records, boolean andPlayFirstSong)
+	{
+		//First Call of AddToSongQueue from Outside Probably -> assign full record list for later
+		if(FullRecordList.get() == null)
+			FullRecordList.set(records);
+
+		List<String> urlsToAppend = new ArrayList<>();
+
+		Thread queueingThread = new Thread(() ->
+		{
+			for(int i = 0; i < URLSToPreload.get(); i++)
 			{
-				CurrentTargetAudioSourceURL.set((String) AudioStreamLookupServiceProperty.get().ResultValueProperty.get());
+				AudioStreamLookupService audioStreamLookupService = new AudioStreamLookupService();
+				audioStreamLookupService.StreamSourceProperty.set(CurrentAudioStreamSource.get());
+				audioStreamLookupService.TargetRecordingProperty.set(records.get(i));
+				audioStreamLookupService.startWorking();
 
-				if(RequireLocallyStoredBuffer() && BufferFile != null)
+				audioStreamLookupService.ResultValueProperty.addListener((observable, oldValue, newValue) ->
 				{
-					FetchAudioStreamAndStoreInBuffer();
+					URLSPrefetched.set(URLSPrefetched.get() + 1);
+					SongQueue.get().put(audioStreamLookupService.TargetRecordingProperty.get(), (String) newValue);
 
-					Buffer(BufferingTime.get(), () ->
+					urlsToAppend.add((String) newValue);
+
+					if(andPlayFirstSong && URLSPrefetched.get() == URLSToPreload.get())
 					{
-						try
-						{
-							TimeUnit.MILLISECONDS.sleep(BufferingTime.get().toMillis());
-						}
-						catch (InterruptedException e)
-						{
-							throw new RuntimeException(e);
-						}
+						System.out.println("Prefetched audio urls for now...");
+						PlayerSpecificInitPostSongQueueLoaded();
+						Play(records.getFirst());
+					}
+					else if(andPlayFirstSong == false)
+					{
+						PlayerSpecificAppendToSongQueue(urlsToAppend);
+					}
+				});
 
-						PlayerSpecificPlay();
-						CurrentState.set(MusicPlayerState.PLAYING);
-					});
+				try
+				{
+					Thread.sleep(Duration.ofSeconds(2));
 				}
-				else
-					PlayerSpecificPlay();
-					CurrentState.set(MusicPlayerState.PLAYING);
-
-				CurrentlyPlayingRecord.set(AudioStreamLookupServiceProperty.get().TargetRecordingProperty.get());
-			});
+				catch (InterruptedException e)
+				{
+					throw new RuntimeException(e);
+				}
+			}
 		});
 
-
+		queueingThread.start();
 	}
 
-	public void ShuffleSongQueue()
+	public void Play(Recording recording)
 	{
-		List<Recording> shuffledRecords = new ArrayList<>();
-
-		for(var record : SongQueue.get())
-			shuffledRecords.add(record);
-
-		Collections.shuffle(shuffledRecords);
-
-		SongQueue.get().clear();
-
-		SongQueue.get().addAll(shuffledRecords);
-	}
-
-	public void AddToSongQueue(LinkedList<Recording> records)
-	{
-		PlayerSpecificPause();
-		SongQueue.get().		clear();
-		SongQueue.get().		addAll(records);
-		ShuffleSongQueue();
-		Play(SongQueue.get().	getFirst());
-	}
-
-	public void Play(Recording toPlay)
-	{
-		System.out.println("Trying to Play Track " + toPlay.getTitle() + " with " + this.getClass().getName());
-
-		AudioStreamLookupServiceProperty.get().TargetRecordingProperty.set(toPlay);
-		AudioStreamLookupServiceProperty.get().startWorking();
+		PlayerSpecificPlay(SongQueue.get().get(recording));
+		PreparedRecord.set(recording);
 	}
 
 	public void PlayNext()
 	{
-		if(SongQueue.get().indexOf(CurrentlyPlayingRecord.get()) + 1 <= SongQueue.get().size()-1)
-			Play(SongQueue.get().get(SongQueue.get().indexOf(CurrentlyPlayingRecord.get()) + 1));
-		else
+		List<Recording> SongQueueList = new ArrayList<>(SongQueue.get().keySet());
+		if(SongQueueList.indexOf(CurrentlyPlayingRecord.get()) + 1 <= SongQueueList.size()-1)
+			Play(SongQueueList.get(SongQueueList.indexOf(CurrentlyPlayingRecord.get()) + 1));
+
+		LinkedList<Recording> recordingsToFetchNext = new LinkedList<>();
+
+		for(int i = URLSPrefetched.get(); i < URLSPrefetched.get() + URLSToPreload.get() ; i++)
 		{
-			ShuffleSongQueue();
-			Play(SongQueue.get().getFirst());
+			recordingsToFetchNext.add(FullRecordList.get().get(i));
 		}
+
+		AddToSongQueue(recordingsToFetchNext, false);
 	}
 
 	public void PlayPrevious()
 	{
-		if(SongQueue.get().indexOf(CurrentlyPlayingRecord.get()) -1 >= 0)
-			Play(SongQueue.get().get(SongQueue.get().indexOf(CurrentlyPlayingRecord.get()) - 1));
+		List<Recording> SongQueueList = new ArrayList<>(SongQueue.get().keySet());
+		if(SongQueueList.indexOf(CurrentlyPlayingRecord.get()) -1 >= 0)
+			Play(SongQueueList.get(SongQueueList.indexOf(CurrentlyPlayingRecord.get()) - 1));
 		else
-			Play(SongQueue.get().getFirst());
+			Play(SongQueueList.getFirst());
 	}
 
 	public void TogglePlay()
@@ -143,7 +133,7 @@ public abstract class MusicPlayer
 	{
 		System.out.println("Initialized Player: " + getClass().getName());
 
-		PlayerSpecificInit();
+		PlayerSpecificInitPreSongQueueLoaded();
 		CurrentState.set(MusicPlayerState.INITIALIZED);
 	}
 
@@ -153,57 +143,15 @@ public abstract class MusicPlayer
 		CurrentState.set(MusicPlayerState.NOT_INITIALIZED);
 		CurrentlyPlayingRecord.set(null);
 	}
-	private void CreateBufferFile() throws IOException, URISyntaxException
-	{
-		InputStream inputStream = getClass().getResourceAsStream("/isaatonimov/invy/media/dummy.mp3");
 
-		File dummyFile = new File(InvyUtils.getTempDirectoryPath().toString(), "dummy.mp3");
-
-		try(OutputStream outputStream = new FileOutputStream(dummyFile)){
-			IOUtils.copy(inputStream, outputStream);
-		} catch (FileNotFoundException e)
-		{
-			// handle exception here
-		} catch (IOException e)
-		{
-			// handle exception here
-		}
-
-		BufferFile.set(dummyFile);
-	}
-
-	private void FetchAudioStreamAndStoreInBuffer()
-	{
-		Thread fetch = new Thread(() ->
-		{
-			try
-			{
-				BufferFile.set(new File(InvyUtils.getTempDirectoryPath().toString(), CurrentlyPlayingRecord.hashCode() + ".mp4"));
-			}
-			catch (IOException e)
-			{
-				throw new RuntimeException(e);
-			}
-
-			Unirest.get(CurrentTargetAudioSourceURL.get()).asFile(BufferFile.get().getPath()).getBody();
-		});
-
-		FetchThread.set(fetch);
-
-		FetchThread.get().start();
-	}
-
-	private void Buffer(Duration bufferingTime, Runnable runnable)
-	{
-		Thread BufferThread = new Thread(runnable);
-		BufferThread.start();
-	}
-
-	protected abstract void PlayerSpecificPlay();
+	protected abstract void PlayerSpecificAppendToSongQueue(List<String> audioURLs);
+	protected abstract void PlayerSpecificPlay(String streamURL);
 	protected abstract void PlayerSpecificResume();
 	protected abstract void PlayerSpecificPause();
-	protected abstract void PlayerSpecificInit();
+	protected abstract void PlayerSpecificInitPreSongQueueLoaded();
+	protected abstract void PlayerSpecificInitPostSongQueueLoaded();
 	protected abstract void InitPlayerSpecificHandlers();
 	protected abstract void PlayerSpecificShutDown();
-	protected abstract boolean RequireLocallyStoredBuffer();
+
+	protected abstract String PlayerSpecificDescription();
 }

@@ -8,11 +8,13 @@
         <option value="$PROJECT_DIR$/../FXTrayIcon/pom.xml" />
         <option value="$PROJECT_DIR$/../SimpleTrayFX/pom.xml" />
         <option value="$PROJECT_DIR$/../FXTrayIcon-main/pom.xml" />
+        <option value="$PROJECT_DIR$/../NetworkMediaPlayerUniversal/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/../FXTrayIcon/pom.xml" />
+        <option value="$PROJECT_DIR$/../NetworkMediaPlayerUniversal/pom.xml" />
         <option value="$PROJECT_DIR$/../SimpleTrayFX/pom.xml" />
       </set>
     </option>

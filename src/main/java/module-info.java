@@ -5,7 +5,6 @@ module isaatonimov.invy {
     requires javafx.controls;
 	requires javafx.fxml;
 	requires javafx.swing;
-	requires com.dustinredmond.fxtrayicon;
 	requires java.net.http;
 	requires unirest.java;
 	requires com.github.kwhat.jnativehook;
@@ -22,6 +21,8 @@ module isaatonimov.invy {
 	requires javafx.media;
 	requires io.github.classgraph;
 	requires org.apache.commons.io;
+	requires com.dustinredmond.fxtrayicon;
+	requires isaatonimov.networkmediaplayeruniversal;
 
 	opens isaatonimov.invy to javafx.fxml;
 	exports isaatonimov.invy;

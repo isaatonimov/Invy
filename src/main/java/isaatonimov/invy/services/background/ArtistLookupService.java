@@ -4,11 +4,12 @@ import isaatonimov.invy.core.metadatasources.MusicBrainz;
 import isaatonimov.invy.exceptions.NoArtistFoundException;
 import isaatonimov.invy.models.musicbrainz.Artist;
 import isaatonimov.invy.services.base.BackgroundHelperService;
+import isaatonimov.invy.services.base.Interruptable;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.util.LinkedList;
 
-public class ArtistLookupService extends BackgroundHelperService
+public class ArtistLookupService extends BackgroundHelperService implements Interruptable
 {
 	public SimpleStringProperty QueryProperty = new SimpleStringProperty("");
 

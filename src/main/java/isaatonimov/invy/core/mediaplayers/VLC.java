@@ -6,22 +6,27 @@ import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.util.List;
 
 public class VLC extends MusicPlayer
 {
 	private MediaPlayerFactory 	vlcMediaPlayerFactory;
 	private MediaPlayer 		vlcMediaPlayer;
 
-	public VLC() throws IOException, URISyntaxException
+	public VLC()
 	{
 	}
 
 	@Override
-	protected void PlayerSpecificPlay()
+	protected void PlayerSpecificAppendToSongQueue(List<String> audioURLs)
 	{
-		vlcMediaPlayer.submit(() -> vlcMediaPlayer.media().play(CurrentTargetAudioSourceURL.get(), ":no-video"));
+
+	}
+
+	@Override
+	protected void PlayerSpecificPlay(String URL)
+	{
+		vlcMediaPlayer.submit(() -> vlcMediaPlayer.media().play(URL, ":no-video"));
 	}
 
 	@Override
@@ -37,12 +42,16 @@ public class VLC extends MusicPlayer
 	}
 
 	@Override
-	protected void PlayerSpecificInit()
+	protected void PlayerSpecificInitPreSongQueueLoaded()
 	{
-		BufferFileRequired.set(false);
-
 		vlcMediaPlayerFactory 	= new MediaPlayerFactory("--no-metadata-network-access");
 		vlcMediaPlayer 			= vlcMediaPlayerFactory.mediaPlayers().newMediaPlayer();
+	}
+
+	@Override
+	protected void PlayerSpecificInitPostSongQueueLoaded()
+	{
+
 	}
 
 	@Override
@@ -55,17 +64,21 @@ public class VLC extends MusicPlayer
 			{
 				mediaPlayer.submit(() -> PlayNext());
 			}
+
 			@Override
 			public void paused(MediaPlayer mediaPlayer)
 			{
 				CurrentState.set(MusicPlayerState.PAUSED);
 			}
+
 			@Override
 			public void playing(MediaPlayer mediaPlayer)
 			{
 				CurrentState.set(MusicPlayerState.PLAYING);
 			}
 		});
+
+
 	}
 
 	@Override
@@ -75,8 +88,9 @@ public class VLC extends MusicPlayer
 	}
 
 	@Override
-	protected boolean RequireLocallyStoredBuffer()
+	protected String PlayerSpecificDescription()
 	{
-		return false;
+		return "Requires the VLC Player to be installed - supports streaming and is very fast.";
 	}
+
 }

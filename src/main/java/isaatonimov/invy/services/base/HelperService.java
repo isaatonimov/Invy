@@ -53,7 +53,9 @@ public abstract class HelperService
 		{
 			try
 			{
-				ThreadProperty.get().interrupt();
+				if(this instanceof Interruptable)
+					ThreadProperty.get().interrupt();
+
 				ThreadProperty.get().join();
 				ThreadProperty.set(new Thread(() -> MainTask.run()));
 				ThreadProperty.get().start();

@@ -27,11 +27,9 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>com.dustinredmond.fxtrayicon</groupId>
-      <artifactId>FXTrayIcon</artifactId>
-      <version>4.2.0-SNAPSHOT</version>
-      <scope>system</scope>
-      <systemPath>/Users/dbeyerle/IdeaProjects/Invy/out/artifacts/FXTrayIcon_jar/FXTrayIcon.jar</systemPath>
+      <groupId>ws.schild</groupId>
+      <artifactId>jave-all-deps</artifactId>
+      <version>3.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.plugins</groupId>

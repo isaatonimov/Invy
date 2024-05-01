@@ -3,7 +3,7 @@ package isaatonimov.invy.core.base;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import isaatonimov.invy.models.generator.JsonModelClassGenerator;
 import isaatonimov.invy.models.musicbrainz.Recording;
-import isaatonimov.invy.utils.InvyUtils;
+import isaatonimov.invy.utils.Utils;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -46,7 +46,7 @@ public abstract class AudioStreamSource
 	private void SetUnirestDefaults()
 	{
 		Unirest.config().cacheResponses(CacheResponses.get());
-		Unirest.config().setDefaultHeader("User-Agent", InvyUtils.getUserAgentString());
+		Unirest.config().setDefaultHeader("User-Agent", Utils.getUserAgentString());
 	}
 
 	/*
@@ -123,7 +123,7 @@ public abstract class AudioStreamSource
 			}
 			catch (Exception e)
 			{
-				throw new RuntimeException(e);
+				System.out.println("Speed Test Failed or was interrupted....");
 			}
 
 			CurrentTargetURL.set(targetURL);

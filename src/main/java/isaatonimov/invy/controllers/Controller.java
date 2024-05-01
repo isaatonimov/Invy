@@ -18,7 +18,7 @@ import isaatonimov.invy.services.ui.ToggleSearchWindowService;
 import isaatonimov.invy.ui.AudioNotificationFX;
 import isaatonimov.invy.ui.MessageFX;
 import isaatonimov.invy.enums.MessageFXType;
-import isaatonimov.invy.utils.InvyUtils;
+import isaatonimov.invy.utils.Utils;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -79,7 +79,7 @@ public class Controller implements Initializable
 	{
 		try
 		{
-			InvyUtils.clearTempFolder();
+			Utils.clearTempFolder();
 		}
 		catch (IOException e)
 		{
@@ -223,7 +223,7 @@ public class Controller implements Initializable
 			RecordLookupServiceProperty.get().ResultValueProperty.addListener((observable, oldValue, newValue) ->
 			{
 				if(((LinkedList<Recording>) newValue).size() > 0)
-					MusicPlayerProperty.get().AddToSongQueue((LinkedList<Recording>) newValue);
+					MusicPlayerProperty.get().AddToSongQueue((LinkedList<Recording>) newValue, true);
 				else
 					ShowErrorMessage("There was a Problem fetching the song information. Maybe try again later....");
 			});
@@ -300,7 +300,7 @@ public class Controller implements Initializable
 		try
 		{
 			ClosePreferencesWindow();
-			Desktop.getDesktop().open(InvyUtils.getTempDirectoryFile());
+			Desktop.getDesktop().open(Utils.getTempDirectoryFile());
 		}
 		catch (IOException e)
 		{
@@ -312,7 +312,7 @@ public class Controller implements Initializable
 	{
 		if (MusicPlayerProperty.get().CurrentlyPlayingRecord.get() != null)
 		{
-			String targetURL = InvyUtils.getMusicBrainzRecordingInformationBaseURL() + MusicPlayerProperty.get().CurrentlyPlayingRecord.get().getId();
+			String targetURL = Utils.getMusicBrainzRecordingInformationBaseURL() + MusicPlayerProperty.get().CurrentlyPlayingRecord.get().getId();
 
 			try
 			{

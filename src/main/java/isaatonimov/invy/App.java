@@ -17,14 +17,13 @@ import isaatonimov.invy.input.ShortcutKeyListener;
 import isaatonimov.invy.runnables.SetMenuItemAction;
 import isaatonimov.invy.runnables.SetMenuItemShortcut;
 import isaatonimov.invy.services.background.ArtistLookupService;
-import isaatonimov.invy.services.background.AudioStreamLookupService;
 import isaatonimov.invy.services.background.RecordingLookupService;
 import isaatonimov.invy.services.base.UIHelperService;
 import isaatonimov.invy.services.ui.*;
 import isaatonimov.invy.ui.AudioNotificationFX;
 import isaatonimov.invy.ui.MessageFX;
 import isaatonimov.invy.ui.base.SimpleFX;
-import isaatonimov.invy.utils.InvyUtils;
+import isaatonimov.invy.utils.Utils;
 import javafx.application.Application;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -54,7 +53,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-
+//TODO Artist -> recommendations
 //TODO MAKE TESTABLE
 //TODO TEST AUTOMATION
 //TODO FX TRAYICON -> JAR FILE
@@ -68,7 +67,7 @@ public class App extends Application
 	ObjectProperty 		themeToUseSelection;
 	Button 			openTempFolderButton 			= new Button("Open Temp Folder");
 	Label 			placeHolderNode					= new Label("           ");
-	ObjectProperty  	defaultLogLocation				= new SimpleObjectProperty(InvyUtils.getTempDirectoryFile());
+	ObjectProperty  	defaultLogLocation				= new SimpleObjectProperty(Utils.getTempDirectoryFile());
 	BooleanProperty 	accessibilityFeaturesActive 			= new SimpleBooleanProperty(true);
 	ListProperty		recommendationsToUse				= new SimpleListProperty(FXCollections.observableArrayList(Arrays.asList("Chopin", "Pink Floyd", "Bob Marley", "Frank Sinatra", "Gorillaz", "Bob Marley", "David Bowie", "The Beatles")));
 	ObjectProperty		recommendationToUseSelection		= new SimpleObjectProperty("Chopin");
@@ -84,7 +83,6 @@ public class App extends Application
 	private SimpleObjectProperty<MusicPlayer> 				MainMusicPlayerProperty 			= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<Class>					AudioSourceToLoad				= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<AudioStreamSource>			MainAudioStreamSourceProperty 		= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<AudioStreamLookupService> 	AudioStreamLookupServiceProperty 	= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<RecordingLookupService>		RecordingLookupServiceProperty 		= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<ArtistLookupService>			ArtistLookupServiceProperty 		= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<ToggleSearchWindowService> 	ToggleSearchViewServiceProperty 		= new SimpleObjectProperty<>();
@@ -139,7 +137,7 @@ public class App extends Application
 			animationImageList.add(new Image(resource.toString()));
 
 		trayIcon.setIconSize(150, 150);
-		trayIcon.newAnimation(animationImageList, 30);
+		trayIcon.newAnimation(animationImageList, 50);
 	}
 	private AudioNotificationFX 		initAudioNotificationFX()
 	{
@@ -153,7 +151,6 @@ public class App extends Application
 	{
 		RecordingLookupServiceProperty.		setValue(new RecordingLookupService());
 		ArtistLookupServiceProperty.			setValue(new ArtistLookupService());
-		AudioStreamLookupServiceProperty.	setValue(new AudioStreamLookupService());
 	}
 	private void 				initUIHelperServices(Controller controller)
 	{
@@ -212,9 +209,9 @@ public class App extends Application
 		MusicPlayerToLoad.set(Class.forName("isaatonimov.invy.core.mediaplayers." + playbackBackendToUseSelelction.get()));
 		MusicPlayer musicPlayer = (MusicPlayer) MusicPlayerToLoad.get().getDeclaredConstructor().newInstance();
 		MainMusicPlayerProperty.set(musicPlayer);
-		System.out.println("Finished to load Audio Source " + playbackBackendToUseSelelction.get());
+		System.out.println("Finished loading Music Player  " + playbackBackendToUseSelelction.get());
 
-		MainMusicPlayerProperty.get().AudioStreamLookupServiceProperty.bindBidirectional(AudioStreamLookupServiceProperty);
+		MainMusicPlayerProperty.get().CurrentAudioStreamSource.set(MainAudioStreamSourceProperty.get());
 	}
 	private void 				initAudioSourceProvider() throws Exception
 	{
@@ -226,8 +223,6 @@ public class App extends Application
 
 		if(autoLocateOptimalInstanceOnStartup.get() == true)
 			MainAudioStreamSourceProperty.get().DoSpeedTestAndSetAppropriately();
-
-		AudioStreamLookupServiceProperty.get().StreamSourceProperty.bindBidirectional(MainAudioStreamSourceProperty);
 	}
 
 	private void 				setCustomPreferenceDialogSettings(PreferencesFx mainPreferencesDialog)
@@ -322,19 +317,19 @@ public class App extends Application
 	}
 	private PreferencesFx 		initPreferencesPropertiesAndDialog() throws IOException
 	{
-		List<String> availableMediaPlayers 		= InvyUtils.getAvailableMediaPlayersAsList();
+		List<String> availableMediaPlayers 		= Utils.getAvailableMediaPlayersAsList();
 
 		//Playback Type
 		playbackBackendToUse 				= new SimpleListProperty<>(FXCollections.observableArrayList(availableMediaPlayers));
 		playbackBackendToUseSelelction 			= new SimpleObjectProperty(availableMediaPlayers.getFirst());
 
-		List<String> availableAudioStreamSources = InvyUtils.getAvailableAudioSourcesAsList();
+		List<String> availableAudioStreamSources = Utils.getAvailableAudioSourcesAsList();
 		audioStreamSourceToUse				= new SimpleListProperty<>(FXCollections.observableArrayList(availableAudioStreamSources));
 		audioStreamSourceToUseSelection			= new SimpleObjectProperty(availableAudioStreamSources.getFirst());
 
 		//Themes
-		themeToUseItems = new SimpleListProperty<>(FXCollections.observableArrayList(InvyUtils.getAllAvailableThemesAsList()));
-		themeToUseSelection = new SimpleObjectProperty(InvyUtils.getAllAvailableThemesAsList().getFirst());
+		themeToUseItems = new SimpleListProperty<>(FXCollections.observableArrayList(Utils.getAllAvailableThemesAsList()));
+		themeToUseSelection = new SimpleObjectProperty(Utils.getAllAvailableThemesAsList().getFirst());
 
 		//Dialog Initialization
 		return PreferencesFx.of(App.class,
@@ -440,16 +435,6 @@ public class App extends Application
 	private void				initArtistLookupServiceHandlers()
 	{
 	}
-	private void				initAudioStreamLookupServiceHandlers()
-	{
-		AudioStreamLookupServiceProperty.get().StreamSourceProperty.get().SpeedTestInProgress.addListener((observable, oldValue, newValue) ->
-		{
-			if(newValue == true)
-				ApplicationLockProperty.set(true);
-			else
-				ApplicationLockProperty.set(false);
-		});
-	}
 	private void 				initSearchBarHandlers(Controller controller)
 	{
 		//Handler for Search Init
@@ -484,8 +469,6 @@ public class App extends Application
 		//Services To control
 		controller.ArtistLookupServiceProperty.		bindBidirectional(ArtistLookupServiceProperty);
 		controller.RecordLookupServiceProperty.		bindBidirectional(RecordingLookupServiceProperty);
-		controller.AudioStreamLookupServiceProperty.	bindBidirectional(AudioStreamLookupServiceProperty);
-
 		//Robot to control
 		controller.FXRobotProperty.				bindBidirectional(FXRobotProperty);
 		controller.AWTRobotProperty.			bindBidirectional(AWTRobotProperty);
@@ -500,7 +483,7 @@ public class App extends Application
 		return controller;
 	}
     @Override
-    public void 				start(Stage stage) throws Exception
+		public void 				start(Stage stage) throws Exception
 	{
 		StageProperty			.set(stage);
 		PreferencesProperty		.set(initPreferencesPropertiesAndDialog());
@@ -528,7 +511,6 @@ public class App extends Application
 		initMusicPlayerHandlers();
 		initRecordLookupServiceHandler();
 		initArtistLookupServiceHandlers();
-		initAudioStreamLookupServiceHandlers();
 
 		ControllerProperty.get().HideRecommendations();
 		ControllerProperty.get().SetAppTheme((String)themeToUseSelection.get());
@@ -545,7 +527,7 @@ public class App extends Application
 	}
     public static void 			main(String[] args) throws IOException
 	{
-		InvyUtils.clearTempFolder();
+		Utils.clearTempFolder();
 		launch();
     }
 }

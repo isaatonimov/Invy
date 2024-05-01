@@ -1,7 +1,7 @@
 package isaatonimov.invy.models.generator;
 
 import com.sun.codemodel.JCodeModel;
-import isaatonimov.invy.utils.InvyUtils;
+import isaatonimov.invy.utils.Utils;
 import org.jsonschema2pojo.*;
 import org.jsonschema2pojo.rules.RuleFactory;
 
@@ -19,7 +19,7 @@ public class JsonModelClassGenerator
 	{
 		String fileName = new SimpleDateFormat("yyyyMMddhhmmss'.json'").format(new Date());
 
-		Path newPath = Paths.get(InvyUtils.getTempDirectoryPath().toString(), fileName);
+		Path newPath = Paths.get(Utils.getTempDirectoryPath().toString(), fileName);
 		//Create file from JSON String
 		Path jsonFilePath = Files.createFile(newPath);
 		Files.write(jsonFilePath, jsonSource.getBytes());

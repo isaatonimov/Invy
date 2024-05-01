@@ -5,7 +5,7 @@ import isaatonimov.invy.core.base.AudioStreamSource;
 import isaatonimov.invy.models.invidious.SearchResponse;
 import isaatonimov.invy.models.invidious.VideoResponse;
 import isaatonimov.invy.models.musicbrainz.Recording;
-import isaatonimov.invy.utils.InvyUtils;
+import isaatonimov.invy.utils.Utils;
 import javafx.collections.ObservableList;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -59,7 +59,7 @@ public class Invidious extends AudioStreamSource
 	@Override
 	protected String ServiceSpecificDefaultURL() throws Exception
 	{
-		return InvyUtils.getFallBackInvidiousInstance();
+		return Utils.getFallBackInvidiousInstance();
 	}
 
 	@Override
