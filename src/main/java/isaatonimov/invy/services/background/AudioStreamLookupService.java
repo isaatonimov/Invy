@@ -3,6 +3,7 @@ package isaatonimov.invy.services.background;
 import isaatonimov.invy.core.base.AudioStreamSource;
 import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.services.base.BackgroundHelperService;
+import isaatonimov.invy.services.base.Interruptable;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.List;

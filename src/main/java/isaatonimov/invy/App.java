@@ -11,6 +11,7 @@ import io.github.classgraph.ScanResult;
 import isaatonimov.invy.controllers.Controller;
 import isaatonimov.invy.core.base.AudioStreamSource;
 import isaatonimov.invy.core.base.MusicPlayer;
+import isaatonimov.invy.enums.MusicPlayerState;
 import isaatonimov.invy.handlers.ReccomendationViewHanderl;
 import isaatonimov.invy.handlers.SmartSearchBoxHandler;
 import isaatonimov.invy.input.ShortcutKeyListener;
@@ -48,10 +49,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 //TODO Artist -> recommendations
 //TODO MAKE TESTABLE
@@ -132,6 +131,7 @@ public class App extends Application
 		}
 
 		animationImageList = new LinkedList<>();
+		animationImageList.sort(Comparator.comparing(Image::getUrl));
 
 		for(var resource : resourcePaths)
 			animationImageList.add(new Image(resource.toString()));
@@ -418,6 +418,15 @@ public class App extends Application
 	{
 		MainMusicPlayerProperty.get().CurrentState.addListener((observable, oldValue, newValue) ->
 		{
+			if(newValue == MusicPlayerState.PLAYING)
+			{
+				TrayIconProperty.get().play();
+			}
+			else if(newValue == MusicPlayerState.PAUSED)
+			{
+				ControllerProperty.get().ResetTrayIcon();
+			}
+
 			ControllerProperty.get().	UpdateToggleMenutItem(newValue);
 		});
 

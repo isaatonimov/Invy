@@ -7,10 +7,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public abstract class MusicPlayer
 {
@@ -20,90 +17,116 @@ public abstract class MusicPlayer
 	public SimpleIntegerProperty									URLSToPreload				= new SimpleIntegerProperty(2);
 	public SimpleObjectProperty<Recording> 						CurrentlyPlayingRecord 		= new SimpleObjectProperty<>(null);
 	public SimpleObjectProperty<MusicPlayerState> 					CurrentState 				= new SimpleObjectProperty<>(MusicPlayerState.NOT_INITIALIZED);
-	private SimpleObjectProperty<LinkedList<Recording>> 				FullRecordList = new SimpleObjectProperty<>();
+	private SimpleObjectProperty<LinkedList<Recording>> 				FullRecordList 				= new SimpleObjectProperty<>(null);
 	public SimpleObjectProperty<LinkedHashMap<Recording, String>> 		SongQueue 				= new SimpleObjectProperty<>(new LinkedHashMap<>());
 	public SimpleObjectProperty<AudioStreamSource>					CurrentAudioStreamSource		= new SimpleObjectProperty<>();
 	public MusicPlayer()
 	{
 		Init();
 		InitPlayerSpecificHandlers();
-
-		CurrentState.addListener((observable, oldValue, newValue) ->
-		{
-			CurrentlyPlayingRecord.set(PreparedRecord.get());
-		});
 	}
 
-	public void AddToSongQueue(LinkedList<Recording> records, boolean andPlayFirstSong)
+	public void ShuffleQueue()
 	{
-		//First Call of AddToSongQueue from Outside Probably -> assign full record list for later
-		if(FullRecordList.get() == null)
-			FullRecordList.set(records);
+		List<Map.Entry<Recording, String>> SongQueueListEntries  = new ArrayList<>(SongQueue.get().entrySet());
+		Collections.shuffle(SongQueueListEntries);
 
-		List<String> urlsToAppend = new ArrayList<>();
+		SongQueue.get().clear();
 
+		for(var entry : SongQueueListEntries)
+		{
+			SongQueue.get().put(entry.getKey(), entry.getValue());
+		}
+	}
+
+	public void FetchNextXSongs(int songAmountToFetchNext)
+	{
 		Thread queueingThread = new Thread(() ->
 		{
-			for(int i = 0; i < URLSToPreload.get(); i++)
+			int counter = 0;
+
+			for(var entry : SongQueue.get().entrySet())
 			{
-				AudioStreamLookupService audioStreamLookupService = new AudioStreamLookupService();
-				audioStreamLookupService.StreamSourceProperty.set(CurrentAudioStreamSource.get());
-				audioStreamLookupService.TargetRecordingProperty.set(records.get(i));
-				audioStreamLookupService.startWorking();
-
-				audioStreamLookupService.ResultValueProperty.addListener((observable, oldValue, newValue) ->
+				if(entry.getValue() == null && counter < songAmountToFetchNext)
 				{
-					URLSPrefetched.set(URLSPrefetched.get() + 1);
-					SongQueue.get().put(audioStreamLookupService.TargetRecordingProperty.get(), (String) newValue);
+					counter++;
 
-					urlsToAppend.add((String) newValue);
+					List<String> urlsToAppend = new ArrayList<>();
 
-					if(andPlayFirstSong && URLSPrefetched.get() == URLSToPreload.get())
+
+					List<Recording> SongQueueList = new ArrayList<>(SongQueue.get().keySet());
+
+					AudioStreamLookupService audioStreamLookupService = new AudioStreamLookupService();
+					audioStreamLookupService.StreamSourceProperty.set(CurrentAudioStreamSource.get());
+					audioStreamLookupService.TargetRecordingProperty.set(entry.getKey());
+					audioStreamLookupService.startWorking();
+
+					audioStreamLookupService.ResultValueProperty.addListener((observable, oldValue, newValue) ->
 					{
-						System.out.println("Prefetched audio urls for now...");
-						PlayerSpecificInitPostSongQueueLoaded();
-						Play(records.getFirst());
-					}
-					else if(andPlayFirstSong == false)
-					{
+						URLSPrefetched.set(URLSPrefetched.get() + 1);
+						SongQueue.get().put(audioStreamLookupService.TargetRecordingProperty.get(), (String) newValue);
+
+						urlsToAppend.add((String) newValue);
 						PlayerSpecificAppendToSongQueue(urlsToAppend);
-					}
-				});
+					});
 
-				try
-				{
-					Thread.sleep(Duration.ofSeconds(2));
-				}
-				catch (InterruptedException e)
-				{
-					throw new RuntimeException(e);
+					try
+					{
+						Thread.sleep(Duration.ofSeconds(2));
+					}
+					catch (InterruptedException e)
+					{
+						throw new RuntimeException(e);
+					}
 				}
 			}
 		});
 
 		queueingThread.start();
+
+		try
+		{
+			queueingThread.join();
+		}
+		catch (InterruptedException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void AddToSongQueue(LinkedList<Recording> records, boolean andPlayFirstSong)
+	{
+		SongQueue.get().clear();
+
+		for(var record : records)
+		{
+			SongQueue.get().put(record, null);
+		}
+
+		ShuffleQueue();
+
+		FetchNextXSongs(URLSToPreload.get());
+
+		if(andPlayFirstSong == true)
+			Play(SongQueue.get().firstEntry().getKey());
 	}
 
 	public void Play(Recording recording)
 	{
+		CurrentlyPlayingRecord.set(recording);
 		PlayerSpecificPlay(SongQueue.get().get(recording));
-		PreparedRecord.set(recording);
 	}
 
 	public void PlayNext()
 	{
 		List<Recording> SongQueueList = new ArrayList<>(SongQueue.get().keySet());
+
 		if(SongQueueList.indexOf(CurrentlyPlayingRecord.get()) + 1 <= SongQueueList.size()-1)
 			Play(SongQueueList.get(SongQueueList.indexOf(CurrentlyPlayingRecord.get()) + 1));
 
 		LinkedList<Recording> recordingsToFetchNext = new LinkedList<>();
 
-		for(int i = URLSPrefetched.get(); i < URLSPrefetched.get() + URLSToPreload.get() ; i++)
-		{
-			recordingsToFetchNext.add(FullRecordList.get().get(i));
-		}
-
-		AddToSongQueue(recordingsToFetchNext, false);
+		FetchNextXSongs(URLSToPreload.get());
 	}
 
 	public void PlayPrevious()

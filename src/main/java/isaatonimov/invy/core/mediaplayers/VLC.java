@@ -26,18 +26,22 @@ public class VLC extends MusicPlayer
 	@Override
 	protected void PlayerSpecificPlay(String URL)
 	{
+		CurrentState.set(MusicPlayerState.PLAYING);
+		vlcMediaPlayer.submit(() -> vlcMediaPlayer.controls().stop());
 		vlcMediaPlayer.submit(() -> vlcMediaPlayer.media().play(URL, ":no-video"));
 	}
 
 	@Override
 	protected void PlayerSpecificResume()
 	{
+		CurrentState.set(MusicPlayerState.PLAYING);
 		vlcMediaPlayer.submit(() -> vlcMediaPlayer.controls().play());
 	}
 
 	@Override
 	protected void PlayerSpecificPause()
 	{
+		CurrentState.set(MusicPlayerState.PAUSED);
 		vlcMediaPlayer.submit(() -> vlcMediaPlayer.controls().pause());
 	}
 
@@ -53,6 +57,8 @@ public class VLC extends MusicPlayer
 	{
 
 	}
+
+
 
 	@Override
 	protected void InitPlayerSpecificHandlers()

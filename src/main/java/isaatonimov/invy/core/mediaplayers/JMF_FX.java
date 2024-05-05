@@ -34,6 +34,7 @@ public class JMF_FX extends MusicPlayer
 	@Override
 	protected void PlayerSpecificPlay(String urlToPlay)
 	{
+		CurrentState.set(MusicPlayerState.PLAYING);
 		for(var multiMedia : networkMediaPlayer.mediaQueueProperty.get())
 		{
 			if(multiMedia.audioURLProperty.get().toString().equals(urlToPlay))
@@ -53,12 +54,14 @@ public class JMF_FX extends MusicPlayer
 	@Override
 	protected void PlayerSpecificResume()
 	{
+		CurrentState.set(MusicPlayerState.PLAYING);
 		networkMediaPlayer.Resume();
 	}
 
 	@Override
 	protected void PlayerSpecificPause()
 	{
+		CurrentState.set(MusicPlayerState.PAUSED);
 		networkMediaPlayer.Pause();
 	}
 
