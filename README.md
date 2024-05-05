@@ -1,3 +1,5 @@
+Important: Was just tested on mac osx with java version 21, should work on other platforms - but I had no time and resources to test it yet
+
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
 
