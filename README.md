@@ -59,21 +59,20 @@ Mouse Listener / Keyboard Listener (Optional!) | [https://github.com/dlsc-softwa
 ## Getting Started
 
 ### Prerequisites
-
-Install VLC if you want to use the VLC Backend otherwise it won't be shown in the preferences window and JMF will be used.
+Java 21 & Javafx
+VLC Player
 
 ### Installation
 
 Go to the releases, and grab the most recentpackage for the platform of choice.
-Simply install by starting the installer.
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
 Start Invy search for an artist and lean back, you will get a random list of songs shuflled and played in loop by design.
-
 In the Preferences Dialog you can change things like your Piped / Invidious Instance or Media Playback Backend.
 
+(Invidious is currently not working correctly...)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -86,14 +85,14 @@ Already implementend:
 - [X] Java Media Framewrok Backend for Audio Playback
 - [X] VLC Meida Player Backend for Audio Playback Support
 - [X] Cross Platform Uniform - Notifications
-- [X] Easily switch between Invidious and Piped
+- [ ] Easily switch between Invidious and Piped
 - [X] Auto detect nearest / fastest response time of instances
 
 Backlog:
 - [X] Search by Artist Name
 - [ ] Search by Song Name
 - [ ] Search by Release
-- [X] Media Key Support
+- [ ] Media Key Support
 - [ ] Native Notifications
 - [ ] Native Media Control
 
