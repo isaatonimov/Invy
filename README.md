@@ -25,9 +25,10 @@ Important: Was just tested on mac osx with java version 21, should work on other
 </div>
 <div align="center"> 
 
-[![Linux][Linux]][Linux]
+
 [![MacOS][MacOS]][MacOS]
-[![Windows][Windows]][Windows]
+([![Linux][Linux]][Linux])*
+([![Windows][Windows]][Windows])*
 
 </div>
 
