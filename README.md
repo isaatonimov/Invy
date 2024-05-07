@@ -51,6 +51,7 @@ Invidious | [https://github.com/iv-org/invidious]() |
 Playback with VLC |  [https://github.com/caprica/vlcj]() | 
 Mouse Listener / Keyboard Listener (Optional!) | [https://github.com/dlsc-software-consulting-gmbh/PreferencesFX]() | 
 
+And a lot more (see pom)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
