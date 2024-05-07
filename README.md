@@ -84,8 +84,8 @@ In the Preferences Dialog you can change things like your Piped / Invidious Inst
 
 Already implementend:
 
-- [X] Java Media Framewrok Backend for Audio Playback
 - [X] VLC Meida Player Backend for Audio Playback Support
+- [ ] Java Media Framework Backend for Audio Playback (Javafx Implementation)
 - [X] Cross Platform Uniform - Notifications
 - [ ] Easily switch between Invidious and Piped
 - [X] Auto detect nearest / fastest response time of instances
