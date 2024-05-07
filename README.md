@@ -103,7 +103,7 @@ See the [open issues](https://github.com/isaatonimov/Invy/issues) for a full lis
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License.
+Distributed under the AGPL-3.0 license.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTACT -->
