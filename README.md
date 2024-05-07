@@ -59,7 +59,7 @@ Mouse Listener / Keyboard Listener (Optional!) | [https://github.com/dlsc-softwa
 ## Getting Started
 
 ### Prerequisites
-Java 21 & Javafx
+Java 21 & Javafx <br>
 VLC Player
 
 ### Installation
