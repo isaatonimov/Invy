@@ -2,16 +2,18 @@ package isaatonimov.invy.controllers;
 
 import com.dlsc.preferencesfx.PreferencesFx;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import isaatonimov.invy.App;
 import isaatonimov.invy.core.base.MusicPlayer;
 import isaatonimov.invy.core.metadatasources.MusicBrainz;
 import isaatonimov.invy.enums.InvyTrayMenuItems;
 import isaatonimov.invy.enums.MusicPlayerState;
+import isaatonimov.invy.enums.SearchCategory;
 import isaatonimov.invy.models.musicbrainz.Artist;
+import isaatonimov.invy.models.musicbrainz.MusicMetadata;
 import isaatonimov.invy.models.musicbrainz.Recording;
-import isaatonimov.invy.services.background.ArtistLookupService;
-import isaatonimov.invy.services.background.AudioStreamLookupService;
-import isaatonimov.invy.services.background.RecordingLookupService;
+import isaatonimov.invy.models.musicbrainz.Release;
+import isaatonimov.invy.services.background.*;
 import isaatonimov.invy.services.ui.PlayTrayAnimationService;
 import isaatonimov.invy.services.ui.PreferencesService;
 import isaatonimov.invy.services.ui.ToggleSearchWindowService;
@@ -26,6 +28,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -37,12 +40,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable
 {
 	private Random randomGenerator = new Random();
+
 	//UI
 	public SimpleObjectProperty<Stage> 					SearchBarStageProperty 		= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<FXTrayIcon> 				TrayProperty 				= new SimpleObjectProperty<>();
@@ -52,7 +57,10 @@ public class Controller implements Initializable
 	public SimpleObjectProperty<MusicPlayer> 				MusicPlayerProperty 			= new SimpleObjectProperty<>();
 	public SimpleObjectProperty <AudioStreamLookupService>		AudioStreamLookupServiceProperty = new SimpleObjectProperty<>();
 	public SimpleObjectProperty<RecordingLookupService>		RecordLookupServiceProperty 	= new SimpleObjectProperty<>();
-	public SimpleObjectProperty<ArtistLookupService>			ArtistLookupServiceProperty 	= new SimpleObjectProperty<>();
+	public SimpleObjectProperty<ArtistMetaLookupService> 		ArtistMetaLookupServiceProperty  = new SimpleObjectProperty<>();
+	public SimpleObjectProperty<SongMetaLookupService>		SongMetaLookupServiceProperty   = new SimpleObjectProperty<>();
+	public SimpleObjectProperty<AlbumMetaLookupService> 		AlbumMetaLookupService 		= new SimpleObjectProperty<>();
+
 	public SimpleObjectProperty<ToggleSearchWindowService> 	ToggleViewServiceProperty 		= new SimpleObjectProperty<>();
 	public SimpleObjectProperty<PlayTrayAnimationService> 		PlayTrayAnimationServiceProperty = new SimpleObjectProperty<>();
 
@@ -69,8 +77,14 @@ public class Controller implements Initializable
 	@FXML
 	private ListView 	recommendationsView;
 	@FXML
-	private Node 		rootPane;
+	private Node 				rootPane;
+	@FXML
+	private javafx.scene.control.Label 	categoryLabel;
+	@FXML
+	private ProgressIndicator searchProgressIndicator;
 
+	public SimpleObjectProperty<ProgressIndicator>		SearchProgressIndicatorProperty = new SimpleObjectProperty<>();
+	public SimpleObjectProperty<javafx.scene.control.Label>	CategoryLabelProperty = new SimpleObjectProperty<>();
 	public SimpleObjectProperty<TextField>				SearchFieldProperty = new SimpleObjectProperty<>();
 	public SimpleObjectProperty<ListView>				RecommendationsProperty = new SimpleObjectProperty<>();
 	public SimpleObjectProperty<Node>				ViewProperty = new SimpleObjectProperty<>();
@@ -125,9 +139,13 @@ public class Controller implements Initializable
 	}
 	private void properties()
 	{
-		SearchFieldProperty.		set(artistSearchTextField);
-		RecommendationsProperty.	set(recommendationsView);
-		ViewProperty.			set(rootPane);
+		SearchProgressIndicatorProperty.	set(searchProgressIndicator);
+		CategoryLabelProperty.			set(categoryLabel);
+		SearchFieldProperty.			set(artistSearchTextField);
+		RecommendationsProperty.		set(recommendationsView);
+		ViewProperty.				set(rootPane);
+
+		searchProgressIndicator.setVisible(false);
 	}
 	@Override
 	public void initialize(URL url, ResourceBundle resourceBundle)
@@ -136,16 +154,19 @@ public class Controller implements Initializable
 	}
 	public void HideRecommendations()
 	{
+		SearchProgressIndicatorProperty.get().setVisible(false);
 		recommendationsView.setVisible(false);
 		SearchBarStageProperty.get().setHeight(95);
 	}
 	public void ShowRecommendations()
 	{
+		SearchProgressIndicatorProperty.get().setVisible(true);
 		recommendationsView.setVisible(true);
 		SearchBarStageProperty.get().setHeight(300);
 	}
 	public void ShowRecommendationMessage()
 	{
+		SearchProgressIndicatorProperty.get().setVisible(false);
 		recommendationsView.setVisible(true);
 		SearchBarStageProperty.get().setHeight(123);
 	}
@@ -158,6 +179,16 @@ public class Controller implements Initializable
 			HideSearchBar();
 		else
 			ShowSearchBar();
+	}
+
+	public SearchCategory GetCurrentSearchCategory()
+	{
+		if(categoryLabel.getText().contains("Song"))
+			return SearchCategory.SONG;
+		else if(categoryLabel.getText().contains("Album"))
+			return SearchCategory.ALBUM;
+
+		return SearchCategory.ARTIST;
 	}
 
 	public void HideSearchBar()
@@ -183,7 +214,11 @@ public class Controller implements Initializable
 	{
 		Recording record = MusicPlayerProperty.get().CurrentlyPlayingRecord.get();
 		MenuItem menuItem = TrayProperty.get().getMenuItem(InvyTrayMenuItems.CURRENTLY_PLAYING);
-		menuItem.setLabel(record.getArtist().getName() + ": " + record.getTitle());
+
+		if(record.getArtist() != null)
+			menuItem.setLabel(record.getArtist().getName() + ": " + record.getTitle());
+		else
+			menuItem.setLabel(record.getTitle());
 	}
 
 	public void UpdateToggleMenutItem(MusicPlayerState playerState)
@@ -214,22 +249,59 @@ public class Controller implements Initializable
 		}
 	}
 
-	public void SearchAndPlay(Artist selectedItem)
+
+	public void SearchAndPlay(MusicMetadata selectedItem)
 	{
 		if(ApplicationLockProperty.get() == false)
 		{
-			TrayProperty.get().play();
+			//TrayProperty.get().play();
 
-			RecordLookupServiceProperty.get().ResultValueProperty.addListener((observable, oldValue, newValue) ->
+			if(selectedItem instanceof Artist)
 			{
-				if(((LinkedList<Recording>) newValue).size() > 0)
-					MusicPlayerProperty.get().AddToSongQueue((LinkedList<Recording>) newValue, true);
-				else
-					ShowErrorMessage("There was a Problem fetching the song information. Maybe try again later....");
-			});
+				RecordLookupServiceProperty.get().ResultValueProperty.addListener((observable, oldValue, newValue) ->
+				{
+					if(((LinkedList<Recording>) newValue).size() > 0)
+						MusicPlayerProperty.get().AddToSongQueue((LinkedList<Recording>) newValue, true);
+					else
+						ShowErrorMessage("There was a Problem fetching the song information. Maybe try again later....");
+				});
 
-			RecordLookupServiceProperty.get().CurrentTargetArtistProperty.set(selectedItem);
-			RecordLookupServiceProperty.get().startWorking();
+				RecordLookupServiceProperty.get().CurrentTargetProperty.set((Artist) selectedItem);
+				RecordLookupServiceProperty.get().startWorking();
+			}
+			else if(selectedItem instanceof Recording)
+			{
+				LinkedList<Recording> recordings = new LinkedList<>();
+				Recording recording = (Recording) selectedItem;
+
+				recordings.add((Recording) selectedItem);
+				recordings.add((Recording) selectedItem);
+
+				MusicPlayerProperty.get().AddToSongQueue(recordings, true);
+			}
+			else if(selectedItem instanceof Release)
+			{
+				LinkedList<Recording> recordings = new LinkedList<>();
+				Release release = (Release) selectedItem;
+
+				try
+				{
+					List<Recording> recordingList = MusicBrainz.getTrackList(release);
+					for(Recording recording : recordingList)
+						recordings.add(recording);
+
+					MusicPlayerProperty.get().AddToSongQueue(recordings, true);
+				}
+				catch (IOException e)
+				{
+					throw new RuntimeException(e);
+				} catch (InterruptedException e)
+				{
+					throw new RuntimeException(e);
+				}
+			}
+
+
 		}
 		else
 		{
@@ -266,7 +338,7 @@ public class Controller implements Initializable
 
 	public void ResetTrayIcon()
 	{
-		TrayProperty.get().stop();
+		//TrayProperty.get().stop();
 		TrayProperty.get().setGraphic(new Image(App.class.getResource("/isaatonimov/invy/images/logo/logo.0001.png").toString()));
 	}
 
@@ -325,5 +397,26 @@ public class Controller implements Initializable
 				throw new RuntimeException(e);
 			}
 		} else ShowNotification("No Song is currently Playing, so no song information is available...");
+	}
+
+	public void SwitchToNextSearchCategory()
+	{
+		if(GetCurrentSearchCategory() == SearchCategory.ARTIST)
+		{
+			categoryLabel.setText("Search Song");
+			return;
+		}
+
+
+		if(GetCurrentSearchCategory() == SearchCategory.SONG)
+		{
+			categoryLabel.setText("Search Album");
+			return;
+		}
+
+
+		if(GetCurrentSearchCategory() == SearchCategory.ALBUM)
+			categoryLabel.setText("Search Artist");
+
 	}
 }

@@ -1,51 +1,52 @@
 package isaatonimov.invy.services.background;
 
+import com.sun.codemodel.JForEach;
 import isaatonimov.invy.core.metadatasources.MusicBrainz;
+import isaatonimov.invy.exceptions.NoArtistFoundException;
+import isaatonimov.invy.exceptions.NoRecordingsFoundException;
 import isaatonimov.invy.models.musicbrainz.Artist;
 import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.services.base.BackgroundHelperService;
-import javafx.beans.property.SimpleObjectProperty;
+import isaatonimov.invy.services.base.Interruptable;
+import javafx.beans.property.SimpleStringProperty;
 
-import java.io.IOException;
 import java.util.LinkedList;
 
-public class RecordingLookupService extends BackgroundHelperService
+public class SongMetaLookupService extends BackgroundHelperService implements Interruptable
 {
-	public SimpleObjectProperty<Artist> CurrentTargetProperty = new SimpleObjectProperty<>();
+	public SimpleStringProperty QueryProperty = new SimpleStringProperty("");
 
 	@Override
 	protected Object ServiceSpecificDo()
 	{
-		System.out.println("Recording Lookup Service Starting....");
+		System.out.println("Search query for Song: " + QueryProperty.get());
 
-		LinkedList<Recording> recordings 	= new LinkedList<>();
+		LinkedList<Recording> top = null;
+
 		try
 		{
-			recordings.addAll(MusicBrainz.searchForSongs(CurrentTargetProperty.get()));
+			top = MusicBrainz.searchForFirstXRecordings(QueryProperty.get(), 10);
 		}
-		catch (IOException e)
+		catch (NoRecordingsFoundException e)
 		{
-			throw new RuntimeException(e);
-		}
-		catch (InterruptedException e)
+
+		} catch (InterruptedException e)
 		{
-			throw new RuntimeException(e);
+
 		}
 
-		return recordings;
+		return top;
 	}
 
 	@Override
 	protected boolean ServiceSpecificOnSuccessDo()
 	{
-		System.out.println("Recording Lookup Service Finished Successfully....");
 		return false;
 	}
 
 	@Override
 	protected boolean ServiceSpecificOnFailureDo()
 	{
-		System.out.println("Recording Lookup Service Finished Failed....");
 		return false;
 	}
 

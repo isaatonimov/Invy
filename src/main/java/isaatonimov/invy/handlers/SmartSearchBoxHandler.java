@@ -2,8 +2,12 @@ package isaatonimov.invy.handlers;
 
 import isaatonimov.invy.controllers.Controller;
 import isaatonimov.invy.models.musicbrainz.Artist;
-import isaatonimov.invy.services.background.ArtistLookupService;
-import isaatonimov.invy.services.background.RecordingLookupService;
+import isaatonimov.invy.models.musicbrainz.MusicMetadata;
+import isaatonimov.invy.models.musicbrainz.Recording;
+import isaatonimov.invy.models.musicbrainz.Release;
+import isaatonimov.invy.services.background.AlbumMetaLookupService;
+import isaatonimov.invy.services.background.ArtistMetaLookupService;
+import isaatonimov.invy.services.background.SongMetaLookupService;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,48 +16,74 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import java.security.Key;
 import java.util.Arrays;
 import java.util.List;
 
 public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.scene.input.KeyEvent>
 {
-	private ArtistLookupService 	artistLookupService;
-	private RecordingLookupService   recordingLookupService;
-	private TextField 			textField;
-	private ListView				recommendationsView;
-	private ObservableList<Artist>	artistsSuggestionList;
-	private ObservableList<String>	messagesList = FXCollections.observableArrayList(Arrays.asList("No Results found..."));
-	private Controller 			controller;
+	private ArtistMetaLookupService 		artistMetaLookupService;
+	private SongMetaLookupService   	songMetaLookupService;
+	private AlbumMetaLookupService 		albumMetaLookupService;
+	private TextField 				textField;
+	private ListView					recommendationsView;
+	private ObservableList<MusicMetadata> 	suggestionList;
+	private ObservableList<String>		messagesList = FXCollections.observableArrayList(Arrays.asList("No Results found..."));
+	private Controller 				controller;
+
 	public SmartSearchBoxHandler(Controller controller)
 	{
 		this.controller 			= controller;
 		this.recommendationsView 	= controller.RecommendationsProperty.get();
 		this.textField 			= controller.SearchFieldProperty.get();
-		this.artistLookupService 	= controller.ArtistLookupServiceProperty.get();
-		this.recordingLookupService	= controller.RecordLookupServiceProperty.get();
+		this.artistMetaLookupService = controller.ArtistMetaLookupServiceProperty.get();
+		this.albumMetaLookupService = controller.AlbumMetaLookupService.get();
+		this.songMetaLookupService = controller.SongMetaLookupServiceProperty.get();
 
-		artistLookupService.ResultValueProperty.addListener((observable, oldValue, newValue) ->
+
+		artistMetaLookupService.ResultValueProperty.addListener((observable, oldValue, newValue) ->
 		{
-			if(artistLookupService.ResultValueProperty.get() != null)
-				artistsSuggestionList 	= FXCollections.observableArrayList((List<Artist>) artistLookupService.ResultValueProperty.get());
+			if(artistMetaLookupService.ResultValueProperty.get() != null)
+				suggestionList = FXCollections.observableArrayList((List<Artist>) artistMetaLookupService.ResultValueProperty.get());
 
-			Platform.runLater(() ->
+			updateSuggestionBox();
+		});
+
+		albumMetaLookupService.ResultValueProperty.addListener((observable, oldValue, newValue) ->
+		{
+			if(albumMetaLookupService.ResultValueProperty.get() != null)
+				suggestionList = FXCollections.observableArrayList((List<Release>) albumMetaLookupService.ResultValueProperty.get());
+
+			updateSuggestionBox();
+		});
+
+		songMetaLookupService.ResultValueProperty.addListener((observable, oldValue, newValue) ->
+		{
+			if(songMetaLookupService.ResultValueProperty.get() != null)
+				suggestionList = FXCollections.observableArrayList((List<Recording>) songMetaLookupService.ResultValueProperty.get());
+
+			updateSuggestionBox();
+		});
+	}
+
+	private void updateSuggestionBox()
+	{
+		Platform.runLater(() ->
+		{
+			recommendationsView.setItems(messagesList);
+			controller.ShowRecommendationMessage();
+
+			controller.SearchProgressIndicatorProperty.get().setVisible(false);
+
+			if(suggestionList.size() > 0)
 			{
-				if(artistLookupService.ResultValueProperty.get() == null)
-				{
-					recommendationsView.setItems(messagesList);
-					controller.ShowRecommendationMessage();
-				}
+				recommendationsView.setItems(suggestionList);
+				controller.ShowRecommendations();
 
-				else
-					if(artistsSuggestionList.size() > 0)
-					{
-						recommendationsView.setItems(artistsSuggestionList);
-						controller.ShowRecommendations();
-					}
-					else
-						controller.HideRecommendations();
-			});
+				controller.SearchProgressIndicatorProperty.get().setVisible(false);
+			}
+			else
+				controller.HideRecommendations();
 		});
 	}
 
@@ -64,22 +94,46 @@ public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.s
 			textField = controller.SearchFieldProperty.get();
 
 		if(textField.getText() != null && textField.getText().length() == 0)
+		{
 			controller.HideRecommendations();
+		}
+
+
+		if(event.getCode() == KeyCode.TAB)
+		{
+			controller.SwitchToNextSearchCategory();
+		}
 
 		if(event.getCode() == KeyCode.ESCAPE)
 			controller.HideSearchBar();
 
+		Search();
+	}
+
+	private void Search()
+	{
 		if(textField.getText() != null && textField.getText().length() > 2)
 		{
-			artistLookupService.QueryProperty.set(textField.getText());
-			artistLookupService.startWorking();
-		}
+			switch (controller.GetCurrentSearchCategory())
+			{
+				case ARTIST -> {
+					controller.SearchProgressIndicatorProperty.get().setVisible(true);
+					artistMetaLookupService.QueryProperty.set(textField.getText());
+					artistMetaLookupService.startWorking();;
+				}
 
-		if(event.getCode() == KeyCode.ENTER)
-		{
-			//recordingLookupService.updateArtist(controller.get);
-			//recordingLookupService.restart();
-		}
+				case SONG -> {
+					controller.SearchProgressIndicatorProperty.get().setVisible(true);
+					songMetaLookupService.QueryProperty.set(textField.getText());
+					songMetaLookupService.startWorking();;
+				}
 
+				case ALBUM -> {
+					controller.SearchProgressIndicatorProperty.get().setVisible(true);
+					albumMetaLookupService.QueryProperty.set(textField.getText());
+					albumMetaLookupService.startWorking();;
+				}
+			}
+		}
 	}
 }

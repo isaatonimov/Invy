@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import isaatonimov.invy.App;
 import isaatonimov.invy.core.base.AudioMetadataSource;
 import isaatonimov.invy.exceptions.NoArtistFoundException;
+import isaatonimov.invy.exceptions.NoRecordingsFoundException;
+import isaatonimov.invy.exceptions.NoReleasesFoundException;
 import isaatonimov.invy.models.musicbrainz.*;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -19,8 +21,119 @@ import java.util.concurrent.TimeUnit;
 
 public class MusicBrainz extends AudioMetadataSource
 {
+	public static LinkedList<Release> searchForFirstXReleases(String query, int numberOfResults) throws NoReleasesFoundException, InterruptedException
+	{
+		String baseURL = "https://musicbrainz.org/ws/2/";
 
-	public static LinkedList<Artist> searchForFirstXArtists(String query, int numberOfResults) throws NoArtistFoundException
+		//Set Unirest Parameters
+		Unirest.config().defaultBaseUrl(baseURL);
+		Unirest.config().cacheResponses(true);
+		Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
+
+		TimeUnit.MILLISECONDS.sleep(1);
+
+		//Get JSON for given Artist (ID)
+		try
+		{
+			var response = Unirest.get("release").queryString("query", query).queryString("fmt", "json").asString();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			ReleaseResponse musicBrainzReleaseResponse = null;
+
+			try
+			{
+				musicBrainzReleaseResponse = objectMapper.readValue(response.getBody(), ReleaseResponse.class);
+
+				LinkedList<Release> xResults = new LinkedList<>();
+
+				if(musicBrainzReleaseResponse.getReleases().size() == 0)
+					throw new NoReleasesFoundException();
+				else
+				{
+					for(int i = 0; i < numberOfResults; i++)
+						xResults.add(musicBrainzReleaseResponse.getReleases().get(i));
+
+					for(var result : xResults)
+					{
+						result.setArtist(MusicBrainz.GetArtistFromRelease(result));
+					}
+
+					removeDuplicateReleases(xResults);
+
+
+					return xResults;
+				}
+			}
+			catch (JsonProcessingException e)
+			{
+				//e.printStackTrace();
+				return null;
+			}
+		}
+		catch (Exception e)
+		{
+			//e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static LinkedList<Recording> searchForFirstXRecordings(String query, int numberOfResults) throws NoRecordingsFoundException, InterruptedException
+	{
+		String baseURL = "https://musicbrainz.org/ws/2/";
+
+		//Set Unirest Parameters
+		Unirest.config().defaultBaseUrl(baseURL);
+		Unirest.config().cacheResponses(true);
+		Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
+
+		TimeUnit.MILLISECONDS.sleep(1);
+
+		//Get JSON for given Artist (ID)
+		try
+		{
+			var response = Unirest.get("recording").queryString("query", query).queryString("fmt", "json").asString();
+
+			//Generate JSON Model Class from JSON - enabled just in development
+			//JsonModelClassGenerator.generateJSONModelClassFromJSONString(response.getBody().toString(), "ArtistModel");
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			RecordingResponse musicBrainzRecodingResponse = null;
+
+			try
+			{
+				musicBrainzRecodingResponse = objectMapper.readValue(response.getBody(), RecordingResponse.class);
+
+				LinkedList<Recording> xResults = new LinkedList<>();
+
+				if(musicBrainzRecodingResponse.getRecordings().size() == 0)
+					throw new NoRecordingsFoundException();
+				else
+				{
+					for (int i = 0; i < numberOfResults; i++)
+						xResults.add(musicBrainzRecodingResponse.getRecordings().get(i));
+
+					for(var result : xResults)
+					{
+						result.setArtist(MusicBrainz.GetArtistFromRecording(result));
+					}
+
+					return xResults;
+				}
+			}
+			catch (JsonProcessingException e)
+			{
+				//e.printStackTrace();
+				return null;
+			}
+		}
+		catch (Exception e)
+		{
+			//e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static LinkedList<Artist> searchForFirstXArtists(String query, int numberOfResults) throws NoArtistFoundException, InterruptedException
 	{
 		//Set Base URL
 		String baseURL = "https://musicbrainz.org/ws/2/";
@@ -29,6 +142,8 @@ public class MusicBrainz extends AudioMetadataSource
 		Unirest.config().defaultBaseUrl(baseURL);
 		Unirest.config().cacheResponses(true);
 		Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
+
+		TimeUnit.MILLISECONDS.sleep(1);
 
 		//Get JSON for given Artist (ID)
 		try
@@ -153,9 +268,12 @@ public class MusicBrainz extends AudioMetadataSource
 		ObjectMapper objectMapper = new ObjectMapper();
 		TracklistReleaseResponse tracklistReleaseResponse = objectMapper.readValue(response.getBody(), TracklistReleaseResponse.class);
 
+		Artist artist = MusicBrainz.GetArtistFromRelease(release);
+
 		for(var track : tracklistReleaseResponse.getRecordings())
 		{
 			track.setRelease(release);
+			track.setArtist(artist);
 		}
 
 		return tracklistReleaseResponse.getRecordings();
@@ -177,6 +295,21 @@ public class MusicBrainz extends AudioMetadataSource
 			}
 		}
 	}
+
+	static void removeDuplicateReleases(List<Release> array) {
+		for (int i = 0; i < array.size(); i++) {
+			Release next = array.get(i);
+
+			for (int j = 0; j < i; j++) {
+				if (next.equals(array.get(j))) {
+					array.remove(i);
+					i--;
+					break;
+				}
+			}
+		}
+	}
+
 
 	/*
 		First Draft of search Function, not that nice
@@ -206,5 +339,52 @@ public class MusicBrainz extends AudioMetadataSource
 		System.out.println("-------------------------------------------------------------------------------");
 
 		return allRecordings;
+	}
+
+	public static Artist GetArtistFromRecording(Recording recording) throws JsonProcessingException, InterruptedException
+	{
+		String baseURL = "https://musicbrainz.org/ws/2/";
+
+		Unirest.config().defaultBaseUrl(baseURL);
+		Unirest.config().cacheResponses(true);
+		Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
+
+		TimeUnit.MILLISECONDS.sleep(50);
+
+		HttpResponse<String> response = Unirest.get("artist?recording="+recording.getId()).queryString("limit", 50).queryString("fmt", "json").asString();
+
+		//Generate JSON Model Class from JSON - enabled just in development
+		//JsonModelClassGenerator.generateJSONModelClassFromJSONString(response.getBody().toString(), "ReleaseResponse");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		ArtistResponse artistResponse = objectMapper.readValue(response.getBody(), ArtistResponse.class);
+
+		return artistResponse.getArtists().get(0);
+	}
+
+	public static Artist GetArtistFromRelease(Release release) throws JsonProcessingException, InterruptedException
+	{
+		String baseURL = "https://musicbrainz.org/ws/2/";
+
+		Unirest.config().defaultBaseUrl(baseURL);
+		Unirest.config().cacheResponses(true);
+		Unirest.config().setDefaultHeader("User-Agent", "InvyMediaPlayer/0.0.1 ( isaatonimov@proton.me )");
+
+		TimeUnit.MILLISECONDS.sleep(1);
+
+		HttpResponse<String> response = Unirest.get("artist?release="+release.getId()).queryString("limit", 50).queryString("fmt", "json").asString();
+
+		//Generate JSON Model Class from JSON - enabled just in development
+		//JsonModelClassGenerator.generateJSONModelClassFromJSONString(response.getBody().toString(), "ReleaseResponse");
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		ArtistResponse artistResponse = objectMapper.readValue(response.getBody(), ArtistResponse.class);
+
+		if(artistResponse.getArtists().size() > 0)
+			return artistResponse.getArtists().get(0);
+		else
+			return null;
+
+
 	}
 }

@@ -39,9 +39,13 @@ public class AudioStreamLookupService extends BackgroundHelperService
 			{
 				System.out.println("Error with Search by ID");
 			}
+
 			//Does the same for streams, does not prioritize high quality
 			if(streams != null && streams.size() >= 0)
+			{
+				System.out.println(streams.getFirst().toString());
 				return streams.getFirst();
+			}
 			else
 				return null;
 	}

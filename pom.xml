@@ -27,6 +27,11 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>com.dustinredmond.fxtrayicon</groupId>
+      <artifactId>FXTrayIcon</artifactId>
+      <version>4.0.1</version>
+    </dependency>
+    <dependency>
       <groupId>ws.schild</groupId>
       <artifactId>jave-all-deps</artifactId>
       <version>3.5.0</version>

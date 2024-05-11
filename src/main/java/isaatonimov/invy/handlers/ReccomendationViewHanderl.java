@@ -2,6 +2,7 @@ package isaatonimov.invy.handlers;
 
 import isaatonimov.invy.controllers.Controller;
 import isaatonimov.invy.models.musicbrainz.Artist;
+import isaatonimov.invy.models.musicbrainz.MusicMetadata;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.ListView;
@@ -14,7 +15,7 @@ public class ReccomendationViewHanderl implements EventHandler<Event>
 {
 	private Controller controller;
 	private ListView 			recommendationView;
-	private SelectionModel<Artist>	artistSelectionModel;
+	private SelectionModel<MusicMetadata>	artistSelectionModel;
 	public ReccomendationViewHanderl(Controller controller)
 	{
 		this.controller = controller;
@@ -24,7 +25,7 @@ public class ReccomendationViewHanderl implements EventHandler<Event>
 	public void handle(Event event)
 	{
 		if(recommendationView == null)
-			recommendationView = (ListView<Artist>) event.getSource();
+			recommendationView = (ListView<MusicMetadata>) event.getSource();
 
 		if(artistSelectionModel == null)
 			artistSelectionModel = recommendationView.getSelectionModel();

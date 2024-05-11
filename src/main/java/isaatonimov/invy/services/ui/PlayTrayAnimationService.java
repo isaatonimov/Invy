@@ -8,7 +8,7 @@ public class PlayTrayAnimationService extends UIHelperService
 	protected Object ServiceSpecificDo()
 	{
 		System.out.println("Trying to play Tray Animation...");
-		ControllerProperty.get().TrayProperty.get().play();
+		//ControllerProperty.get().TrayProperty.get().play();
 		return null;
 	}
 

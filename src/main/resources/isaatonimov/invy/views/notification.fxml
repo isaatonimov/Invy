@@ -9,21 +9,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="112.0" prefWidth="300.0" style="-fx-background-radius: 12;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="112.0" prefWidth="400.0" style="-fx-background-radius: 12;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <VBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="29.0" prefHeight="65.0" prefWidth="203.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="0.0">
+            <VBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="29.0" prefHeight="112.0" prefWidth="381.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label fx:id="titleLabel" graphicTextGap="0.0" prefHeight="18.0" prefWidth="188.0" text="Now Playing">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="2.0" right="2.0" />
-                     </VBox.margin>
-                  </Label>
-                  <Label fx:id="subtitleLabel" prefHeight="23.0" prefWidth="187.0" text="Crumb">
+                  <Label fx:id="subtitleLabel" prefHeight="23.0" prefWidth="364.0" text="Crumb">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -31,7 +23,7 @@
                         <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                      </VBox.margin>
                   </Label>
-                  <Label fx:id="messageLabel" text="L.A Cappuchino Monkey" textOverrun="CLIP">
+                  <Label fx:id="messageLabel" prefHeight="32.0" prefWidth="361.0" text="L.A Cappuchino Monkey" textOverrun="CLIP">
                      <font>
                         <Font size="27.0" />
                      </font>

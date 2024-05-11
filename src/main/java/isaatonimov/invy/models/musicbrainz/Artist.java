@@ -31,7 +31,8 @@ import java.util.Map;
     "aliases"
 })
 @Generated("jsonschema2pojo")
-public class Artist {
+public class Artist extends MusicMetadata
+{
 
     //public SimpleStringProperty NameProperty = new SimpleStringProperty();
 

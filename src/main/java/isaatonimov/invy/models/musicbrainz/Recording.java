@@ -17,7 +17,7 @@ import java.util.Map;
     "disambiguation"
 })
 @Generated("jsonschema2pojo")
-public class Recording
+public class Recording extends MusicMetadata
 {
     //public SimpleObjectProperty<Artist> ArtistProperty  = new SimpleObjectProperty<>();
     //public SimpleObjectProperty<Release> ReleaseProperty        = new SimpleObjectProperty<>();
@@ -124,42 +124,8 @@ public class Recording
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(Recording.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("firstReleaseDate");
-        sb.append('=');
-        sb.append(((this.firstReleaseDate == null)?"<null>":this.firstReleaseDate));
-        sb.append(',');
-        sb.append("id");
-        sb.append('=');
-        sb.append(((this.id == null)?"<null>":this.id));
-        sb.append(',');
-        sb.append("length");
-        sb.append('=');
-        sb.append(((this.length == null)?"<null>":this.length));
-        sb.append(',');
-        sb.append("title");
-        sb.append('=');
-        sb.append(((this.title == null)?"<null>":this.title));
-        sb.append(',');
-        sb.append("video");
-        sb.append('=');
-        sb.append(((this.video == null)?"<null>":this.video));
-        sb.append(',');
-        sb.append("disambiguation");
-        sb.append('=');
-        sb.append(((this.disambiguation == null)?"<null>":this.disambiguation));
-        sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
-        sb.append(',');
-        if (sb.charAt((sb.length()- 1)) == ',') {
-            sb.setCharAt((sb.length()- 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+
+        return getTitle() + " (" + getArtist().getName() + ")";
     }
 
     @Override

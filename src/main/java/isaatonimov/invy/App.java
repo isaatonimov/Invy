@@ -17,8 +17,10 @@ import isaatonimov.invy.handlers.SmartSearchBoxHandler;
 import isaatonimov.invy.input.ShortcutKeyListener;
 import isaatonimov.invy.runnables.SetMenuItemAction;
 import isaatonimov.invy.runnables.SetMenuItemShortcut;
-import isaatonimov.invy.services.background.ArtistLookupService;
+import isaatonimov.invy.services.background.AlbumMetaLookupService;
+import isaatonimov.invy.services.background.ArtistMetaLookupService;
 import isaatonimov.invy.services.background.RecordingLookupService;
+import isaatonimov.invy.services.background.SongMetaLookupService;
 import isaatonimov.invy.services.base.UIHelperService;
 import isaatonimov.invy.services.ui.*;
 import isaatonimov.invy.ui.AudioNotificationFX;
@@ -83,7 +85,10 @@ public class App extends Application
 	private SimpleObjectProperty<Class>					AudioSourceToLoad				= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<AudioStreamSource>			MainAudioStreamSourceProperty 		= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<RecordingLookupService>		RecordingLookupServiceProperty 		= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<ArtistLookupService>			ArtistLookupServiceProperty 		= new SimpleObjectProperty<>();
+	private SimpleObjectProperty<ArtistMetaLookupService>		ArtistMetaLookupServiceProperty 		= new SimpleObjectProperty<>();
+	private SimpleObjectProperty<SongMetaLookupService>		SongMetaLookupServiceProperty 		= new SimpleObjectProperty<>();
+	private SimpleObjectProperty<AlbumMetaLookupService>		AlbumMetaLookupServiceProperty 		= new SimpleObjectProperty<>();
+
 	private SimpleObjectProperty<ToggleSearchWindowService> 	ToggleSearchViewServiceProperty 		= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<SongInfoService>			ShowSongInfoServiceProperty 		= new SimpleObjectProperty<>();
 	private SimpleObjectProperty<SongTogglePlayService>		SongTogglePlayServiceProperty 		= new SimpleObjectProperty<>();
@@ -136,8 +141,8 @@ public class App extends Application
 		for(var resource : resourcePaths)
 			animationImageList.add(new Image(resource.toString()));
 
-		trayIcon.setIconSize(150, 150);
-		trayIcon.newAnimation(animationImageList, 50);
+		//trayIcon.setIconSize(150, 150);
+		//trayIcon.newAnimation(animationImageList, 50);
 	}
 	private AudioNotificationFX 		initAudioNotificationFX()
 	{
@@ -149,8 +154,10 @@ public class App extends Application
 	}
 	private void 				initBackgroundServices()
 	{
-		RecordingLookupServiceProperty.		setValue(new RecordingLookupService());
-		ArtistLookupServiceProperty.			setValue(new ArtistLookupService());
+		RecordingLookupServiceProperty.			setValue(new RecordingLookupService());
+		ArtistMetaLookupServiceProperty.			setValue(new ArtistMetaLookupService());
+		AlbumMetaLookupServiceProperty.			setValue(new AlbumMetaLookupService());
+		SongMetaLookupServiceProperty.			setValue(new SongMetaLookupService());
 	}
 	private void 				initUIHelperServices(Controller controller)
 	{
@@ -420,7 +427,7 @@ public class App extends Application
 		{
 			if(newValue == MusicPlayerState.PLAYING)
 			{
-				TrayIconProperty.get().play();
+				//TrayIconProperty.get().play();
 			}
 			else if(newValue == MusicPlayerState.PAUSED)
 			{
@@ -476,7 +483,10 @@ public class App extends Application
 		controller.TryThisProperty.				bindBidirectional(recommendationsToUse);
 
 		//Services To control
-		controller.ArtistLookupServiceProperty.		bindBidirectional(ArtistLookupServiceProperty);
+		controller.ArtistMetaLookupServiceProperty.	bindBidirectional(ArtistMetaLookupServiceProperty);
+		controller.AlbumMetaLookupService.		bindBidirectional(AlbumMetaLookupServiceProperty);
+		controller.SongMetaLookupServiceProperty.	bindBidirectional(SongMetaLookupServiceProperty);
+
 		controller.RecordLookupServiceProperty.		bindBidirectional(RecordingLookupServiceProperty);
 		//Robot to control
 		controller.FXRobotProperty.				bindBidirectional(FXRobotProperty);

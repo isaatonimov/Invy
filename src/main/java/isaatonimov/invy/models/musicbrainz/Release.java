@@ -29,7 +29,7 @@ import java.util.Map;
     "text-representation"
 })
 @Generated("jsonschema2pojo")
-public class Release
+public class Release extends MusicMetadata
 {
     @JsonProperty("packaging")
     private String packaging;
@@ -227,79 +227,9 @@ public class Release
     }
 
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(Release.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("packaging");
-        sb.append('=');
-        sb.append(((this.packaging == null)?"<null>":this.packaging));
-        sb.append(',');
-        sb.append("id");
-        sb.append('=');
-        sb.append(((this.id == null)?"<null>":this.id));
-        sb.append(',');
-        sb.append("packagingId");
-        sb.append('=');
-        sb.append(((this.packagingId == null)?"<null>":this.packagingId));
-        sb.append(',');
-        sb.append("asin");
-        sb.append('=');
-        sb.append(((this.asin == null)?"<null>":this.asin));
-        sb.append(',');
-        sb.append("coverArtArchive");
-        sb.append('=');
-        sb.append(((this.coverArtArchive == null)?"<null>":this.coverArtArchive));
-        sb.append(',');
-        sb.append("status");
-        sb.append('=');
-        sb.append(((this.status == null)?"<null>":this.status));
-        sb.append(',');
-        sb.append("disambiguation");
-        sb.append('=');
-        sb.append(((this.disambiguation == null)?"<null>":this.disambiguation));
-        sb.append(',');
-        sb.append("barcode");
-        sb.append('=');
-        sb.append(((this.barcode == null)?"<null>":this.barcode));
-        sb.append(',');
-        sb.append("releaseEvents");
-        sb.append('=');
-        sb.append(((this.releaseEvents == null)?"<null>":this.releaseEvents));
-        sb.append(',');
-        sb.append("statusId");
-        sb.append('=');
-        sb.append(((this.statusId == null)?"<null>":this.statusId));
-        sb.append(',');
-        sb.append("country");
-        sb.append('=');
-        sb.append(((this.country == null)?"<null>":this.country));
-        sb.append(',');
-        sb.append("title");
-        sb.append('=');
-        sb.append(((this.title == null)?"<null>":this.title));
-        sb.append(',');
-        sb.append("date");
-        sb.append('=');
-        sb.append(((this.date == null)?"<null>":this.date));
-        sb.append(',');
-        sb.append("quality");
-        sb.append('=');
-        sb.append(((this.quality == null)?"<null>":this.quality));
-        sb.append(',');
-        sb.append("textRepresentation");
-        sb.append('=');
-        sb.append(((this.textRepresentation == null)?"<null>":this.textRepresentation));
-        sb.append(',');
-        sb.append("additionalProperties");
-        sb.append('=');
-        sb.append(((this.additionalProperties == null)?"<null>":this.additionalProperties));
-        sb.append(',');
-        if (sb.charAt((sb.length()- 1)) == ',') {
-            sb.setCharAt((sb.length()- 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+    public String toString()
+    {
+        return getTitle() + " (" + getArtist().getName() + ")";
     }
 
     @Override
@@ -325,15 +255,15 @@ public class Release
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-        if ((other instanceof Release) == false) {
+    public boolean equals(Object other)
+    {
+        if(other instanceof Release != true)
             return false;
-        }
-        Release rhs = ((Release) other);
-        return (((((((((((((((((this.date == rhs.date)||((this.date!= null)&&this.date.equals(rhs.date)))&&((this.country == rhs.country)||((this.country!= null)&&this.country.equals(rhs.country))))&&((this.textRepresentation == rhs.textRepresentation)||((this.textRepresentation!= null)&&this.textRepresentation.equals(rhs.textRepresentation))))&&((this.packaging == rhs.packaging)||((this.packaging!= null)&&this.packaging.equals(rhs.packaging))))&&((this.title == rhs.title)||((this.title!= null)&&this.title.equals(rhs.title))))&&((this.packagingId == rhs.packagingId)||((this.packagingId!= null)&&this.packagingId.equals(rhs.packagingId))))&&((this.quality == rhs.quality)||((this.quality!= null)&&this.quality.equals(rhs.quality))))&&((this.statusId == rhs.statusId)||((this.statusId!= null)&&this.statusId.equals(rhs.statusId))))&&((this.coverArtArchive == rhs.coverArtArchive)||((this.coverArtArchive!= null)&&this.coverArtArchive.equals(rhs.coverArtArchive))))&&((this.disambiguation == rhs.disambiguation)||((this.disambiguation!= null)&&this.disambiguation.equals(rhs.disambiguation))))&&((this.asin == rhs.asin)||((this.asin!= null)&&this.asin.equals(rhs.asin))))&&((this.id == rhs.id)||((this.id!= null)&&this.id.equals(rhs.id))))&&((this.releaseEvents == rhs.releaseEvents)||((this.releaseEvents!= null)&&this.releaseEvents.equals(rhs.releaseEvents))))&&((this.additionalProperties == rhs.additionalProperties)||((this.additionalProperties!= null)&&this.additionalProperties.equals(rhs.additionalProperties))))&&((this.barcode == rhs.barcode)||((this.barcode!= null)&&this.barcode.equals(rhs.barcode))))&&((this.status == rhs.status)||((this.status!= null)&&this.status.equals(rhs.status))));
+
+        if(this.getArtist().getName().equals(((Release) other).getArtist().getName()))
+            return true;
+        else
+            return false;
     }
 
     public void setArtist(Artist artist)

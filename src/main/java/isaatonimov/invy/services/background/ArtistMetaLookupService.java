@@ -9,27 +9,30 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.util.LinkedList;
 
-public class ArtistLookupService extends BackgroundHelperService implements Interruptable
+public class ArtistMetaLookupService extends BackgroundHelperService implements Interruptable
 {
 	public SimpleStringProperty QueryProperty = new SimpleStringProperty("");
 
 	@Override
 	protected Object ServiceSpecificDo()
 	{
-		System.out.println("Search query: " + QueryProperty.get());
+		System.out.println("Search query for Artist: " + QueryProperty.get());
 
-		LinkedList<Artist> top5 = null;
+		LinkedList<Artist> top = null;
 
 		try
 		{
-			top5 = MusicBrainz.searchForFirstXArtists(QueryProperty.get(), 5);
+			top = MusicBrainz.searchForFirstXArtists(QueryProperty.get(), 10);
 		}
 		catch (NoArtistFoundException e)
 		{
 			return null;
+		} catch (InterruptedException e)
+		{
+
 		}
 
-		return top5;
+		return top;
 	}
 
 	@Override

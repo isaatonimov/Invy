@@ -26,7 +26,7 @@ public class AudioNotificationFX extends SimpleFX
 	@FXML
 	private ImageView 	imageView;
 
-	public SimpleStringProperty 		TitleProperty 			= new SimpleStringProperty(this, "title");
+	//public SimpleStringProperty 		TitleProperty 			= new SimpleStringProperty(this, "title");
 	public SimpleStringProperty 		SubtitleProperty 		= new SimpleStringProperty(this, "subtitle");
 	public SimpleStringProperty 		MessageProperty 		= new SimpleStringProperty(this, "message");
 	public SimpleObjectProperty<Image> 	CoverProperty 			= new SimpleObjectProperty<>(this, "image");
@@ -35,7 +35,7 @@ public class AudioNotificationFX extends SimpleFX
 	{
 		Platform.runLater(() ->
 		{
-			TitleProperty.set(title);
+			//TitleProperty.set(title);
 			SubtitleProperty.set(subtitle);
 			MessageProperty.set(message);
 			CoverProperty.set(coverArtImage);
@@ -73,14 +73,14 @@ public class AudioNotificationFX extends SimpleFX
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
-		titleLabel.textProperty().bindBidirectional(TitleProperty);
+		//titleLabel.textProperty().bindBidirectional(TitleProperty);
 		subtitleLabel.textProperty().bindBidirectional(SubtitleProperty);
 		messageLabel.textProperty().bindBidirectional(MessageProperty);
 		imageView.imageProperty().bindBidirectional(CoverProperty);
 
 		Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
-		StageProperty.get().setWidth(300);
+		StageProperty.get().setWidth(400);
 		StageProperty.get().setHeight(90);
 
 		StageProperty.get().setY(screenBounds.getMinY() + 20);
