@@ -21,6 +21,7 @@ import isaatonimov.invy.ui.AudioNotificationFX;
 import isaatonimov.invy.ui.MessageFX;
 import isaatonimov.invy.enums.MessageFXType;
 import isaatonimov.invy.utils.Utils;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -284,21 +285,48 @@ public class Controller implements Initializable
 				LinkedList<Recording> recordings = new LinkedList<>();
 				Release release = (Release) selectedItem;
 
-				try
+				Thread trackFetchThread = new Thread(new Runnable()
 				{
-					List<Recording> recordingList = MusicBrainz.getTrackList(release);
-					for(Recording recording : recordingList)
-						recordings.add(recording);
+					@Override
+					public void run()
+					{
+						List<Recording> recordingList = null;
+						try
+						{
+							recordingList = MusicBrainz.getTrackList(release);
+						} catch (IOException e)
+						{
+							throw new RuntimeException(e);
+						} catch (InterruptedException e)
+						{
+							throw new RuntimeException(e);
+						}
+						for(Recording recording : recordingList)
+							recordings.add(recording);
+					}
+				});
 
-					MusicPlayerProperty.get().AddToSongQueue(recordings, true);
-				}
-				catch (IOException e)
+				trackFetchThread.start();
+
+				Thread joinThread = new Thread(new Runnable()
 				{
-					throw new RuntimeException(e);
-				} catch (InterruptedException e)
-				{
-					throw new RuntimeException(e);
-				}
+					@Override
+					public void run()
+					{
+						try
+						{
+							trackFetchThread.join();
+						} catch (InterruptedException e)
+						{
+
+						}
+
+						MusicPlayerProperty.get().AddToSongQueue(recordings, true);
+					}
+				});
+
+				joinThread.start();
+
 			}
 
 

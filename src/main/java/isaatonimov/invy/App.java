@@ -75,6 +75,9 @@ public class App extends Application
 	ListProperty 		playbackBackendToUse;
 	ObjectProperty 		playbackBackendToUseSelelction 		= new SimpleObjectProperty<>();
 
+	ListProperty 		instanceToUse					= new SimpleListProperty(FXCollections.observableArrayList(new ArrayList()));
+	ObjectProperty 		instanceToUseSelection 			= new SimpleObjectProperty<>("Null");
+
 	ListProperty 		audioStreamSourceToUse			= new SimpleListProperty();
 	ObjectProperty 		audioStreamSourceToUseSelection  	= new SimpleObjectProperty();
 
@@ -228,8 +231,11 @@ public class App extends Application
 		MainAudioStreamSourceProperty.set(audioSourceProvider);
 		System.out.println("Finished loading Audio Source " + audioStreamSourceToUseSelection.get());
 
-		if(autoLocateOptimalInstanceOnStartup.get() == true)
-			MainAudioStreamSourceProperty.get().DoSpeedTestAndSetAppropriately();
+//		if(autoLocateOptimalInstanceOnStartup.get() == true)
+//			MainAudioStreamSourceProperty.get().DoSpeedTestAndSetAppropriately();
+
+		List<String> availableInstances = MainAudioStreamSourceProperty.get().LookupInstances();
+		instanceToUse.set(FXCollections.observableArrayList(availableInstances));
 	}
 
 	private void 				setCustomPreferenceDialogSettings(PreferencesFx mainPreferencesDialog)
@@ -342,6 +348,7 @@ public class App extends Application
 		return PreferencesFx.of(App.class,
 				Category.of("Audio Source",
 						Setting.of("Audio Source Provider", audioStreamSourceToUse, audioStreamSourceToUseSelection),
+						Setting.of("Instance to Use", instanceToUse, instanceToUseSelection),
 						Setting.of("Auto detect nearest (in ms) Instance Location on startup", autoLocateOptimalInstanceOnStartup)),
 
 				Category.of("Music Player",
@@ -420,6 +427,16 @@ public class App extends Application
 			else
 				ControllerProperty.get().ShowNotification("Accessabilty deactivated. Please restart the application.");
 		});
+
+		instanceToUseSelection.addListener((observable, oldValue, newValue) ->
+		{
+			MainAudioStreamSourceProperty.get().CurrentTargetURL.set((String) instanceToUseSelection.get());
+		});
+
+		instanceToUse.addListener((observable, oldValue, newValue) ->
+		{
+			instanceToUseSelection.set(instanceToUse.getFirst());
+		});
 	}
 	private void				initMusicPlayerHandlers()
 	{
@@ -471,6 +488,11 @@ public class App extends Application
 			controller.UpdateSearchBarToggleMenu(false);
 		});
 	}
+
+	private void 				additionalBindings()
+	{
+		MainAudioStreamSourceProperty.get().CurrentTargetURL.bindBidirectional(instanceToUseSelection);
+	}
 	private Controller 			bindToController(Controller controller)
 	{
 		//Music Player to control
@@ -502,7 +524,7 @@ public class App extends Application
 		return controller;
 	}
     @Override
-		public void 				start(Stage stage) throws Exception
+	public void 				start(Stage stage) throws Exception
 	{
 		StageProperty			.set(stage);
 		PreferencesProperty		.set(initPreferencesPropertiesAndDialog());
@@ -521,6 +543,7 @@ public class App extends Application
 		initAudioSourceProvider();
 		initMusicPlayer();
 		bindToController			(ControllerProperty.get());
+		additionalBindings();
 		initSearchBarHandlers		(ControllerProperty.get());
 		setTrayMenuSettings		(TrayIconProperty.get());
 		initTrayAnimationCreation	(TrayIconProperty.get());
