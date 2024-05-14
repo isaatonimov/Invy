@@ -49,7 +49,7 @@ public abstract class SimpleFX implements Initializable
 			instance.StageProperty.get().initStyle(StageStyle.TRANSPARENT);
 			instance.StageProperty.get().setAlwaysOnTop(true);
 
-			instance.StylesheetResourceProperty.addListener((observable, oldValue, newValue) -> instance.SceneProperty.get().setUserAgentStylesheet((String)newValue));
+			instance.StylesheetResourceProperty.addListener((observable, oldValue, newValue) -> instance.SceneProperty.get().setUserAgentStylesheet(newValue));
 
 			instance.FXSpecificSceneSettings();
 
@@ -66,7 +66,7 @@ public abstract class SimpleFX implements Initializable
 
 	public static void Show(SimpleFX toShow)
 	{
-		if(toShow.StageProperty.get().isShowing() == false)
+		if(!toShow.StageProperty.get().isShowing())
 		{
 			Platform.runLater(() ->
 			{
@@ -117,7 +117,7 @@ public abstract class SimpleFX implements Initializable
 
 	public static void AnimatedShow(SimpleFX toShow)
 	{
-		if(toShow.StageProperty.get().isShowing() == false)
+		if(!toShow.StageProperty.get().isShowing())
 		{
 			Platform.runLater(() ->
 			{

@@ -12,12 +12,12 @@ import java.util.*;
 public abstract class MusicPlayer
 {
 
-	private SimpleObjectProperty<Recording>						PreparedRecord				= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Recording>						PreparedRecord				= new SimpleObjectProperty<>();
 	public SimpleIntegerProperty									URLSPrefetched				= new SimpleIntegerProperty(0);
 	public SimpleIntegerProperty									URLSToPreload				= new SimpleIntegerProperty(2);
 	public SimpleObjectProperty<Recording> 						CurrentlyPlayingRecord 		= new SimpleObjectProperty<>(null);
 	public SimpleObjectProperty<MusicPlayerState> 					CurrentState 				= new SimpleObjectProperty<>(MusicPlayerState.NOT_INITIALIZED);
-	private SimpleObjectProperty<LinkedList<Recording>> 				FullRecordList 				= new SimpleObjectProperty<>(null);
+	private final SimpleObjectProperty<LinkedList<Recording>> 				FullRecordList 				= new SimpleObjectProperty<>(null);
 	public SimpleObjectProperty<LinkedHashMap<Recording, String>> 		SongQueue 				= new SimpleObjectProperty<>(new LinkedHashMap<>());
 	public SimpleObjectProperty<AudioStreamSource>					CurrentAudioStreamSource		= new SimpleObjectProperty<>();
 	public MusicPlayer()
@@ -107,7 +107,7 @@ public abstract class MusicPlayer
 
 		FetchNextXSongs(URLSToPreload.get());
 
-		if(andPlayFirstSong == true)
+		if(andPlayFirstSong)
 			Play(SongQueue.get().firstEntry().getKey());
 	}
 

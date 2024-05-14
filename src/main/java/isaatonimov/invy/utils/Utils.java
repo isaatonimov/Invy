@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Utils
 {
-	private static Path tempBase = Path.of(System.getProperty("java.io.tmpdir") + "/invyMusicPlayer/");
+	private static final Path tempBase = Path.of(System.getProperty("java.io.tmpdir") + "/invyMusicPlayer/");
 
 	public static Path 		getTempDirectoryPath() throws IOException
 	{

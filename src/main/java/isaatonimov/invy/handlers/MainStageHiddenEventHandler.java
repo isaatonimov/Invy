@@ -12,8 +12,8 @@ import java.awt.event.InputEvent;
 
 public class MainStageHiddenEventHandler implements EventHandler<WindowEvent>
 {
-	private Controller controller;
-	private Robot robot;
+	private final Controller controller;
+	private final Robot robot;
 	public MainStageHiddenEventHandler(Controller controller) throws AWTException
 	{
 		this.controller = controller;

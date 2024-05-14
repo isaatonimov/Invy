@@ -6,7 +6,6 @@ module isaatonimov.invy {
 	requires javafx.fxml;
 	requires javafx.swing;
 	requires java.net.http;
-	requires unirest.java;
 	requires com.github.kwhat.jnativehook;
 	requires org.jetbrains.annotations;
 	requires jsonschema2pojo.core;
@@ -14,6 +13,11 @@ module isaatonimov.invy {
 	requires com.fasterxml.jackson.core;
 	requires com.fasterxml.jackson.databind;
 	requires com.fasterxml.jackson.annotation;
+
+	requires unirest.java;
+	requires unirest.objectmapper.jackson;
+
+
 	requires uk.co.caprica.vlcj;
 	requires com.dlsc.preferencesfx;
 	requires org.slf4j;

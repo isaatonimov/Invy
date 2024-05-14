@@ -83,33 +83,33 @@ public class App extends Application
 
 	LinkedList<Image>	animationImageList;
 
-	private SimpleObjectProperty<Class>					MusicPlayerToLoad				= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<MusicPlayer> 				MainMusicPlayerProperty 			= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<Class>					AudioSourceToLoad				= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<AudioStreamSource>			MainAudioStreamSourceProperty 		= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<RecordingLookupService>		RecordingLookupServiceProperty 		= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<ArtistMetaLookupService>		ArtistMetaLookupServiceProperty 		= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<SongMetaLookupService>		SongMetaLookupServiceProperty 		= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<AlbumMetaLookupService>		AlbumMetaLookupServiceProperty 		= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Class>					MusicPlayerToLoad				= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<MusicPlayer> 				MainMusicPlayerProperty 			= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Class>					AudioSourceToLoad				= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<AudioStreamSource>			MainAudioStreamSourceProperty 		= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<RecordingLookupService>		RecordingLookupServiceProperty 		= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<ArtistMetaLookupService>		ArtistMetaLookupServiceProperty 		= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<SongMetaLookupService>		SongMetaLookupServiceProperty 		= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<AlbumMetaLookupService>		AlbumMetaLookupServiceProperty 		= new SimpleObjectProperty<>();
 
-	private SimpleObjectProperty<ToggleSearchWindowService> 	ToggleSearchViewServiceProperty 		= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<SongInfoService>			ShowSongInfoServiceProperty 		= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<SongTogglePlayService>		SongTogglePlayServiceProperty 		= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<SongPlayNextService>		SongPlayNextServiceProperty 		= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<SongPlayPrevService>			SongPlayPreviousServiceProperty 		= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<PreferencesService>			PreferencesServiceProperty 			= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<PlayTrayAnimationService>		PlayTrayAnimationServiceProperty 	= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<ApplicationShutdownService> 	ApplicationShutdownServiceProperty 	= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<javafx.scene.robot.Robot> 		FXRobotProperty 				= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<java.awt.Robot> 			AWTRobotProperty 				= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<FXTrayIcon>				TrayIconProperty 				= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<PreferencesFx>				PreferencesProperty  				= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<Stage>					StageProperty 					= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<Controller>				ControllerProperty    			= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<AudioNotificationFX>			AudioNotificationProperty			= new SimpleObjectProperty<>();
-	private SimpleObjectProperty<MessageFX>				MessageProperty					= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<ToggleSearchWindowService> 	ToggleSearchViewServiceProperty 		= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<SongInfoService>			ShowSongInfoServiceProperty 		= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<SongTogglePlayService>		SongTogglePlayServiceProperty 		= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<SongPlayNextService>		SongPlayNextServiceProperty 		= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<SongPlayPrevService>			SongPlayPreviousServiceProperty 		= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<PreferencesService>			PreferencesServiceProperty 			= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<PlayTrayAnimationService>		PlayTrayAnimationServiceProperty 	= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<ApplicationShutdownService> 	ApplicationShutdownServiceProperty 	= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<javafx.scene.robot.Robot> 		FXRobotProperty 				= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<java.awt.Robot> 			AWTRobotProperty 				= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<FXTrayIcon>				TrayIconProperty 				= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<PreferencesFx>				PreferencesProperty  				= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Stage>					StageProperty 					= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<Controller>				ControllerProperty    			= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<AudioNotificationFX>			AudioNotificationProperty			= new SimpleObjectProperty<>();
+	private final SimpleObjectProperty<MessageFX>				MessageProperty					= new SimpleObjectProperty<>();
 
-	private SimpleBooleanProperty						ApplicationLockProperty			= new SimpleBooleanProperty(false);
+	private final SimpleBooleanProperty						ApplicationLockProperty			= new SimpleBooleanProperty(false);
 
 	private Controller 			loadMainScene(Stage mainStage) throws IOException
 	{
@@ -178,7 +178,7 @@ public class App extends Application
 	}
 	private void 				initAccessibilityServicesIfActive()
 	{
-		if(accessibilityFeaturesActive.get() == true)
+		if(accessibilityFeaturesActive.get())
 		{
 			try
 			{
@@ -422,7 +422,7 @@ public class App extends Application
 
 		accessibilityFeaturesActive.addListener((observable, oldValue, newValue) ->
 		{
-			if(newValue == true)
+			if(newValue)
 				ControllerProperty.get().ShowNotification("Accessabilty activated. Please restart the application.");
 			else
 				ControllerProperty.get().ShowNotification("Accessabilty deactivated. Please restart the application.");

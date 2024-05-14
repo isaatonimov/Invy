@@ -7,9 +7,9 @@ import java.awt.*;
 
 public class SetMenuItemShortcut implements Runnable
 {
-	private FXTrayIcon 	icon;
-	private MenuItem 	menuItem;
-	private MenuShortcut  menuShortcut;
+	private final FXTrayIcon 	icon;
+	private final MenuItem 	menuItem;
+	private final MenuShortcut  menuShortcut;
 	public SetMenuItemShortcut(FXTrayIcon icon, MenuItem menuItem, MenuShortcut menuShortcut)
 	{
 		this.icon 		= icon;

@@ -43,7 +43,7 @@ public class AudioStreamLookupService extends BackgroundHelperService
 			//Does the same for streams, does not prioritize high quality
 			if(streams != null && streams.size() >= 0)
 			{
-				System.out.println(streams.getFirst().toString());
+				System.out.println(streams.getFirst());
 				return streams.getFirst();
 			}
 			else

@@ -11,7 +11,7 @@ public abstract class HelperService
 	public	SimpleObjectProperty<Service>	ServiceProperty		= new SimpleObjectProperty<>();
 	public 	SimpleObjectProperty<Thread>	ThreadProperty		= new SimpleObjectProperty<>();
 	public 	SimpleObjectProperty<Object> 	ResultValueProperty 	= new SimpleObjectProperty<>(null);
-	private 	Runnable					MainTask 			= () -> ResultValueProperty.set(ServiceSpecificDo());
+	private final Runnable					MainTask 			= () -> ResultValueProperty.set(ServiceSpecificDo());
 
 	public HelperService()
 	{

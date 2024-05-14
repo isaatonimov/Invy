@@ -6,8 +6,8 @@ import javafx.scene.control.MenuItem;
 
 public class SetMenuItemAction implements Runnable
 {
-	private MenuItem 	menuItem;
-	private FXTrayIcon 	trayIcon;
+	private final MenuItem 	menuItem;
+	private final FXTrayIcon 	trayIcon;
 	private UIHelperService toStart;
 	private Runnable		 toRun;
 

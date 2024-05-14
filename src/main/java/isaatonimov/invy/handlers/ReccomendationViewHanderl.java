@@ -13,7 +13,7 @@ import javafx.scene.input.MouseEvent;
 
 public class ReccomendationViewHanderl implements EventHandler<Event>
 {
-	private Controller controller;
+	private final Controller controller;
 	private ListView 			recommendationView;
 	private SelectionModel<MusicMetadata>	artistSelectionModel;
 	public ReccomendationViewHanderl(Controller controller)
@@ -30,9 +30,8 @@ public class ReccomendationViewHanderl implements EventHandler<Event>
 		if(artistSelectionModel == null)
 			artistSelectionModel = recommendationView.getSelectionModel();
 
-		if(event instanceof KeyEvent)
+		if(event instanceof KeyEvent keyEvent)
 		{
-			KeyEvent keyEvent = (KeyEvent) event;
 
 			if(keyEvent.getCode() == KeyCode.ENTER)
 				controller.SearchAndPlay(artistSelectionModel.getSelectedItem());

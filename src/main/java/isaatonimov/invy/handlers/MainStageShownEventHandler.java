@@ -13,9 +13,9 @@ import java.awt.event.InputEvent;
 
 public class MainStageShownEventHandler implements EventHandler<WindowEvent>
 {
-	private Controller controller;
+	private final Controller controller;
 	private Robot robot;
-	private javafx.scene.robot.Robot robotFX;
+	private final javafx.scene.robot.Robot robotFX;
 	private Node whereToMove;
 	public MainStageShownEventHandler(Controller controller)
 	{

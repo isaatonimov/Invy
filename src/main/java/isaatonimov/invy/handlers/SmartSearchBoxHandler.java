@@ -22,14 +22,14 @@ import java.util.List;
 
 public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.scene.input.KeyEvent>
 {
-	private ArtistMetaLookupService 		artistMetaLookupService;
-	private SongMetaLookupService   	songMetaLookupService;
-	private AlbumMetaLookupService 		albumMetaLookupService;
+	private final ArtistMetaLookupService 		artistMetaLookupService;
+	private final SongMetaLookupService   	songMetaLookupService;
+	private final AlbumMetaLookupService 		albumMetaLookupService;
 	private TextField 				textField;
-	private ListView					recommendationsView;
+	private final ListView					recommendationsView;
 	private ObservableList<MusicMetadata> 	suggestionList;
-	private ObservableList<String>		messagesList = FXCollections.observableArrayList(Arrays.asList("No Results found..."));
-	private Controller 				controller;
+	private final ObservableList<String>		messagesList = FXCollections.observableArrayList(List.of("No Results found..."));
+	private final Controller 				controller;
 
 	public SmartSearchBoxHandler(Controller controller)
 	{
@@ -119,19 +119,19 @@ public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.s
 				case ARTIST -> {
 					controller.SearchProgressIndicatorProperty.get().setVisible(true);
 					artistMetaLookupService.QueryProperty.set(textField.getText());
-					artistMetaLookupService.startWorking();;
+					artistMetaLookupService.startWorking();
 				}
 
 				case SONG -> {
 					controller.SearchProgressIndicatorProperty.get().setVisible(true);
 					songMetaLookupService.QueryProperty.set(textField.getText());
-					songMetaLookupService.startWorking();;
+					songMetaLookupService.startWorking();
 				}
 
 				case ALBUM -> {
 					controller.SearchProgressIndicatorProperty.get().setVisible(true);
 					albumMetaLookupService.QueryProperty.set(textField.getText());
-					albumMetaLookupService.startWorking();;
+					albumMetaLookupService.startWorking();
 				}
 			}
 		}

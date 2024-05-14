@@ -94,9 +94,9 @@ public class JMF_FX extends MusicPlayer
 	{
 		networkMediaPlayer.isPlayingProperty.addListener((observable, oldValue, newValue) ->
 		{
-			if(newValue == true)
+			if(newValue)
 				CurrentState.set(MusicPlayerState.PLAYING);
-			else if(newValue == false)
+			else if(!newValue)
 				CurrentState.set(MusicPlayerState.PAUSED);
 		});
 

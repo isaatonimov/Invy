@@ -20,6 +20,7 @@ import isaatonimov.invy.services.ui.ToggleSearchWindowService;
 import isaatonimov.invy.ui.AudioNotificationFX;
 import isaatonimov.invy.ui.MessageFX;
 import isaatonimov.invy.enums.MessageFXType;
+import isaatonimov.invy.ui.base.SimpleFX;
 import isaatonimov.invy.utils.Utils;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -47,7 +48,7 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable
 {
-	private Random randomGenerator = new Random();
+	private final Random randomGenerator = new Random();
 
 	//UI
 	public SimpleObjectProperty<Stage> 					SearchBarStageProperty 		= new SimpleObjectProperty<>();
@@ -122,7 +123,11 @@ public class Controller implements Initializable
 	public void ShowNotificationDefaults()
 	{
 		Toolkit.getDefaultToolkit().beep();
-		MessageProperty.get().OkButtonProperty.get().setOnMouseClicked(event -> MessageProperty.get().Hide(MessageProperty.get()));
+		MessageProperty.get().OkButtonProperty.get().setOnMouseClicked(event ->
+		{
+			MessageProperty.get();
+			SimpleFX.Hide(MessageProperty.get());
+		});
 	}
 	public void ShowYesNoDialog(String question, Runnable yesRunThis, Runnable noRunThis)
 	{
@@ -240,11 +245,11 @@ public class Controller implements Initializable
 	{
 		MenuItem searchToggle = TrayProperty.get().getMenuItem(InvyTrayMenuItems.SHOW_SEARCHBAR);
 
-		if(searchBarShown == true)
+		if(searchBarShown)
 		{
 			searchToggle.setLabel("Hide Search");
 		}
-		else if(searchBarShown == false)
+		else if(!searchBarShown)
 		{
 			searchToggle.setLabel("Show Search");
 		}
@@ -253,7 +258,7 @@ public class Controller implements Initializable
 
 	public void SearchAndPlay(MusicMetadata selectedItem)
 	{
-		if(ApplicationLockProperty.get() == false)
+		if(!ApplicationLockProperty.get())
 		{
 			//TrayProperty.get().play();
 
@@ -270,20 +275,18 @@ public class Controller implements Initializable
 				RecordLookupServiceProperty.get().CurrentTargetProperty.set((Artist) selectedItem);
 				RecordLookupServiceProperty.get().startWorking();
 			}
-			else if(selectedItem instanceof Recording)
+			else if(selectedItem instanceof Recording recording)
 			{
 				LinkedList<Recording> recordings = new LinkedList<>();
-				Recording recording = (Recording) selectedItem;
 
 				recordings.add((Recording) selectedItem);
 				recordings.add((Recording) selectedItem);
 
 				MusicPlayerProperty.get().AddToSongQueue(recordings, true);
 			}
-			else if(selectedItem instanceof Release)
+			else if(selectedItem instanceof Release release)
 			{
 				LinkedList<Recording> recordings = new LinkedList<>();
-				Release release = (Release) selectedItem;
 
 				Thread trackFetchThread = new Thread(new Runnable()
 				{
