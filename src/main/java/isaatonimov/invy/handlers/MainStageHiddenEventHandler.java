@@ -12,11 +12,9 @@ import java.awt.event.InputEvent;
 
 public class MainStageHiddenEventHandler implements EventHandler<WindowEvent>
 {
-	private final Controller controller;
 	private final Robot robot;
 	public MainStageHiddenEventHandler(Controller controller) throws AWTException
 	{
-		this.controller = controller;
 		this.robot = new Robot();
 	}
 	@Override

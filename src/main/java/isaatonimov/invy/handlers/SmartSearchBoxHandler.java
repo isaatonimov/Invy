@@ -16,8 +16,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-import java.security.Key;
-import java.util.Arrays;
 import java.util.List;
 
 public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.scene.input.KeyEvent>
@@ -75,7 +73,7 @@ public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.s
 
 			controller.SearchProgressIndicatorProperty.get().setVisible(false);
 
-			if(suggestionList.size() > 0)
+			if (!suggestionList.isEmpty())
 			{
 				recommendationsView.setItems(suggestionList);
 				controller.ShowRecommendations();
@@ -93,7 +91,7 @@ public class SmartSearchBoxHandler implements javafx.event.EventHandler<javafx.s
 		if(textField == null)
 			textField = controller.SearchFieldProperty.get();
 
-		if(textField.getText() != null && textField.getText().length() == 0)
+		if (textField.getText() != null && textField.getText().isEmpty())
 		{
 			controller.HideRecommendations();
 		}

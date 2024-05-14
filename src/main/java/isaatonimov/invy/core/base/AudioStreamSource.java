@@ -1,7 +1,6 @@
 package isaatonimov.invy.core.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import isaatonimov.invy.models.generator.JsonModelClassGenerator;
 import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.utils.Utils;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -12,7 +11,6 @@ import kong.unirest.HttpRequest;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -173,17 +171,6 @@ public abstract class AudioStreamSource
 		List<String> InstanceURLsToCheck = LookupInstances();
 		SpeedTestInProgress.set(false);
 		return SimpleSpeedTest(InstanceURLsToCheck);
-	}
-
-	/*
-	Helper Function to test out APIs that return Audio Sources. Generates Java Classes
-	and puts them somewhere into the classpath. Should just be used in development or when you are a
-	reflection wizard.
- */
-	public static void GenerateModelsFromJSON(HttpRequest httpRequestThatLeadsToJson, String ModelName) throws IOException
-	{
-		HttpResponse response = httpRequestThatLeadsToJson.asString();
-		JsonModelClassGenerator.generateJSONModelClassFromJSONString(response.getBody().toString(), ModelName);
 	}
 
 	protected abstract boolean					ServiceSpecificHasMultipleInstances();

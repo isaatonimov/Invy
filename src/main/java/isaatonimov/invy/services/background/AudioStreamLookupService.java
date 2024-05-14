@@ -3,10 +3,10 @@ package isaatonimov.invy.services.background;
 import isaatonimov.invy.core.base.AudioStreamSource;
 import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.services.base.BackgroundHelperService;
-import isaatonimov.invy.services.base.Interruptable;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AudioStreamLookupService extends BackgroundHelperService
 {
@@ -33,7 +33,7 @@ public class AudioStreamLookupService extends BackgroundHelperService
 
 			try
 			{
-				streams = StreamSourceProperty.get().SearchByID(IDs.getFirst());
+				streams = StreamSourceProperty.get().SearchByID(Objects.requireNonNull(IDs).getFirst());
 			}
 			catch (Exception e)
 			{
@@ -41,7 +41,7 @@ public class AudioStreamLookupService extends BackgroundHelperService
 			}
 
 			//Does the same for streams, does not prioritize high quality
-			if(streams != null && streams.size() >= 0)
+		if (streams != null)
 			{
 				System.out.println(streams.getFirst());
 				return streams.getFirst();

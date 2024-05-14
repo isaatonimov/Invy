@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 
 public class InvyUtils
@@ -46,7 +47,7 @@ public class InvyUtils
 		if(Files.notExists(tempBase))
 			Files.createDirectory(tempBase);
 
-		List<File> files = Arrays.stream(new File(tempBase.toString()).listFiles()).toList();
+		List<File> files = Arrays.stream(Objects.requireNonNull(new File(tempBase.toString()).listFiles())).toList();
 		for(var file : files)
 			file.delete();
 	}

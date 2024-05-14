@@ -2,7 +2,6 @@ package isaatonimov.invy.core.audiosources;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import isaatonimov.invy.core.base.AudioStreamSource;
-import isaatonimov.invy.models.generator.JsonModelClassGenerator;
 import isaatonimov.invy.models.invidious.SearchResponse;
 import isaatonimov.invy.models.invidious.VideoResponse;
 import isaatonimov.invy.models.musicbrainz.Recording;
@@ -12,7 +11,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
-import kong.unirest.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;

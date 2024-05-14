@@ -22,7 +22,7 @@ public class SetMenuItemAction implements Runnable
 	{
 		this.trayIcon	= trayIcon;
 		this.menuItem 	= menuItem;
-		this.toRun 		= toRun;
+		this.toRun = null;
 	}
 
 	@Override

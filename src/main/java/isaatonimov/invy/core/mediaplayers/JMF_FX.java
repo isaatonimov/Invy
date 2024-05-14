@@ -1,15 +1,15 @@
 package isaatonimov.invy.core.mediaplayers;
 
 import isaatonimov.invy.core.base.MusicPlayer;
+import isaatonimov.invy.core.base.networkmediaplayeruniversal.MultiMedia;
+import isaatonimov.invy.core.base.networkmediaplayeruniversal.NetworkMediaPlayer;
 import isaatonimov.invy.enums.MusicPlayerState;
-import isaatonimov.networkmediaplayeruniversal.MultiMedia;
-import isaatonimov.networkmediaplayeruniversal.NetworkMediaPlayer;
 
 import java.util.List;
 
 public class JMF_FX extends MusicPlayer
 {
-	private NetworkMediaPlayer 	networkMediaPlayer;
+	private NetworkMediaPlayer networkMediaPlayer;
 
 	@Override
 	protected void PlayerSpecificAppendToSongQueue(List<String> audioURLs)
@@ -96,8 +96,7 @@ public class JMF_FX extends MusicPlayer
 		{
 			if(newValue)
 				CurrentState.set(MusicPlayerState.PLAYING);
-			else if(!newValue)
-				CurrentState.set(MusicPlayerState.PAUSED);
+			else CurrentState.set(MusicPlayerState.PAUSED);
 		});
 
 		networkMediaPlayer.runOnEndOfMedia.set(() ->

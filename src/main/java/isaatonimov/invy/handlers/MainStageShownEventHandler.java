@@ -13,13 +13,11 @@ import java.awt.event.InputEvent;
 
 public class MainStageShownEventHandler implements EventHandler<WindowEvent>
 {
-	private final Controller controller;
 	private Robot robot;
 	private final javafx.scene.robot.Robot robotFX;
 	private Node whereToMove;
 	public MainStageShownEventHandler(Controller controller)
 	{
-		this.controller = controller;
 		this.robotFX = new javafx.scene.robot.Robot();
 		//this.robot = controller.getRobot();
 		//this.whereToMove = controller.getArtistSearchTextField();

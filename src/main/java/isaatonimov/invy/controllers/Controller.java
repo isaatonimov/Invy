@@ -2,11 +2,11 @@ package isaatonimov.invy.controllers;
 
 import com.dlsc.preferencesfx.PreferencesFx;
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import isaatonimov.invy.App;
 import isaatonimov.invy.core.base.MusicPlayer;
 import isaatonimov.invy.core.metadatasources.MusicBrainz;
 import isaatonimov.invy.enums.InvyTrayMenuItems;
+import isaatonimov.invy.enums.MessageFXType;
 import isaatonimov.invy.enums.MusicPlayerState;
 import isaatonimov.invy.enums.SearchCategory;
 import isaatonimov.invy.models.musicbrainz.Artist;
@@ -19,10 +19,8 @@ import isaatonimov.invy.services.ui.PreferencesService;
 import isaatonimov.invy.services.ui.ToggleSearchWindowService;
 import isaatonimov.invy.ui.AudioNotificationFX;
 import isaatonimov.invy.ui.MessageFX;
-import isaatonimov.invy.enums.MessageFXType;
 import isaatonimov.invy.ui.base.SimpleFX;
 import isaatonimov.invy.utils.Utils;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -41,10 +39,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Controller implements Initializable
 {
@@ -248,8 +244,7 @@ public class Controller implements Initializable
 		if(searchBarShown)
 		{
 			searchToggle.setLabel("Hide Search");
-		}
-		else if(!searchBarShown)
+		} else
 		{
 			searchToggle.setLabel("Show Search");
 		}
@@ -266,7 +261,7 @@ public class Controller implements Initializable
 			{
 				RecordLookupServiceProperty.get().ResultValueProperty.addListener((observable, oldValue, newValue) ->
 				{
-					if(((LinkedList<Recording>) newValue).size() > 0)
+					if (!((LinkedList<Recording>) newValue).isEmpty())
 						MusicPlayerProperty.get().AddToSongQueue((LinkedList<Recording>) newValue, true);
 					else
 						ShowErrorMessage("There was a Problem fetching the song information. Maybe try again later....");
@@ -370,7 +365,7 @@ public class Controller implements Initializable
 	public void ResetTrayIcon()
 	{
 		//TrayProperty.get().stop();
-		TrayProperty.get().setGraphic(new Image(App.class.getResource("/isaatonimov/invy/images/logo/logo.0001.png").toString()));
+		TrayProperty.get().setGraphic(new Image(Objects.requireNonNull(App.class.getResource("/isaatonimov/invy/images/logo/logo.0001.png")).toString()));
 	}
 
 	public void ShowPreferencesWindow()
@@ -382,7 +377,7 @@ public class Controller implements Initializable
 	public void SetAppTheme(String theme)
 	{
 		System.out.println		("Trying to set theme: " + theme);
-		String resourceString 		= App.class.getResource("/" + theme).toString();
+		String resourceString = Objects.requireNonNull(App.class.getResource("/" + theme)).toString();
 
 		PreferencesProperty.		get().getStylesheets().clear();
 		PreferencesProperty.		get().getStylesheets().add(resourceString);

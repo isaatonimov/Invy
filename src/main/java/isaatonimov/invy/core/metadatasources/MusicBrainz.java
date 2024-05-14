@@ -46,7 +46,7 @@ public class MusicBrainz extends AudioMetadataSource
 
 				LinkedList<Release> xResults = new LinkedList<>();
 
-				if(musicBrainzReleaseResponse.getReleases().size() == 0)
+				if (musicBrainzReleaseResponse.getReleases().isEmpty())
 					throw new NoReleasesFoundException();
 				else
 				{
@@ -105,7 +105,7 @@ public class MusicBrainz extends AudioMetadataSource
 
 				LinkedList<Recording> xResults = new LinkedList<>();
 
-				if(musicBrainzRecodingResponse.getRecordings().size() == 0)
+				if (musicBrainzRecodingResponse.getRecordings().isEmpty())
 					throw new NoRecordingsFoundException();
 				else
 				{
@@ -162,7 +162,7 @@ public class MusicBrainz extends AudioMetadataSource
 
 				LinkedList<Artist> xResults = new LinkedList<>();
 
-				if(musicBrainzArtistResponse.getArtists().size() == 0)
+				if (musicBrainzArtistResponse.getArtists().isEmpty())
 					throw new NoArtistFoundException();
 				else
 				{
@@ -380,7 +380,7 @@ public class MusicBrainz extends AudioMetadataSource
 		ObjectMapper objectMapper = new ObjectMapper();
 		ArtistResponse artistResponse = objectMapper.readValue(response.getBody(), ArtistResponse.class);
 
-		if(artistResponse.getArtists().size() > 0)
+		if (!artistResponse.getArtists().isEmpty())
 			return artistResponse.getArtists().get(0);
 		else
 			return null;

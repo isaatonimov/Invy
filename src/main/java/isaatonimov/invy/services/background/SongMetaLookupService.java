@@ -1,10 +1,7 @@
 package isaatonimov.invy.services.background;
 
-import com.sun.codemodel.JForEach;
 import isaatonimov.invy.core.metadatasources.MusicBrainz;
-import isaatonimov.invy.exceptions.NoArtistFoundException;
 import isaatonimov.invy.exceptions.NoRecordingsFoundException;
-import isaatonimov.invy.models.musicbrainz.Artist;
 import isaatonimov.invy.models.musicbrainz.Recording;
 import isaatonimov.invy.services.base.BackgroundHelperService;
 import isaatonimov.invy.services.base.Interruptable;

@@ -428,15 +428,6 @@ public class App extends Application
 				ControllerProperty.get().ShowNotification("Accessabilty deactivated. Please restart the application.");
 		});
 
-		instanceToUseSelection.addListener((observable, oldValue, newValue) ->
-		{
-			MainAudioStreamSourceProperty.get().CurrentTargetURL.set((String) instanceToUseSelection.get());
-		});
-
-		instanceToUse.addListener((observable, oldValue, newValue) ->
-		{
-			instanceToUseSelection.set(instanceToUse.getFirst());
-		});
 	}
 	private void				initMusicPlayerHandlers()
 	{

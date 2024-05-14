@@ -10,7 +10,6 @@ import java.util.List;
 
 public class HTML5 extends MusicPlayer
 {
-	private MediaPlayerFactory vlcMediaPlayerFactory;
 	private MediaPlayer vlcMediaPlayer;
 
 	public HTML5()
@@ -48,7 +47,7 @@ public class HTML5 extends MusicPlayer
 	@Override
 	protected void PlayerSpecificInitPreSongQueueLoaded()
 	{
-		vlcMediaPlayerFactory = new MediaPlayerFactory("--no-metadata-network-access");
+		MediaPlayerFactory vlcMediaPlayerFactory = new MediaPlayerFactory("--no-metadata-network-access");
 		vlcMediaPlayer = vlcMediaPlayerFactory.mediaPlayers().newMediaPlayer();
 	}
 
